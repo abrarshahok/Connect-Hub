@@ -20,4 +20,8 @@ class AuthUserAuthenticationSuccessState extends AuthState {
 
 class AuthUserAuthenticationFailedState extends AuthState {}
 
-class AuthUserNavigateToHomePageActionState extends AuthActionState {}
+class AuthSignUpFailedActionState extends AuthActionState {}
+
+class AuthLoginFailedActionState extends AuthActionState {}
+
+

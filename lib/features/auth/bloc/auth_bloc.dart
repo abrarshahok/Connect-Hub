@@ -42,9 +42,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUserAuthenticationSuccessState(user: AuthRepo.user!));
       } else {
         emit(AuthUserAuthenticationFailedState());
+        emit(AuthLoginFailedActionState());
       }
     } catch (_) {
       emit(AuthUserAuthenticationFailedState());
+      emit(AuthLoginFailedActionState());
     }
   }
 
@@ -64,9 +66,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthUserAuthenticationSuccessState(user: AuthRepo.user!));
       } else {
         emit(AuthUserAuthenticationFailedState());
+        emit(AuthSignUpFailedActionState());
       }
     } catch (_) {
       emit(AuthUserAuthenticationFailedState());
+      emit(AuthSignUpFailedActionState());
     }
   }
 }
