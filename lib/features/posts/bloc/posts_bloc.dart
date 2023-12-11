@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:instagram_clone_flutter/models/post_data_model.dart';
 import 'package:instagram_clone_flutter/repos/auth_repo.dart';
 import 'package:uuid/uuid.dart';
 

@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter/constants/constants.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '/constants/constants.dart';
+import '/models/post_data_model.dart';
 import '../../../components/custom_icon_button.dart';
 
 class PostsScreen extends StatelessWidget {
@@ -32,7 +32,10 @@ class PostsScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .orderBy('postedOn')
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator(
@@ -51,9 +54,13 @@ class PostsScreen extends StatelessWidget {
                 )
               : ListView.builder(
                   itemCount: postDocuments.length,
-                  itemBuilder: (context, index) => Text(
-                    postDocuments[index]['username'],
-                  ),
+                  itemBuilder: (context, index) {
+                    final postInfo = PostDataModel.fromJson(
+                      postDocuments[index].data(),
+                      postDocuments[index].id,
+                    );
+                    return Text(postInfo.username);
+                  },
                 );
         },
       ),

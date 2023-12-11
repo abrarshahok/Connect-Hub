@@ -18,9 +18,9 @@ class UserDataModel {
         'userImage': userImage,
       };
 
-  factory UserDataModel.fromJson(Map<String, dynamic> json, String id) =>
+  factory UserDataModel.fromJson(Map<String, dynamic> json, String userId) =>
       UserDataModel(
-        uid: id,
+        uid: userId,
         username: json['username'],
         email: json['email'],
         userImage: json['userImageUrl'],

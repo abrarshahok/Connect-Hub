@@ -30,12 +30,13 @@ class PostDataModel {
         'comments': comments,
       };
 
-  factory PostDataModel.fromJson(Map<String, dynamic> json) => PostDataModel(
-        postId: json['postId'],
+  factory PostDataModel.fromJson(Map<String, dynamic> json, String postId) =>
+      PostDataModel(
+        postId: postId,
         userId: json['userId'],
         username: json['username'],
         caption: json['caption'],
-        postUrl: json['postUrl'],
+        postUrl: json['postImageUrl'],
         postedOn: DateTime.parse(json['postedOn']),
         likes: List<String>.from(json['likes']),
         comments: List<String>.from(json['comments']),
