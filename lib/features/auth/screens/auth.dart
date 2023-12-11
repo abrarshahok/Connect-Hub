@@ -4,7 +4,6 @@ import 'package:instagram_clone_flutter/components/show_snackbar.dart';
 import '../../home/screens/home.dart';
 import '/features/auth/widgets/login_signup_form.dart';
 import '../bloc/auth_bloc.dart';
-import '/constants/constants.dart';
 
 class Auth extends StatefulWidget {
   const Auth({super.key});
@@ -44,21 +43,10 @@ class _AuthState extends State<Auth> {
       },
       builder: (context, state) {
         switch (state.runtimeType) {
-          case const (AuthUserAuthenticatingState):
-            return Scaffold(
-              backgroundColor: MyColors.primaryColor,
-              body: Center(
-                child: CircularProgressIndicator(
-                  color: MyColors.buttonColor1,
-                ),
-              ),
-            );
           case const (AuthUserAuthenticationSuccessState):
-            return const Home();
+            return Home();
           case const (AuthUserAuthenticationFailedState):
-            return SafeArea(
-              child: LoginSignUpForm(authBloc: authBloc),
-            );
+            return LoginSignUpForm(authBloc: authBloc);
           default:
             return const SizedBox();
         }

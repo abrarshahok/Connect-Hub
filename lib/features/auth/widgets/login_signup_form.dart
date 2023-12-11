@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone_flutter/features/auth/bloc/auth_bloc.dart';
 import '../../../components/custom_text_form_field.dart';
 import '../../../constants/constants.dart';
@@ -119,15 +120,30 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                 onPressed: onFormSubmitted,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 40),
+                  fixedSize: const Size(double.infinity, 40),
                   backgroundColor: MyColors.buttonColor1,
                 ),
-                child: Text(
-                  authMode == AuthMode.signUp ? 'Sign Up' : 'Login',
-                  style: MyFonts.firaSans(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontColor: MyColors.secondaryColor,
-                  ),
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  bloc: widget.authBloc,
+                  buildWhen: (previous, current) => current is AuthActionState,
+                  builder: (context, state) {
+                    return state is AuthButtonLoadingActionState
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: MyColors.secondaryColor,
+                            ),
+                          )
+                        : Text(
+                            authMode == AuthMode.signUp ? 'Sign Up' : 'Login',
+                            style: MyFonts.firaSans(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              fontColor: MyColors.secondaryColor,
+                            ),
+                          );
+                  },
                 ),
               ),
               const Spacer(),

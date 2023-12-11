@@ -33,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(AuthUserAuthenticatingState());
+      emit(AuthButtonLoadingActionState());
       final isLoginSuccess = await AuthRepo.signIn(
         email: event.email,
         password: event.password,
@@ -55,7 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      emit(AuthUserAuthenticatingState());
+      emit(AuthButtonLoadingActionState());
       final isSignupSuccess = await AuthRepo.signUp(
         email: event.email,
         password: event.password,
