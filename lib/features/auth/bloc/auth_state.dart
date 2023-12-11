@@ -11,10 +11,7 @@ class AuthLoginFormSubmitedState extends AuthState {}
 
 class AuthSignupFormSubmitedState extends AuthState {}
 
-class AuthUserAuthenticationSuccessState extends AuthState {
-  final User user;
-  AuthUserAuthenticationSuccessState({required this.user});
-}
+class AuthUserAuthenticationSuccessState extends AuthState {}
 
 class AuthUserAuthenticationFailedState extends AuthState {}
 

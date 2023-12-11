@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import '/repos/auth_repo.dart';
 
@@ -19,10 +18,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> onAuthInitialEvent(
     AuthInitialEvent event,
     Emitter<AuthState> emit,
-  ) {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      emit(AuthUserAuthenticationSuccessState(user: currentUser));
+  ) async {
+    final isUserFound = await AuthRepo.fetchCurrentUserInfo();
+    if (isUserFound) {
+      emit(AuthUserAuthenticationSuccessState());
     } else {
       emit(AuthUserAuthenticationFailedState());
     }
@@ -32,19 +31,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLoginFormSubmitedEvent event,
     Emitter<AuthState> emit,
   ) async {
-    try {
-      emit(AuthButtonLoadingActionState());
-      final isLoginSuccess = await AuthRepo.signIn(
-        email: event.email,
-        password: event.password,
-      );
-      if (isLoginSuccess) {
-        emit(AuthUserAuthenticationSuccessState(user: AuthRepo.user!));
-      } else {
-        emit(AuthUserAuthenticationFailedState());
-        emit(AuthLoginFailedActionState());
-      }
-    } catch (_) {
+    emit(AuthButtonLoadingActionState());
+    final isLoginSuccess = await AuthRepo.signIn(
+      email: event.email,
+      password: event.password,
+    );
+    if (isLoginSuccess) {
+      emit(AuthUserAuthenticationSuccessState());
+    } else {
       emit(AuthUserAuthenticationFailedState());
       emit(AuthLoginFailedActionState());
     }
@@ -54,21 +48,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthSignupFormSubmitedEvent event,
     Emitter<AuthState> emit,
   ) async {
-    try {
-      emit(AuthButtonLoadingActionState());
-      final isSignupSuccess = await AuthRepo.signUp(
-        email: event.email,
-        password: event.password,
-        username: event.username,
-        image: event.userImage,
-      );
-      if (isSignupSuccess) {
-        emit(AuthUserAuthenticationSuccessState(user: AuthRepo.user!));
-      } else {
-        emit(AuthUserAuthenticationFailedState());
-        emit(AuthSignUpFailedActionState());
-      }
-    } catch (_) {
+    emit(AuthButtonLoadingActionState());
+    final isSignupSuccess = await AuthRepo.signUp(
+      email: event.email,
+      password: event.password,
+      username: event.username,
+      image: event.userImage,
+    );
+    if (isSignupSuccess) {
+      emit(AuthUserAuthenticationSuccessState());
+    } else {
       emit(AuthUserAuthenticationFailedState());
       emit(AuthSignUpFailedActionState());
     }

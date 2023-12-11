@@ -1,30 +1,49 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instagram_clone_flutter/constants/constants.dart';
 
+import '../models/user_data_model.dart';
+
 class AuthRepo {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  static UserDataModel? user;
 
-  static User? user;
+  static Future<bool> fetchCurrentUserInfo() async {
+    try {
+      final userInfo = await firebaseFirestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .get();
+
+      if (userInfo.exists) {
+        user = UserDataModel.fromJson(userInfo.data()!, userInfo.id);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 
   static Future<bool> signIn({
     required String email,
     required String password,
   }) async {
-    final UserCredential userCredential =
-        await firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    if (userCredential.user != null) {
-      user = userCredential.user;
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await fetchCurrentUserInfo();
       return true;
+    } catch (e) {
+      return false;
     }
-    return false;
   }
 
   static Future<bool> signUp({
@@ -33,21 +52,21 @@ class AuthRepo {
     required String password,
     required File? image,
   }) async {
-    final UserCredential userCredential =
-        await firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-
-    if (userCredential.user != null) {
-      user = userCredential.user;
-      firebaseFirestore.collection('users').doc(user!.uid).set({
+    try {
+      final UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      firebaseFirestore.collection('users').doc(userCredential.user!.uid).set({
         'username': username,
         'email': email,
         'userImageUrl': image ?? MyIcons.defaultProfilePicUrl,
       });
+      await fetchCurrentUserInfo();
       return true;
+    } catch (e) {
+      return false;
     }
-    return false;
   }
 }

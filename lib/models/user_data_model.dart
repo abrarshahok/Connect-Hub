@@ -18,10 +18,11 @@ class UserDataModel {
         'userImage': userImage,
       };
 
-  factory UserDataModel.fromJson(Map<String, dynamic> json) => UserDataModel(
-        uid: json['uid'],
+  factory UserDataModel.fromJson(Map<String, dynamic> json, String id) =>
+      UserDataModel(
+        uid: id,
         username: json['username'],
         email: json['email'],
-        userImage: json['userImage'],
+        userImage: json['userImageUrl'],
       );
 }
