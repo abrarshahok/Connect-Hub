@@ -1,4 +1,6 @@
 part of 'home_bloc.dart';
 
 @immutable
-sealed class HomeEvent {}
+abstract class HomeEvent {}
+
+class HomeAddPostButtonClickedEvent extends HomeEvent {}
