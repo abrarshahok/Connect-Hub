@@ -32,7 +32,6 @@ class CustomTextFormField extends StatelessWidget {
       color: MyColors.primaryColor,
       child: TextFormField(
         key: key,
-        
         style: MyFonts.firaSans(
           fontColor: MyColors.secondaryColor,
           fontWeight: FontWeight.w300,
