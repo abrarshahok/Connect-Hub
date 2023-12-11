@@ -13,10 +13,10 @@ class PostChoosenSuccessState extends PostsState {
   PostChoosenSuccessState({required this.choosenImage});
 }
 
-class PostUploadingState extends PostsState {}
+class PostUploadSuccessActionState extends PostsActionState {}
 
-class PostUploadSuccessState extends PostsState {}
+class PostUploadFailedActionState extends PostsActionState {}
 
-class PostUploadErrorState extends PostsState {}
+class PostUploadingActionState extends PostsActionState {}
 
 class PostChooseUploadOptionActionState extends PostsActionState {}

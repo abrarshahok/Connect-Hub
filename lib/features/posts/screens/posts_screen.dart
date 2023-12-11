@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter/constants/constants.dart';
 
@@ -30,13 +31,31 @@ class PostsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          'Post Here',
-          style: MyFonts.firaSans(
-            fontColor: MyColors.secondaryColor,
-          ),
-        ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(
+              color: MyColors.secondaryColor,
+            );
+          }
+          final postDocuments = snapshot.data!.docs;
+          return postDocuments.isEmpty
+              ? Center(
+                  child: Text(
+                    'No Posts!',
+                    style: MyFonts.firaSans(
+                      fontColor: MyColors.secondaryColor,
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: postDocuments.length,
+                  itemBuilder: (context, index) => Text(
+                    postDocuments[index]['username'],
+                  ),
+                );
+        },
       ),
     );
   }

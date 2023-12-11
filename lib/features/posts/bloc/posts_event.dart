@@ -10,3 +10,9 @@ class PostImageChoosenSuccessEvent extends PostsEvent {
 
   PostImageChoosenSuccessEvent({required this.pickedImage});
 }
+
+class PostUploadButtonClickedEvent extends PostsEvent {
+  final String caption;
+  final File image;
+  PostUploadButtonClickedEvent({required this.caption, required this.image});
+}
