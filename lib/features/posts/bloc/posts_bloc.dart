@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:instagram_clone_flutter/repos/auth_repo.dart';
+import '/repos/auth_repo.dart';
 import 'package:uuid/uuid.dart';
-
 import 'package:bloc/bloc.dart';
-import 'package:instagram_clone_flutter/repos/post_repo.dart';
+import '/repos/post_repo.dart';
 import 'package:meta/meta.dart';
 
 part 'posts_event.dart';
@@ -15,6 +14,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostChooseImageButtonClickedEvent>(postChooseImageButtonClickedEvent);
     on<PostImageChoosenSuccessEvent>(postImageChoosenSuccessEvent);
     on<PostUploadButtonClickedEvent>(postUploadButtonClickedEvent);
+    on<PostLikeButtonClickedEvent>(postLikeButtonClickedEvent);
+    on<PostSaveButtonClickedEvent>(postSaveButtonClickedEvent);
   }
 
   FutureOr<void> postChooseImageButtonClickedEvent(
@@ -43,6 +44,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       caption: event.caption,
       postImage: event.image,
       postedOn: DateTime.now(),
+      userImage: AuthRepo.user!.userImage,
       likes: [],
       comments: [],
     );
@@ -50,6 +52,29 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       emit(PostUploadSuccessActionState());
     } else {
       emit(PostUploadFailedActionState());
+    }
+  }
+
+  FutureOr<void> postLikeButtonClickedEvent(
+    PostLikeButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) async {
+    final isLikedOrDisliked = await PostRepo.likeOrDislikePost(
+      likes: event.likes,
+      postId: event.postId,
+    );
+    if (!isLikedOrDisliked) {
+      emit(PostLikingFailedActionState());
+    }
+  }
+
+  FutureOr<void> postSaveButtonClickedEvent(
+    PostSaveButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) async{
+    final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.postId);
+    if(!isSavedOrUnsaved){
+      emit(PostSavingFailedActionState());
     }
   }
 }

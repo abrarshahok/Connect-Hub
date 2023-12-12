@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:line_icons/line_icons.dart';
+import '/features/posts/widgets/post_card.dart';
 import '/constants/constants.dart';
 import '/models/post_data_model.dart';
 import '../../../components/custom_icon_button.dart';
 
-class PostsScreen extends StatelessWidget {
-  const PostsScreen({super.key});
+class PostsFeed extends StatelessWidget {
+  const PostsFeed({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +22,13 @@ class PostsScreen extends StatelessWidget {
         ),
         actions: [
           CustomIconButton(
-            icon: Icons.favorite_border,
+            icon: LineIcons.heart,
             color: MyColors.secondaryColor,
             onPressed: () {},
           ),
           CustomIconButton(
             onPressed: () {},
-            icon: Icons.chat_bubble_outline,
+            icon: LineIcons.facebookMessenger,
             color: MyColors.secondaryColor,
           ),
         ],
@@ -43,25 +45,28 @@ class PostsScreen extends StatelessWidget {
             );
           }
           final postDocuments = snapshot.data!.docs;
-          return postDocuments.isEmpty
-              ? Center(
-                  child: Text(
-                    'No Posts!',
-                    style: MyFonts.firaSans(
-                      fontColor: MyColors.secondaryColor,
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: postDocuments.length,
-                  itemBuilder: (context, index) {
-                    final postInfo = PostDataModel.fromJson(
-                      postDocuments[index].data(),
-                      postDocuments[index].id,
-                    );
-                    return Text(postInfo.username);
-                  },
+          if (postDocuments.isEmpty) {
+            return Center(
+              child: Text(
+                'No Posts!',
+                style: MyFonts.firaSans(
+                  fontColor: MyColors.secondaryColor,
+                ),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: postDocuments.length,
+              itemBuilder: (context, index) {
+                final postInfo = PostDataModel.fromJson(
+                  postDocuments[index].data(),
+                  postDocuments[index].id,
                 );
+
+                return PostCard(postDataModel: postInfo);
+              },
+            );
+          }
         },
       ),
     );

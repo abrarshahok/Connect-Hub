@@ -20,3 +20,7 @@ class PostUploadFailedActionState extends PostsActionState {}
 class PostUploadingActionState extends PostsActionState {}
 
 class PostChooseUploadOptionActionState extends PostsActionState {}
+
+class PostLikingFailedActionState extends PostsActionState {}
+
+class PostSavingFailedActionState extends PostsActionState {}

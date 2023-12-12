@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone_flutter/components/show_snackbar.dart';
+import 'package:line_icons/line_icons.dart';
 import '/constants/constants.dart';
 
 import '../bloc/posts_bloc.dart';
@@ -71,7 +72,7 @@ class AddPostScreen extends StatelessWidget {
                                 height: 20,
                                 width: 20,
                                 child: CircularProgressIndicator(
-                                  color: MyColors.secondaryColor,
+                                  color: MyColors.buttonColor1,
                                 ),
                               )
                             : Text(
@@ -131,7 +132,7 @@ class AddPostScreen extends StatelessWidget {
                         postsBloc.add(PostChooseImageButtonClickedEvent());
                       },
                       icon: Icon(
-                        Icons.camera_alt_outlined,
+                        LineIcons.camera,
                         color: MyColors.secondaryColor,
                       ),
                       label: Text(
@@ -225,18 +226,15 @@ class AddPostScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                TextButton.icon(
-                  icon: Icon(
-                    Icons.cancel_outlined,
-                    color: MyColors.primaryColor,
-                  ),
+                TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  label: Text(
+                  child: Text(
                     'Cancel',
                     style: MyFonts.firaSans(
                       fontColor: MyColors.primaryColor,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
