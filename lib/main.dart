@@ -16,9 +16,14 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.grey,
+        ),
+      ),
       home: const Auth(),
       routes: {
-        AddPostScreen.routeName: (context) =>  AddPostScreen(),
+        AddPostScreen.routeName: (context) => AddPostScreen(),
       },
     );
   }

@@ -2,6 +2,7 @@ class PostDataModel {
   final String postId;
   final String userId;
   final String username;
+  final String userImage;
   final String caption;
   final String postUrl;
   final DateTime postedOn;
@@ -12,6 +13,7 @@ class PostDataModel {
     required this.postId,
     required this.userId,
     required this.username,
+    required this.userImage,
     required this.caption,
     required this.postUrl,
     required this.postedOn,
@@ -24,6 +26,7 @@ class PostDataModel {
         'userId': userId,
         'username': username,
         'caption': caption,
+        'userImage': userImage,
         'postUrl': postUrl,
         'postedOn': postedOn.toIso8601String(),
         'likes': likes,
@@ -37,6 +40,7 @@ class PostDataModel {
         username: json['username'],
         caption: json['caption'],
         postUrl: json['postImageUrl'],
+        userImage: json['userImage'],
         postedOn: DateTime.parse(json['postedOn']),
         likes: List<String>.from(json['likes']),
         comments: List<String>.from(json['comments']),
