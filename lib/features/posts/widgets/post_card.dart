@@ -102,13 +102,18 @@ class PostCard extends StatelessWidget {
                         .doc(AuthRepo.user!.uid)
                         .snapshots(),
                     builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(
+                            color: MyColors.buttonColor1);
+                      }
                       bool isSaved = false;
-                      if (snapshot.hasData) {
-                        final savedPostDocs = snapshot.data;
-                        isSaved = savedPostDocs!
+                      final savedPostDocs = snapshot.data;
+                      if (savedPostDocs!.exists) {
+                        isSaved = savedPostDocs
                             .data()!
                             .containsKey(postDataModel.postId);
                       }
+
                       return CustomIconButton(
                         icon: isSaved ? Icons.bookmark : Icons.bookmark_outline,
                         color: MyColors.secondaryColor,
