@@ -472,14 +472,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  multi_stream_builder:
-    dependency: "direct main"
-    description:
-      name: multi_stream_builder
-      sha256: "7c2d28452dfe73ce0d463b9d2b825739d2d27f2a07c88742903c47cf5591d774"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   nested:
     dependency: transitive
     description:
