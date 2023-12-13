@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone_flutter/features/posts/screens/saved_posts_screen.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '/components/custom_elevated_button.dart';
 import '/repos/auth_repo.dart';
@@ -26,7 +27,11 @@ class Profile extends StatelessWidget {
         bloc: authBloc,
         listenWhen: (previous, current) => current is AuthActionState,
         buildWhen: (previous, current) => current is! AuthActionState,
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is AuthNavigateToSavedPostScreenActionState) {
+            Navigator.pushNamed(context, SavedPostsScreen.routeName);
+          }
+        },
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -70,7 +75,10 @@ class Profile extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        authBloc.add(
+                            AuthNavigateToSavedPostScreenButtonClickedEvent());
+                      },
                       child: Container(
                         height: 30,
                         width: 120,

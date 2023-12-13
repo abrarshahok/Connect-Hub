@@ -6,7 +6,7 @@ class PostDataModel {
   final String caption;
   final String postUrl;
   final DateTime postedOn;
-  final List<String> likes;
+  final List<dynamic> likes;
 
   PostDataModel({
     required this.postId,
@@ -20,12 +20,11 @@ class PostDataModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'postId': postId,
         'userId': userId,
         'username': username,
         'caption': caption,
         'userImage': userImage,
-        'postUrl': postUrl,
+        'postImageUrl': postUrl,
         'postedOn': postedOn.toIso8601String(),
         'likes': likes,
       };

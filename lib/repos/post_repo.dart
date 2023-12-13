@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instagram_clone_flutter/models/post_data_model.dart';
 import 'package:instagram_clone_flutter/repos/auth_repo.dart';
 
 class PostRepo {
@@ -42,7 +43,7 @@ class PostRepo {
   }
 
   static Future<bool> likeOrDislikePost({
-    required List<String> likes,
+    required List<dynamic> likes,
     required String postId,
   }) async {
     try {
@@ -63,7 +64,7 @@ class PostRepo {
     }
   }
 
-  static Future<bool> saveOrUnsavePost(String postId) async {
+  static Future<bool> saveOrUnsavePost(PostDataModel postInfo) async {
     try {
       final savedPostRef = firebaseFirestore
           .collection('savedPosts')
@@ -71,15 +72,16 @@ class PostRepo {
 
       final savedPostData = await savedPostRef.get();
       if (savedPostData.exists) {
-        final isPostSaved = savedPostData.data()!.containsKey(postId);
+        final isPostSaved = savedPostData.data()!.containsKey(postInfo.postId);
         if (isPostSaved) {
-          await savedPostRef.update({postId: FieldValue.delete()});
+          await savedPostRef.update({postInfo.postId: FieldValue.delete()});
         } else {
-          await savedPostRef.update({postId: true});
+          await savedPostRef.update({postInfo.postId: postInfo.toJson()});
         }
       } else {
-        await savedPostRef.set({postId: true});
+        await savedPostRef.set({postInfo.postId: postInfo.toJson()});
       }
+      print(postInfo.toJson());
       return true;
     } catch (_) {
       return false;
