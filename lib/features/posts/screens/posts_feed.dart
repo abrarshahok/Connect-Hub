@@ -14,7 +14,7 @@ class PostsFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     final postStream = FirebaseFirestore.instance
         .collection('posts')
-        .orderBy('postedOn')
+        .orderBy('postedOn', descending: true)
         .snapshots();
     final savedPostStream = FirebaseFirestore.instance
         .collection('savedPosts')
