@@ -30,3 +30,5 @@ class AuthSignupFormSubmitedEvent extends AuthEvent {
 }
 
 class AuthLogoutButtonClickedEvent extends AuthEvent {}
+
+class AuthNavigateToSavedPostScreenButtonClickedEvent extends AuthEvent {}

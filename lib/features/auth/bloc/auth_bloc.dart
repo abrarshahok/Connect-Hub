@@ -14,6 +14,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginFormSubmitedEvent>(onAuthLoginFormSubmitedEvent);
     on<AuthSignupFormSubmitedEvent>(onAuthSignupFormSubmitedEvent);
     on<AuthLogoutButtonClickedEvent>(onAuthLogoutButtonClickedEvent);
+    on<AuthNavigateToSavedPostScreenButtonClickedEvent>(
+        onAuthNavigateToSavedPostScreenButtonClickedEvent);
   }
 
   FutureOr<void> onAuthInitialEvent(
@@ -72,5 +74,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (isLogoutSuccess) {
       emit(AuthUserUnAuthenticatedState());
     }
+  }
+
+  FutureOr<void> onAuthNavigateToSavedPostScreenButtonClickedEvent(
+    AuthNavigateToSavedPostScreenButtonClickedEvent event,
+    Emitter<AuthState> emit,
+  ) {
+    emit(AuthNavigateToSavedPostScreenActionState());
   }
 }

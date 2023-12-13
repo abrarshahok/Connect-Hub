@@ -20,3 +20,5 @@ class AuthButtonLoadingActionState extends AuthActionState {}
 class AuthSignUpFailedActionState extends AuthActionState {}
 
 class AuthLoginFailedActionState extends AuthActionState {}
+
+class AuthNavigateToSavedPostScreenActionState extends AuthActionState {}
