@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:instagram_clone_flutter/features/posts/screens/likes_screen.dart';
@@ -14,7 +13,12 @@ import '/models/post_data_model.dart';
 
 class PostCard extends StatelessWidget {
   final PostDataModel postDataModel;
-  PostCard({super.key, required this.postDataModel});
+  final bool isSaved;
+  PostCard({
+    super.key,
+    required this.postDataModel,
+    required this.isSaved,
+  });
   final PostsBloc postsBloc = PostsBloc();
   @override
   Widget build(BuildContext context) {
@@ -102,32 +106,12 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('savedPosts')
-                        .doc(AuthRepo.currentUser!.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(
-                          color: MyColors.buttonColor1,
-                        );
-                      }
-                      bool isSaved = false;
-                      final savedPostDocs = snapshot.data;
-                      if (savedPostDocs!.exists) {
-                        isSaved = savedPostDocs
-                            .data()!
-                            .containsKey(postDataModel.postId);
-                      }
-
-                      return CustomIconButton(
-                        icon: isSaved ? Icons.bookmark : Icons.bookmark_outline,
-                        color: MyColors.secondaryColor,
-                        onPressed: () {
-                          postsBloc.add(
-                              PostSaveButtonClickedEvent(postDataModel.postId));
-                        },
+                  CustomIconButton(
+                    icon: isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                    color: MyColors.secondaryColor,
+                    onPressed: () {
+                      postsBloc.add(
+                        PostSaveButtonClickedEvent(postDataModel),
                       );
                     },
                   ),

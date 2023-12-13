@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:instagram_clone_flutter/models/post_data_model.dart';
+
 import '/repos/auth_repo.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bloc/bloc.dart';
@@ -74,7 +76,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostSaveButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) async {
-    final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.postId);
+    final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.clickedPost);
     if (!isSavedOrUnsaved) {
       emit(PostSavingFailedActionState());
     }
