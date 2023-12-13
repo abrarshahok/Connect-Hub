@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:instagram_clone_flutter/features/posts/screens/likes_screen.dart';
 import '/repos/auth_repo.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,9 @@ class PostCard extends StatelessWidget {
             label: 'Something went wrong!',
             color: Colors.red,
           );
+        } else if (state is PostNavigateToLikesScreenActionState) {
+          Navigator.pushNamed(context, LikesScreen.routeName,
+              arguments: postDataModel.likes);
         }
       },
       builder: (context, state) {
@@ -67,12 +71,14 @@ class PostCard extends StatelessWidget {
               Row(
                 children: [
                   CustomIconButton(
-                    icon: postDataModel.likes.contains(AuthRepo.user!.uid)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: postDataModel.likes.contains(AuthRepo.user!.uid)
-                        ? Colors.red
-                        : MyColors.secondaryColor,
+                    icon:
+                        postDataModel.likes.contains(AuthRepo.currentUser!.uid)
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                    color:
+                        postDataModel.likes.contains(AuthRepo.currentUser!.uid)
+                            ? Colors.red
+                            : MyColors.secondaryColor,
                     onPressed: () {
                       postsBloc.add(
                         PostLikeButtonClickedEvent(
@@ -99,12 +105,13 @@ class PostCard extends StatelessWidget {
                   StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('savedPosts')
-                        .doc(AuthRepo.user!.uid)
+                        .doc(AuthRepo.currentUser!.uid)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator(
-                            color: MyColors.buttonColor1);
+                          color: MyColors.buttonColor1,
+                        );
                       }
                       bool isSaved = false;
                       final savedPostDocs = snapshot.data;
@@ -131,13 +138,18 @@ class PostCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      postDataModel.likes.isEmpty
-                          ? 'No Likes'
-                          : '${postDataModel.likes.length} Likes',
-                      style: MyFonts.firaSans(
-                        fontColor: MyColors.secondaryColor,
-                        fontSize: 15,
+                    GestureDetector(
+                      onTap: () {
+                        postsBloc.add(PostNavigateToLikeScreenButtonClicked());
+                      },
+                      child: Text(
+                        postDataModel.likes.isEmpty
+                            ? 'No Likes'
+                            : '${postDataModel.likes.length} Likes',
+                        style: MyFonts.firaSans(
+                          fontColor: MyColors.secondaryColor,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),

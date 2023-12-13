@@ -16,6 +16,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostUploadButtonClickedEvent>(postUploadButtonClickedEvent);
     on<PostLikeButtonClickedEvent>(postLikeButtonClickedEvent);
     on<PostSaveButtonClickedEvent>(postSaveButtonClickedEvent);
+    on<PostNavigateToLikeScreenButtonClicked>(
+        postNavigateToLikeScreenButtonClicked);
   }
 
   FutureOr<void> postChooseImageButtonClickedEvent(
@@ -39,12 +41,12 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     emit(PostUploadingActionState());
     bool isUploadingSuccess = await PostRepo.uploadPost(
       postId: const Uuid().v1(),
-      userId: AuthRepo.user!.uid,
-      username: AuthRepo.user!.username,
+      userId: AuthRepo.currentUser!.uid,
+      username: AuthRepo.currentUser!.username,
       caption: event.caption,
       postImage: event.image,
       postedOn: DateTime.now(),
-      userImage: AuthRepo.user!.userImage,
+      userImage: AuthRepo.currentUser!.userImage,
       likes: [],
       comments: [],
     );
@@ -71,10 +73,17 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   FutureOr<void> postSaveButtonClickedEvent(
     PostSaveButtonClickedEvent event,
     Emitter<PostsState> emit,
-  ) async{
+  ) async {
     final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.postId);
-    if(!isSavedOrUnsaved){
+    if (!isSavedOrUnsaved) {
       emit(PostSavingFailedActionState());
     }
+  }
+
+  FutureOr<void> postNavigateToLikeScreenButtonClicked(
+    PostNavigateToLikeScreenButtonClicked event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostNavigateToLikesScreenActionState());
   }
 }

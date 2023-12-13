@@ -27,3 +27,5 @@ class PostSaveButtonClickedEvent extends PostsEvent {
   final String postId;
   PostSaveButtonClickedEvent(this.postId);
 }
+
+class PostNavigateToLikeScreenButtonClicked extends PostsEvent{}

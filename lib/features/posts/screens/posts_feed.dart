@@ -40,8 +40,10 @@ class PostsFeed extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(
-              color: MyColors.secondaryColor,
+            return Center(
+              child: CircularProgressIndicator(
+                color: MyColors.buttonColor1,
+              ),
             );
           }
           final postDocuments = snapshot.data!.docs;
@@ -62,7 +64,6 @@ class PostsFeed extends StatelessWidget {
                   postDocuments[index].data(),
                   postDocuments[index].id,
                 );
-
                 return PostCard(postDataModel: postInfo);
               },
             );

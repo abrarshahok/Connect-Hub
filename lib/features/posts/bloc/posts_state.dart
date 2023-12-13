@@ -24,3 +24,5 @@ class PostChooseUploadOptionActionState extends PostsActionState {}
 class PostLikingFailedActionState extends PostsActionState {}
 
 class PostSavingFailedActionState extends PostsActionState {}
+
+class PostNavigateToLikesScreenActionState extends PostsActionState {}
