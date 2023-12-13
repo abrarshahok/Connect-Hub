@@ -47,15 +47,16 @@ class PostRepo {
   }) async {
     try {
       final postRef = firebaseFirestore.collection('posts').doc(postId);
-      if (likes.contains(AuthRepo.user!.uid)) {
+      if (likes.contains(AuthRepo.currentUser!.uid)) {
         postRef.update({
-          'likes': FieldValue.arrayRemove([AuthRepo.user!.uid])
+          'likes': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
         });
       } else {
         postRef.update({
-          'likes': FieldValue.arrayUnion([AuthRepo.user!.uid])
+          'likes': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
         });
       }
+
       return true;
     } catch (e) {
       return false;
@@ -64,8 +65,9 @@ class PostRepo {
 
   static Future<bool> saveOrUnsavePost(String postId) async {
     try {
-      final savedPostRef =
-          firebaseFirestore.collection('savedPosts').doc(AuthRepo.user!.uid);
+      final savedPostRef = firebaseFirestore
+          .collection('savedPosts')
+          .doc(AuthRepo.currentUser!.uid);
 
       final savedPostData = await savedPostRef.get();
       if (savedPostData.exists) {

@@ -7,7 +7,6 @@ class PostDataModel {
   final String postUrl;
   final DateTime postedOn;
   final List<String> likes;
-  final List<String> comments;
 
   PostDataModel({
     required this.postId,
@@ -18,7 +17,6 @@ class PostDataModel {
     required this.postUrl,
     required this.postedOn,
     required this.likes,
-    required this.comments,
   });
 
   Map<String, dynamic> toJson() => {
@@ -30,7 +28,6 @@ class PostDataModel {
         'postUrl': postUrl,
         'postedOn': postedOn.toIso8601String(),
         'likes': likes,
-        'comments': comments,
       };
 
   factory PostDataModel.fromJson(Map<String, dynamic> json, String postId) =>
@@ -43,6 +40,5 @@ class PostDataModel {
         userImage: json['userImage'],
         postedOn: DateTime.parse(json['postedOn']),
         likes: List<String>.from(json['likes']),
-        comments: List<String>.from(json['comments']),
       );
 }
