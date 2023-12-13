@@ -28,3 +28,5 @@ class AuthSignupFormSubmitedEvent extends AuthEvent {
     required this.userImage,
   });
 }
+
+class AuthLogoutButtonClickedEvent extends AuthEvent {}

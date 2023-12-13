@@ -13,17 +13,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthInitialEvent>(onAuthInitialEvent);
     on<AuthLoginFormSubmitedEvent>(onAuthLoginFormSubmitedEvent);
     on<AuthSignupFormSubmitedEvent>(onAuthSignupFormSubmitedEvent);
+    on<AuthLogoutButtonClickedEvent>(onAuthLogoutButtonClickedEvent);
   }
 
   FutureOr<void> onAuthInitialEvent(
     AuthInitialEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final isUserFound = await AuthRepo.fetchCurrentUserInfo();
+    bool isUserFound = await AuthRepo.fetchCurrentUserInfo();
     if (isUserFound) {
       emit(AuthUserAuthenticationSuccessState());
     } else {
-      emit(AuthUserAuthenticationFailedState());
+      emit(AuthUserUnAuthenticatedState());
     }
   }
 
@@ -32,14 +33,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthButtonLoadingActionState());
-    final isLoginSuccess = await AuthRepo.signIn(
+    bool isLoginSuccess = await AuthRepo.signIn(
       email: event.email,
       password: event.password,
     );
     if (isLoginSuccess) {
       emit(AuthUserAuthenticationSuccessState());
     } else {
-      emit(AuthUserAuthenticationFailedState());
+      emit(AuthUserUnAuthenticatedState());
       emit(AuthLoginFailedActionState());
     }
   }
@@ -49,7 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthButtonLoadingActionState());
-    final isSignupSuccess = await AuthRepo.signUp(
+    bool isSignupSuccess = await AuthRepo.signUp(
       email: event.email,
       password: event.password,
       username: event.username,
@@ -58,8 +59,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (isSignupSuccess) {
       emit(AuthUserAuthenticationSuccessState());
     } else {
-      emit(AuthUserAuthenticationFailedState());
+      emit(AuthUserUnAuthenticatedState());
       emit(AuthSignUpFailedActionState());
+    }
+  }
+
+  FutureOr<void> onAuthLogoutButtonClickedEvent(
+    AuthLogoutButtonClickedEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    bool isLogoutSuccess = await AuthRepo.signOut();
+    if (isLogoutSuccess) {
+      emit(AuthUserUnAuthenticatedState());
     }
   }
 }

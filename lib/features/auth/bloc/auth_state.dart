@@ -13,7 +13,7 @@ class AuthSignupFormSubmitedState extends AuthState {}
 
 class AuthUserAuthenticationSuccessState extends AuthState {}
 
-class AuthUserAuthenticationFailedState extends AuthState {}
+class AuthUserUnAuthenticatedState extends AuthState {}
 
 class AuthButtonLoadingActionState extends AuthActionState {}
 

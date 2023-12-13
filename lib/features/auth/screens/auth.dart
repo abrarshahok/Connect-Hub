@@ -44,8 +44,8 @@ class _AuthState extends State<Auth> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case const (AuthUserAuthenticationSuccessState):
-            return Home();
-          case const (AuthUserAuthenticationFailedState):
+            return Home(authBloc: authBloc);
+          case const (AuthUserUnAuthenticatedState):
             return LoginSignUpForm(authBloc: authBloc);
           default:
             return const SizedBox();

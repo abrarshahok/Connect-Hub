@@ -11,17 +11,21 @@ class AuthRepo {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  static UserDataModel? user;
+  static UserDataModel? currentUser;
+
+  static bool get isYou => currentUser!.uid == firebaseAuth.currentUser!.uid;
 
   static Future<bool> fetchCurrentUserInfo() async {
     try {
+      if (firebaseAuth.currentUser == null) {
+        return false;
+      }
       final userInfo = await firebaseFirestore
           .collection('users')
           .doc(firebaseAuth.currentUser!.uid)
           .get();
-
       if (userInfo.exists) {
-        user = UserDataModel.fromJson(userInfo.data()!, userInfo.id);
+        currentUser = UserDataModel.fromJson(userInfo.data()!, userInfo.id);
         return true;
       }
       return false;
@@ -66,6 +70,15 @@ class AuthRepo {
       await fetchCurrentUserInfo();
       return true;
     } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> signOut() async {
+    try {
+      firebaseAuth.signOut();
+      return true;
+    } catch (_) {
       return false;
     }
   }
