@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone_flutter/features/auth/bloc/auth_bloc.dart';
+import 'package:instagram_clone_flutter/features/profile/screens/profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
 import 'package:line_icons/line_icons.dart';
 import '../../posts/screens/posts_feed.dart';
@@ -7,11 +9,24 @@ import '../bloc/home_bloc.dart';
 import '/components/custom_icon_button.dart';
 import '/constants/constants.dart';
 
-class Home extends StatelessWidget {
-  Home({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key, required this.authBloc});
+  final AuthBloc authBloc;
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final HomeBloc homeBloc = HomeBloc();
+
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgetList = [
+      const PostsFeed(),
+      const Center(child: Text('In Making')),
+      Profile(authBloc: widget.authBloc),
+    ];
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
       listenWhen: (previous, current) => current is HomeActionState,
@@ -24,7 +39,7 @@ class Home extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: MyColors.primaryColor,
-          body: const PostsFeed(),
+          body: widgetList[currentIndex],
           bottomNavigationBar: BottomAppBar(
             color: MyColors.primaryColor,
             height: 60,
@@ -35,12 +50,20 @@ class Home extends StatelessWidget {
                 CustomIconButton(
                   icon: LineIcons.home,
                   color: MyColors.secondaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 0;
+                    });
+                  },
                 ),
                 CustomIconButton(
-                  onPressed: () {},
                   icon: LineIcons.search,
                   color: MyColors.secondaryColor,
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 1;
+                    });
+                  },
                 ),
                 CustomIconButton(
                   icon: LineIcons.plusCircle,
@@ -50,9 +73,13 @@ class Home extends StatelessWidget {
                   },
                 ),
                 CustomIconButton(
-                  onPressed: () {},
                   icon: LineIcons.user,
                   color: MyColors.secondaryColor,
+                  onPressed: () {
+                    setState(() {
+                      currentIndex = 2;
+                    });
+                  },
                 ),
               ],
             ),
