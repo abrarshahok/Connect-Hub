@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:line_icons/line_icons.dart';
 import '/components/show_snackbar.dart';
 import '/constants/constants.dart';
 
@@ -132,7 +131,7 @@ class AddPostScreen extends StatelessWidget {
                         postsBloc.add(PostChooseImageButtonClickedEvent());
                       },
                       icon: Icon(
-                        LineIcons.camera,
+                        IconlyLight.camera,
                         color: MyColors.secondaryColor,
                       ),
                       label: Text(
