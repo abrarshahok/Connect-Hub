@@ -1,12 +1,13 @@
+import 'package:connecthub/features/posts/screens/saved_posts_screen.dart';
+import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
 import '/features/auth/bloc/auth_bloc.dart';
 import '/features/profile/screens/profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
-import 'package:line_icons/line_icons.dart';
 import '../../posts/screens/posts_feed.dart';
 import '../bloc/home_bloc.dart';
-import '/components/custom_icon_button.dart';
 import '/constants/constants.dart';
 
 class Home extends StatefulWidget {
@@ -25,6 +26,8 @@ class _HomeState extends State<Home> {
     final List<Widget> widgetList = [
       const PostsFeed(),
       const Center(child: Text('In Making')),
+      AddPostScreen(),
+      const SavedPostsScreen(),
       Profile(authBloc: widget.authBloc),
     ];
     return BlocConsumer<HomeBloc, HomeState>(
@@ -39,50 +42,62 @@ class _HomeState extends State<Home> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: MyColors.primaryColor,
-          body: widgetList[currentIndex],
-          bottomNavigationBar: BottomAppBar(
-            color: MyColors.primaryColor,
-            height: 60,
-            elevation: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                CustomIconButton(
-                  icon: LineIcons.home,
-                  color: MyColors.secondaryColor,
-                  onPressed: () {
+          body: Stack(
+            children: [
+              widgetList[currentIndex],
+              Positioned(
+                bottom: 0,
+                left: 5,
+                right: 5,
+                child: CrystalNavigationBar(
+                  height: 0,
+                  borderRadius: 16,
+                  marginR: const EdgeInsets.all(20),
+                  paddingR: const EdgeInsets.all(0),
+                  margin: const EdgeInsets.all(0),
+                  currentIndex: currentIndex,
+                  indicatorColor: Colors.white,
+                  unselectedItemColor: Colors.white70,
+                  backgroundColor: Colors.black.withOpacity(0.1),
+                  onTap: (index) {
+                    if (index == 2) {
+                      homeBloc.add(HomeAddPostButtonClickedEvent());
+                      return;
+                    }
                     setState(() {
-                      currentIndex = 0;
+                      currentIndex = index;
                     });
                   },
+                  items: [
+                    CrystalNavigationBarItem(
+                      icon: IconlyBold.home,
+                      unselectedIcon: IconlyLight.home,
+                      selectedColor: Colors.white,
+                    ),
+                    CrystalNavigationBarItem(
+                      icon: IconlyBold.search,
+                      unselectedIcon: IconlyLight.search,
+                      selectedColor: Colors.white,
+                    ),
+                    CrystalNavigationBarItem(
+                      icon: IconlyBold.plus,
+                      unselectedIcon: IconlyLight.plus,
+                      selectedColor: Colors.white,
+                    ),
+                    CrystalNavigationBarItem(
+                      icon: IconlyBold.bookmark,
+                      unselectedIcon: IconlyLight.bookmark,
+                      selectedColor: Colors.blueGrey,
+                    ),
+                    CrystalNavigationBarItem(
+                      icon: IconlyBold.user_2,
+                      unselectedIcon: IconlyLight.user,
+                      selectedColor: Colors.white,
+                    ),
+                  ],
                 ),
-                CustomIconButton(
-                  icon: LineIcons.search,
-                  color: MyColors.secondaryColor,
-                  onPressed: () {
-                    setState(() {
-                      currentIndex = 1;
-                    });
-                  },
-                ),
-                CustomIconButton(
-                  icon: LineIcons.plusCircle,
-                  color: MyColors.secondaryColor,
-                  onPressed: () {
-                    homeBloc.add(HomeAddPostButtonClickedEvent());
-                  },
-                ),
-                CustomIconButton(
-                  icon: LineIcons.user,
-                  color: MyColors.secondaryColor,
-                  onPressed: () {
-                    setState(() {
-                      currentIndex = 2;
-                    });
-                  },
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         );
       },
