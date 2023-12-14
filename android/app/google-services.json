@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "282961710262",
-    "project_id": "instagram-clone-21bscs20",
-    "storage_bucket": "instagram-clone-21bscs20.appspot.com"
+    "project_number": "398991963577",
+    "project_id": "connect-hub-40e51",
+    "storage_bucket": "connect-hub-40e51.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:282961710262:android:c0f0043564c450cc4e6a17",
+        "mobilesdk_app_id": "1:398991963577:android:20628a3214a9223692b268",
         "android_client_info": {
-          "package_name": "com.example.instagram_clone_flutter"
+          "package_name": "com.connecthub.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDXK2-bVqe4I_09fpJ0c7iA2dJf3F4HBL8"
+          "current_key": "AIzaSyDruYUdFFaLivE31IXJg8ImcAD-PR0s1cU"
         }
       ],
       "services": {

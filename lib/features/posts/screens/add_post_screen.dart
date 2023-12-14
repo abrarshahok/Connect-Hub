@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instagram_clone_flutter/components/show_snackbar.dart';
 import 'package:line_icons/line_icons.dart';
+import '/components/show_snackbar.dart';
 import '/constants/constants.dart';
 
 import '../bloc/posts_bloc.dart';

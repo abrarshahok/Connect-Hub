@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram_clone_flutter/features/posts/screens/saved_posts_screen.dart';
+import '/features/posts/screens/saved_posts_screen.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '/components/custom_elevated_button.dart';
 import '/repos/auth_repo.dart';

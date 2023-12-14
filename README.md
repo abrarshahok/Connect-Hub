@@ -1,3 +1,3 @@
-# instagram_clone_flutter
+# Connect Hub
 
-A new Flutter project.
+A Flutter Based Social Media App

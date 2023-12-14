@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter/constants/constants.dart';
+import '/constants/constants.dart';
 
 class PostLikeTile extends StatelessWidget {
   const PostLikeTile({

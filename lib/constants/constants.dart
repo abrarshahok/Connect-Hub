@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyIcons {
-  static const String instagramIcon = 'assets/icon/instagram.png';
-  static const String instagramLogo = 'assets/images/instagram_logo.png';
   static const String defaultProfilePicUrl =
-      "https://firebasestorage.googleapis.com/v0/b/instagram-clone-21bscs20.appspot.com/o/user_posts%2Fdefault.jpg?alt=media&token=11d99af4-a9a2-48ef-bab9-29c5bf3485ed";
+      "https://firebasestorage.googleapis.com/v0/b/connect-hub-40e51.appspot.com/o/user_profile_pictures%2Fdefault.png?alt=media&token=02e0efea-5488-4204-a3b3-9811c6225eb9";
 }
 
 class MyColors {

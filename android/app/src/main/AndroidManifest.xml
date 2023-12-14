@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="instagram_clone_flutter"
+        android:label="Connect Hub"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

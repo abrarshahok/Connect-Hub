@@ -23,12 +23,14 @@ class PostsFeed extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
       appBar: AppBar(
-        leadingWidth: 0,
         backgroundColor: MyColors.primaryColor,
-        title: Image.asset(
-          MyIcons.instagramLogo,
-          height: 40,
-          color: MyColors.secondaryColor,
+        title: Text(
+          'Connect Hub',
+          style: MyFonts.firaSans(
+            fontColor: MyColors.secondaryColor,
+            fontWeight: FontWeight.w500,
+            fontSize: 30,
+          ),
         ),
         actions: [
           CustomIconButton(

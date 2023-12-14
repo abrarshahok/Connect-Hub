@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram_clone_flutter/components/show_snackbar.dart';
+import '/components/show_snackbar.dart';
 import '../../home/screens/home.dart';
 import '/features/auth/widgets/login_signup_form.dart';
 import '../bloc/auth_bloc.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram_clone_flutter/features/auth/bloc/auth_bloc.dart';
+import '/features/auth/bloc/auth_bloc.dart';
 import '../../../components/custom_text_form_field.dart';
 import '../../../constants/constants.dart';
 
@@ -40,16 +40,16 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
               children: [
                 const SizedBox(height: 100),
                 Center(
-                  child: SizedBox(
-                    height: 80,
-                    width: 80,
-                    child: Image.asset(
-                      MyIcons.instagramIcon,
-                      fit: BoxFit.cover,
+                  child: Text(
+                    'Connect Hub',
+                    style: MyFonts.firaSans(
+                      fontWeight: FontWeight.bold,
+                      fontColor: MyColors.secondaryColor,
+                      fontSize: 40,
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 100),
                 if (authMode == AuthMode.signUp) ...[
                   CustomTextFormField(
                     key: const ValueKey('username'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram_clone_flutter/features/auth/bloc/auth_bloc.dart';
-import 'package:instagram_clone_flutter/features/profile/screens/profile.dart';
+import '/features/auth/bloc/auth_bloc.dart';
+import '/features/profile/screens/profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
 import 'package:line_icons/line_icons.dart';
 import '../../posts/screens/posts_feed.dart';

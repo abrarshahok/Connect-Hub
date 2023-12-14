@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter/features/posts/widgets/post_like_tile.dart';
-import 'package:instagram_clone_flutter/repos/auth_repo.dart';
-
+import '/features/posts/widgets/post_like_tile.dart';
+import '/repos/auth_repo.dart';
 import '../../../constants/constants.dart';
 
 class LikesScreen extends StatelessWidget {

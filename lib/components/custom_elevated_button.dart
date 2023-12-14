@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter/constants/constants.dart';
+import '/constants/constants.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({

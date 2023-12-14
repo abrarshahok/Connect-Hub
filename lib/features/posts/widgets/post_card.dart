@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:instagram_clone_flutter/features/posts/screens/likes_screen.dart';
 import '/repos/auth_repo.dart';
+import '/features/posts/screens/likes_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';

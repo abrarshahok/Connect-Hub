@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:instagram_clone_flutter/constants/constants.dart';
+import '/constants/constants.dart';
 
 import '../models/user_data_model.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:instagram_clone_flutter/models/post_data_model.dart';
-import 'package:instagram_clone_flutter/repos/auth_repo.dart';
+import '/models/post_data_model.dart';
+import '/repos/auth_repo.dart';
 
 class PostRepo {
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
