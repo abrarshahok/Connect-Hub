@@ -17,7 +17,7 @@ class CustomIconButton extends StatelessWidget {
       icon: Icon(
         icon,
         color: color,
-        size: 30,
+        size: 25,
       ),
     );
   }
