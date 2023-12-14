@@ -10,8 +10,8 @@ class MyColors {
   static Color primaryColor = Colors.grey[900]!;
   static Color secondaryColor = Colors.white;
   static Color tercharyColor = Colors.grey[600]!;
-  static Color buttonColor1 = Colors.blue.shade700;
-  static Color buttonColor2 = Colors.blue.shade500;
+  static Color buttonColor1 = Colors.blueGrey;
+  static Color buttonColor2 = Colors.blueGrey.shade200;
 }
 
 class MyFonts {
