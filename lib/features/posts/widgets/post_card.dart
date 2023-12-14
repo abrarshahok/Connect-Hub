@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:iconly/iconly.dart';
 import '/repos/auth_repo.dart';
 import '/features/posts/screens/likes_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import '/components/show_snackbar.dart';
 import '../bloc/posts_bloc.dart';
 import '/constants/constants.dart';
@@ -77,8 +77,8 @@ class PostCard extends StatelessWidget {
                   CustomIconButton(
                     icon:
                         postDataModel.likes.contains(AuthRepo.currentUser!.uid)
-                            ? Icons.favorite
-                            : Icons.favorite_border,
+                            ? IconlyBold.heart
+                            : IconlyLight.heart,
                     color:
                         postDataModel.likes.contains(AuthRepo.currentUser!.uid)
                             ? Colors.red
@@ -93,22 +93,19 @@ class PostCard extends StatelessWidget {
                     },
                   ),
                   CustomIconButton(
-                    icon: LineIcons.comment,
+                    icon: IconlyLight.document,
                     color: MyColors.secondaryColor,
                     onPressed: () {},
                   ),
-                  Transform.rotate(
-                    angle: -0.7,
-                    child: CustomIconButton(
-                      icon: Icons.send,
-                      color: MyColors.secondaryColor,
-                      onPressed: () {},
-                    ),
+                  CustomIconButton(
+                    icon: IconlyLight.send,
+                    color: MyColors.secondaryColor,
+                    onPressed: () {},
                   ),
                   const Spacer(),
                   CustomIconButton(
-                    icon: isSaved ? Icons.bookmark : Icons.bookmark_outline,
-                    color: MyColors.secondaryColor,
+                    icon: isSaved ? IconlyBold.bookmark : IconlyLight.bookmark,
+                    color: isSaved ? Colors.blueGrey : MyColors.secondaryColor,
                     onPressed: () {
                       postsBloc.add(
                         PostSaveButtonClickedEvent(postDataModel),
@@ -129,7 +126,7 @@ class PostCard extends StatelessWidget {
                       child: Text(
                         postDataModel.likes.isEmpty
                             ? 'No Likes'
-                            : '${postDataModel.likes.length} Likes',
+                            : '${postDataModel.likes.length} ${postDataModel.likes.length == 1 ? 'Like' : 'Likes'}',
                         style: MyFonts.firaSans(
                           fontColor: MyColors.secondaryColor,
                           fontSize: 15,

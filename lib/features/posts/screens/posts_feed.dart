@@ -1,6 +1,7 @@
+import 'package:connecthub/components/custom_app_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:iconly/iconly.dart';
 import '../../../repos/auth_repo.dart';
 import '/features/posts/widgets/post_card.dart';
 import '/constants/constants.dart';
@@ -22,76 +23,74 @@ class PostsFeed extends StatelessWidget {
         .snapshots();
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: MyColors.primaryColor,
-        title: Text(
-          'Connect Hub',
-          style: MyFonts.firaSans(
-            fontColor: MyColors.secondaryColor,
-            fontWeight: FontWeight.w500,
-            fontSize: 30,
-          ),
-        ),
-        actions: [
-          CustomIconButton(
-            icon: LineIcons.heart,
-            color: MyColors.secondaryColor,
-            onPressed: () {},
-          ),
-          CustomIconButton(
-            onPressed: () {},
-            icon: LineIcons.facebookMessenger,
-            color: MyColors.secondaryColor,
-          ),
-        ],
-      ),
-      body: StreamBuilder(
-        stream: postStream,
-        builder: (context, postSnapshots) => StreamBuilder(
-          stream: savedPostStream,
-          builder: (context, savedPostSnapshots) {
-            if (postSnapshots.connectionState == ConnectionState.waiting ||
-                savedPostSnapshots.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: MyColors.buttonColor1,
-                ),
-              );
-            }
-            final postDocuments = postSnapshots.data!.docs;
-            if (postDocuments.isEmpty) {
-              return Center(
-                child: Text(
-                  'No Posts!',
-                  style: MyFonts.firaSans(
-                    fontColor: MyColors.secondaryColor,
-                  ),
-                ),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: postDocuments.length,
-                itemBuilder: (context, index) {
-                  bool isSaved = false;
-                  if (savedPostSnapshots.data!.exists) {
-                    isSaved = savedPostSnapshots.data!
-                        .data()!
-                        .containsKey(postDocuments[index].id);
-                  }
+      body: Stack(
+        children: [
+          StreamBuilder(
+            stream: postStream,
+            builder: (context, postSnapshots) => StreamBuilder(
+              stream: savedPostStream,
+              builder: (context, savedPostSnapshots) {
+                if (postSnapshots.connectionState == ConnectionState.waiting ||
+                    savedPostSnapshots.connectionState ==
+                        ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: MyColors.buttonColor1,
+                    ),
+                  );
+                }
+                final postDocuments = postSnapshots.data!.docs;
+                if (postDocuments.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No Posts!',
+                      style: MyFonts.firaSans(
+                        fontColor: MyColors.secondaryColor,
+                      ),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 80),
+                    itemCount: postDocuments.length,
+                    itemBuilder: (context, index) {
+                      bool isSaved = false;
+                      if (savedPostSnapshots.data!.exists) {
+                        isSaved = savedPostSnapshots.data!
+                            .data()!
+                            .containsKey(postDocuments[index].id);
+                      }
 
-                  final postInfo = PostDataModel.fromJson(
-                    postDocuments[index].data(),
-                    postDocuments[index].id,
+                      final postInfo = PostDataModel.fromJson(
+                        postDocuments[index].data(),
+                        postDocuments[index].id,
+                      );
+                      return PostCard(
+                        postDataModel: postInfo,
+                        isSaved: isSaved,
+                      );
+                    },
                   );
-                  return PostCard(
-                    postDataModel: postInfo,
-                    isSaved: isSaved,
-                  );
-                },
-              );
-            }
-          },
-        ),
+                }
+              },
+            ),
+          ),
+          Positioned(
+            top: 20,
+            left: 7,
+            right: 7,
+            child: CustomAppTopBar(
+              title: 'Connect Hub',
+              centerTitle: true,
+              showActionButton: true,
+              actionButton: CustomIconButton(
+                onPressed: () {},
+                icon: IconlyLight.chat,
+                color: MyColors.secondaryColor,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
