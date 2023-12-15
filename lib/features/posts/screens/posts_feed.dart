@@ -23,74 +23,67 @@ class PostsFeed extends StatelessWidget {
         .snapshots();
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      body: Stack(
-        children: [
-          StreamBuilder(
-            stream: postStream,
-            builder: (context, postSnapshots) => StreamBuilder(
-              stream: savedPostStream,
-              builder: (context, savedPostSnapshots) {
-                if (postSnapshots.connectionState == ConnectionState.waiting ||
-                    savedPostSnapshots.connectionState ==
-                        ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: MyColors.buttonColor1,
-                    ),
-                  );
-                }
-                final postDocuments = postSnapshots.data!.docs;
-                if (postDocuments.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No Posts!',
-                      style: MyFonts.bodyFont(
-                        fontColor: MyColors.secondaryColor,
-                      ),
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 80),
-                    itemCount: postDocuments.length,
-                    itemBuilder: (context, index) {
-                      bool isSaved = false;
-                      if (savedPostSnapshots.data!.exists) {
-                        isSaved = savedPostSnapshots.data!
-                            .data()!
-                            .containsKey(postDocuments[index].id);
-                      }
-
-                      final postInfo = PostDataModel.fromJson(
-                        postDocuments[index].data(),
-                        postDocuments[index].id,
-                      );
-                      return PostCard(
-                        postDataModel: postInfo,
-                        isSaved: isSaved,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: MyColors.primaryColor,
+        title: CustomAppTopBar(
+          title: 'Connect Hub',
+          centerTitle: true,
+          showActionButton: true,
+          actionButton: CustomIconButton(
+            onPressed: () {},
+            icon: IconlyLight.chat,
+            color: MyColors.secondaryColor,
           ),
-          Positioned(
-            top: 20,
-            left: 7,
-            right: 7,
-            child: CustomAppTopBar(
-              title: 'Connect Hub',
-              centerTitle: true,
-              showActionButton: true,
-              actionButton: CustomIconButton(
-                onPressed: () {},
-                icon: IconlyLight.chat,
-                color: MyColors.secondaryColor,
-              ),
-            ),
-          )
-        ],
+        ),
+      ),
+      body: StreamBuilder(
+        stream: postStream,
+        builder: (context, postSnapshots) => StreamBuilder(
+          stream: savedPostStream,
+          builder: (context, savedPostSnapshots) {
+            if (postSnapshots.connectionState == ConnectionState.waiting ||
+                savedPostSnapshots.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: MyColors.buttonColor1,
+                ),
+              );
+            }
+            final postDocuments = postSnapshots.data!.docs;
+            if (postDocuments.isEmpty) {
+              return Center(
+                child: Text(
+                  'No Posts!',
+                  style: MyFonts.bodyFont(
+                    fontColor: MyColors.secondaryColor,
+                  ),
+                ),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: postDocuments.length,
+                padding: const EdgeInsets.only(top: 10, bottom: 80),
+                itemBuilder: (context, index) {
+                  bool isSaved = false;
+                  if (savedPostSnapshots.data!.exists) {
+                    isSaved = savedPostSnapshots.data!
+                        .data()!
+                        .containsKey(postDocuments[index].id);
+                  }
+                  final postInfo = PostDataModel.fromJson(
+                    postDocuments[index].data(),
+                    postDocuments[index].id,
+                  );
+                  return PostCard(
+                    postDataModel: postInfo,
+                    isSaved: isSaved,
+                  );
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }

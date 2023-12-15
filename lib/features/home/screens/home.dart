@@ -27,7 +27,6 @@ class _HomeState extends State<Home> {
       const PostsFeed(),
       const Center(child: Text('In Making')),
       AddPostScreen(),
-      const SavedPostsScreen(),
       Profile(authBloc: widget.authBloc),
     ];
     return BlocConsumer<HomeBloc, HomeState>(
@@ -98,11 +97,6 @@ class _HomeState extends State<Home> {
                       icon: IconlyBold.plus,
                       unselectedIcon: IconlyLight.plus,
                       selectedColor: Colors.white,
-                    ),
-                    CrystalNavigationBarItem(
-                      icon: IconlyBold.bookmark,
-                      unselectedIcon: IconlyLight.bookmark,
-                      selectedColor: Colors.blueGrey,
                     ),
                     CrystalNavigationBarItem(
                       icon: IconlyBold.user_2,

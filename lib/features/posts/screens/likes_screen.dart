@@ -21,80 +21,76 @@ class LikesScreen extends StatelessWidget {
     }
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      body: Stack(
-        children: [
-          StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('users').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: MyColors.buttonColor1,
-                    ),
-                  );
-                }
-
-                final likeDocs = snapshot.data!.docs;
-                final userLikesData = likeDocs.where((user) {
-                  return likes.contains(user.id);
-                }).toList();
-
-                userLikesData.sort((a, b) {
-                  if (a.id == AuthRepo.currentUser!.uid) {
-                    return -1;
-                  } else if (b.id == AuthRepo.currentUser!.uid) {
-                    return 1;
-                  } else {
-                    return a.id.compareTo(b.id);
-                  }
-                });
-
-                if (likes.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No Likes!',
-                      style: MyFonts.bodyFont(
-                        fontColor: MyColors.secondaryColor,
-                      ),
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 80),
-                    itemCount: userLikesData.length,
-                    itemBuilder: (context, index) {
-                      bool isYou =
-                          userLikesData[index].id == AuthRepo.currentUser!.uid;
-                      final userName =
-                          isYou ? 'You' : userLikesData[index]['username'];
-                      final imageUrl = userLikesData[index]['userImageUrl'];
-                      return PostLikeTile(
-                        userImageUrl: imageUrl,
-                        userName: userName,
-                        isYou: isYou,
-                      );
-                    },
-                  );
-                }
-              }),
-          Positioned(
-            top: 20,
-            left: 7,
-            right: 7,
-            child: CustomAppTopBar(
-              showLeadingButton: true,
-              leadingButton: CustomIconButton(
-                color: MyColors.secondaryColor,
-                icon: IconlyLight.arrow_left,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: 'Likes',
-            ),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: MyColors.primaryColor,
+        automaticallyImplyLeading: false,
+        title: CustomAppTopBar(
+          showLeadingButton: true,
+          leadingButton: CustomIconButton(
+            color: MyColors.secondaryColor,
+            icon: IconlyLight.arrow_left,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-        ],
+          title: 'Likes',
+        ),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: MyColors.buttonColor1,
+              ),
+            );
+          }
+
+          final likeDocs = snapshot.data!.docs;
+          final userLikesData = likeDocs.where((user) {
+            return likes.contains(user.id);
+          }).toList();
+
+          userLikesData.sort((a, b) {
+            if (a.id == AuthRepo.currentUser!.uid) {
+              return -1;
+            } else if (b.id == AuthRepo.currentUser!.uid) {
+              return 1;
+            } else {
+              return a.id.compareTo(b.id);
+            }
+          });
+
+          if (likes.isEmpty) {
+            return Center(
+              child: Text(
+                'No Likes!',
+                style: MyFonts.bodyFont(
+                  fontColor: MyColors.secondaryColor,
+                ),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              itemCount: userLikesData.length,
+              itemBuilder: (context, index) {
+                bool isYou =
+                    userLikesData[index].id == AuthRepo.currentUser!.uid;
+                final userName =
+                    isYou ? 'You' : userLikesData[index]['username'];
+                final imageUrl = userLikesData[index]['userImageUrl'];
+                return PostLikeTile(
+                  userImageUrl: imageUrl,
+                  userName: userName,
+                  isYou: isYou,
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
