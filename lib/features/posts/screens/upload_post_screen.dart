@@ -5,10 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../../components/show_snackbar.dart';
+import 'add_post_screen.dart';
 
 class UploadPostScreen extends StatelessWidget {
   static const routeName = '/upload-post-screen';
   final TextEditingController _captionTextController = TextEditingController();
+
+  UploadPostScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final routeData =
@@ -19,7 +22,25 @@ class UploadPostScreen extends StatelessWidget {
       bloc: postsBloc,
       listenWhen: (previous, current) => current is PostsActionState,
       listener: (context, state) {
-        if (state is PostUploadSuccessActionState) {
+        if (state is PostChooseUploadOptionActionState) {
+          
+          showModalBottomSheet(
+            context: context,
+            showDragHandle: true,
+            backgroundColor: MyColors.primaryColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            builder: (context) => SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: AddPostScreen(isChangingImage:state.isChangingImage),
+            ),
+          );
+        } else if (state is PostUploadSuccessActionState) {
           Navigator.pop(context);
           ShowSnackBar(
             context: context,
@@ -108,7 +129,7 @@ class UploadPostScreen extends StatelessWidget {
               const SizedBox(height: 10),
               TextButton.icon(
                 onPressed: () {
-                  postsBloc.add(PostChooseImageButtonClickedEvent());
+                  postsBloc.add(PostChooseImageButtonClickedEvent(isChagingImage: true));
                 },
                 icon: Icon(
                   IconlyLight.camera,

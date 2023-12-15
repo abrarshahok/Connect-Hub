@@ -1,8 +1,8 @@
 import 'package:connecthub/constants/constants.dart';
-import 'package:connecthub/features/posts/screens/upload_post_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '/features/posts/screens/upload_post_screen.dart';
 import '/features/posts/screens/likes_screen.dart';
 import '/features/posts/screens/saved_posts_screen.dart';
 import '/features/posts/screens/add_post_screen.dart';

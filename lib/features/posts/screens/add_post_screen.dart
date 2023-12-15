@@ -9,11 +9,15 @@ import '/constants/constants.dart';
 import '../bloc/posts_bloc.dart';
 
 class AddPostScreen extends StatelessWidget {
-  AddPostScreen({super.key});
+  AddPostScreen({super.key, this.isChangingImage = false});
+  final bool isChangingImage;
   static const routeName = '/add-post-screen';
   final PostsBloc postsBloc = PostsBloc();
 
-  void _pickImage(ImageSource imageSource, BuildContext context) {
+  void _pickImage(
+    ImageSource imageSource,
+    BuildContext context,
+  ) {
     ImagePicker().pickImage(source: imageSource).then((image) {
       if (image == null) {
         return;
@@ -33,11 +37,20 @@ class AddPostScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is PostChoosenSuccessActionState) {
             final image = state.choosenImage;
-            Navigator.pushNamed(context, UploadPostScreen.routeName,
-                arguments: {
-                  'postBloc': postsBloc,
-                  'image': image,
-                });
+            if (isChangingImage) {
+              Navigator.pushReplacementNamed(
+                  context, UploadPostScreen.routeName,
+                  arguments: {
+                    'postBloc': postsBloc,
+                    'image': image,
+                  });
+            } else {
+              Navigator.pushNamed(context, UploadPostScreen.routeName,
+                  arguments: {
+                    'postBloc': postsBloc,
+                    'image': image,
+                  });
+            }
           }
         },
         builder: (context, state) {

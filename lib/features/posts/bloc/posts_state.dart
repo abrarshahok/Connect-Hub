@@ -19,7 +19,10 @@ class PostUploadFailedActionState extends PostsActionState {}
 
 class PostUploadingActionState extends PostsActionState {}
 
-class PostChooseUploadOptionActionState extends PostsActionState {}
+class PostChooseUploadOptionActionState extends PostsActionState {
+  final bool isChangingImage;
+  PostChooseUploadOptionActionState({this.isChangingImage = false});
+}
 
 class PostLikingFailedActionState extends PostsActionState {}
 

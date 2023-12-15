@@ -25,7 +25,9 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostChooseImageButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) {
-    emit(PostChooseUploadOptionActionState());
+    emit(PostChooseUploadOptionActionState(
+      isChangingImage: event.isChagingImage,
+    ));
   }
 
   FutureOr<void> postImageChoosenSuccessEvent(
