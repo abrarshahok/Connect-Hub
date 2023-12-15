@@ -14,10 +14,12 @@ import '/models/post_data_model.dart';
 class PostCard extends StatelessWidget {
   final PostDataModel postDataModel;
   final bool isSaved;
+  final bool likedFromSavedScreen;
   PostCard({
     super.key,
     required this.postDataModel,
     required this.isSaved,
+    this.likedFromSavedScreen = false,
   });
   final PostsBloc postsBloc = PostsBloc();
   @override
@@ -60,8 +62,9 @@ class PostCard extends StatelessWidget {
                   const SizedBox(width: 5),
                   Text(
                     postDataModel.username,
-                    style: MyFonts.firaSans(
+                    style: MyFonts.bodyFont(
                       fontColor: MyColors.secondaryColor,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -127,7 +130,7 @@ class PostCard extends StatelessWidget {
                         postDataModel.likes.isEmpty
                             ? 'No Likes'
                             : '${postDataModel.likes.length} ${postDataModel.likes.length == 1 ? 'Like' : 'Likes'}',
-                        style: MyFonts.firaSans(
+                        style: MyFonts.bodyFont(
                           fontColor: MyColors.secondaryColor,
                           fontSize: 15,
                         ),
@@ -142,7 +145,7 @@ class PostCard extends StatelessWidget {
                           ),
                           TextSpan(
                             text: postDataModel.caption,
-                            style: MyFonts.firaSans(
+                            style: MyFonts.bodyFont(
                               fontWeight: FontWeight.w300,
                             ),
                           )
@@ -151,7 +154,7 @@ class PostCard extends StatelessWidget {
                     ),
                     Text(
                       formatedDateTime,
-                      style: MyFonts.firaSans(
+                      style: MyFonts.bodyFont(
                         fontColor: MyColors.secondaryColor,
                         fontSize: 10,
                         fontWeight: FontWeight.w200,

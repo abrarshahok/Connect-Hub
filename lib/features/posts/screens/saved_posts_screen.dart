@@ -36,7 +36,7 @@ class SavedPostsScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     'No Saved Posts!',
-                    style: MyFonts.firaSans(
+                    style: MyFonts.bodyFont(
                       fontColor: MyColors.secondaryColor,
                     ),
                   ),
@@ -58,6 +58,7 @@ class SavedPostsScreen extends StatelessWidget {
                     return PostCard(
                       postDataModel: postInfo,
                       isSaved: isSaved,
+                      likedFromSavedScreen: true,
                     );
                   },
                 );

@@ -44,7 +44,7 @@ class PostsFeed extends StatelessWidget {
                   return Center(
                     child: Text(
                       'No Posts!',
-                      style: MyFonts.firaSans(
+                      style: MyFonts.bodyFont(
                         fontColor: MyColors.secondaryColor,
                       ),
                     ),

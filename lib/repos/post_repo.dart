@@ -48,13 +48,23 @@ class PostRepo {
   }) async {
     try {
       final postRef = firebaseFirestore.collection('posts').doc(postId);
+      // Also Update likes in Saved Posts
+      final savedPostRef = firebaseFirestore
+          .collection('savedPosts')
+          .doc(AuthRepo.currentUser!.uid);
       if (likes.contains(AuthRepo.currentUser!.uid)) {
         postRef.update({
           'likes': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
         });
+        savedPostRef.update({
+          '$postId.likes': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
+        });
       } else {
         postRef.update({
           'likes': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
+        });
+        savedPostRef.update({
+          '$postId.likes': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
         });
       }
 
@@ -69,7 +79,6 @@ class PostRepo {
       final savedPostRef = firebaseFirestore
           .collection('savedPosts')
           .doc(AuthRepo.currentUser!.uid);
-
       final savedPostData = await savedPostRef.get();
       if (savedPostData.exists) {
         final isPostSaved = savedPostData.data()!.containsKey(postInfo.postId);
@@ -81,7 +90,7 @@ class PostRepo {
       } else {
         await savedPostRef.set({postInfo.postId: postInfo.toJson()});
       }
-      print(postInfo.toJson());
+
       return true;
     } catch (_) {
       return false;

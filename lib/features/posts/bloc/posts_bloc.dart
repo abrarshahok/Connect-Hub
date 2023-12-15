@@ -32,7 +32,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostImageChoosenSuccessEvent event,
     Emitter<PostsState> emit,
   ) {
-    emit(PostChoosenSuccessState(choosenImage: event.pickedImage));
+    emit(PostChoosenSuccessActionState(choosenImage: event.pickedImage));
   }
 
   FutureOr<void> postUploadButtonClickedEvent(

@@ -24,7 +24,7 @@ class PostLikeTile extends StatelessWidget {
       ),
       title: Text(
         userName,
-        style: MyFonts.firaSans(
+        style: MyFonts.bodyFont(
           fontColor: MyColors.secondaryColor,
         ),
       ),
@@ -42,7 +42,7 @@ class PostLikeTile extends StatelessWidget {
               ),
               child: Text(
                 'Follow',
-                style: MyFonts.firaSans(
+                style: MyFonts.bodyFont(
                   fontColor: MyColors.secondaryColor,
                 ),
               ),

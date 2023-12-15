@@ -7,10 +7,10 @@ class PostsActionState extends PostsState {}
 
 class PostsInitial extends PostsState {}
 
-class PostChoosenSuccessState extends PostsState {
+class PostChoosenSuccessActionState extends PostsActionState {
   final File choosenImage;
 
-  PostChoosenSuccessState({required this.choosenImage});
+  PostChoosenSuccessActionState({required this.choosenImage});
 }
 
 class PostUploadSuccessActionState extends PostsActionState {}
