@@ -15,12 +15,44 @@ class MyColors {
 }
 
 class MyFonts {
-  static TextStyle firaSans({
+  static TextStyle bodyFont({
     FontWeight? fontWeight,
     Color? fontColor,
     double? fontSize,
   }) =>
-      GoogleFonts.firaSans(
+      GoogleFonts.openSans(
+        fontWeight: fontWeight,
+        color: fontColor,
+        fontSize: fontSize,
+      );
+
+  static TextStyle headingFont({
+    FontWeight? fontWeight,
+    Color? fontColor,
+    double? fontSize,
+  }) =>
+      GoogleFonts.montserrat(
+        fontWeight: fontWeight,
+        color: fontColor,
+        fontSize: fontSize,
+      );
+
+  static TextStyle buttonFont({
+    FontWeight? fontWeight,
+    Color? fontColor,
+    double? fontSize,
+  }) =>
+      GoogleFonts.poppins(
+        fontWeight: fontWeight,
+        color: fontColor,
+        fontSize: fontSize,
+      );
+  static TextStyle logoFont({
+    FontWeight? fontWeight,
+    Color? fontColor,
+    double? fontSize,
+  }) =>
+      GoogleFonts.averiaSansLibre(
         fontWeight: fontWeight,
         color: fontColor,
         fontSize: fontSize,
