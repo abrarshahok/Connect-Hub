@@ -1,3 +1,4 @@
+import 'package:connecthub/features/posts/screens/upload_post_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '/features/posts/screens/likes_screen.dart';
@@ -26,6 +27,7 @@ class MainApp extends StatelessWidget {
       home: const Auth(),
       routes: {
         AddPostScreen.routeName: (context) => AddPostScreen(),
+        UploadPostScreen.routeName:(context)=>UploadPostScreen(),
         LikesScreen.routeName: (context) => const LikesScreen(),
         SavedPostsScreen.routeName: (context) => const SavedPostsScreen(),
       },
