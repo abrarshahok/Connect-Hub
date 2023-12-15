@@ -42,7 +42,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                 Center(
                   child: Text(
                     'Connect Hub',
-                    style: MyFonts.firaSans(
+                    style: MyFonts.bodyFont(
                       fontWeight: FontWeight.bold,
                       fontColor: MyColors.secondaryColor,
                       fontSize: 40,
@@ -143,7 +143,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                             )
                           : Text(
                               authMode == AuthMode.signUp ? 'Sign Up' : 'Login',
-                              style: MyFonts.firaSans(
+                              style: MyFonts.bodyFont(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
                                 fontColor: MyColors.secondaryColor,
@@ -160,7 +160,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                       authMode == AuthMode.login
                           ? 'Not a member? '
                           : 'Already a member? ',
-                      style: MyFonts.firaSans(
+                      style: MyFonts.bodyFont(
                         fontColor: MyColors.secondaryColor,
                       ),
                     ),
@@ -168,7 +168,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                       onTap: toggleAuthMode,
                       child: Text(
                         authMode == AuthMode.login ? 'Sign Up' : 'Login',
-                        style: MyFonts.firaSans(
+                        style: MyFonts.bodyFont(
                           fontColor: MyColors.buttonColor2,
                         ),
                       ),
