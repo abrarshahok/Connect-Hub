@@ -32,7 +32,7 @@ class CustomElevatedButton extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: MyFonts.firaSans(
+        style: MyFonts.bodyFont(
           fontColor: MyColors.secondaryColor,
           fontSize: 16,
         ),

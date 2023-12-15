@@ -8,12 +8,16 @@ class CustomAppTopBar extends StatelessWidget {
     required this.title,
     this.centerTitle = false,
     this.showActionButton = false,
+    this.showLeadingButton = false,
     this.actionButton,
+    this.leadingButton,
   });
   final String title;
   final bool centerTitle;
   final bool showActionButton;
+  final bool showLeadingButton;
   final Widget? actionButton;
+  final Widget? leadingButton;
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +38,17 @@ class CustomAppTopBar extends StatelessWidget {
             ),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              if (showLeadingButton) leadingButton!,
               Text(
                 title,
-                style: MyFonts.firaSans(
+                style: MyFonts.logoFont(
                   fontColor: MyColors.secondaryColor,
-                  fontSize: 20,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const Spacer(),
               if (showActionButton) actionButton!,
             ],
           ),

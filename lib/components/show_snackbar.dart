@@ -20,7 +20,7 @@ class ShowSnackBar {
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         content: Text(
           label,
-          style: MyFonts.firaSans(
+          style: MyFonts.bodyFont(
             fontColor: MyColors.secondaryColor,
             fontSize: 15,
           ),

@@ -32,14 +32,14 @@ class CustomTextFormField extends StatelessWidget {
       color: MyColors.primaryColor,
       child: TextFormField(
         key: key,
-        style: MyFonts.firaSans(
+        style: MyFonts.bodyFont(
           fontColor: MyColors.secondaryColor,
           fontWeight: FontWeight.w300,
         ),
         decoration: InputDecoration(
           label: Text(
             label,
-            style: MyFonts.firaSans(
+            style: MyFonts.bodyFont(
               fontColor: MyColors.tercharyColor,
               fontWeight: FontWeight.w400,
             ),
