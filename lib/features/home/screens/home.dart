@@ -35,8 +35,23 @@ class _HomeState extends State<Home> {
       listenWhen: (previous, current) => current is HomeActionState,
       buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
-        if (state is HomeNavigateToAddPostPageActionState) {
-          Navigator.pushNamed(context, AddPostScreen.routeName);
+        if (state is HomeShowAddPostOptionsModalSheetActionState) {
+          showModalBottomSheet(
+            context: context,
+            showDragHandle: true,
+            backgroundColor: MyColors.primaryColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            builder: (context) => SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: AddPostScreen(),
+            ),
+          );
         }
       },
       builder: (context, state) {

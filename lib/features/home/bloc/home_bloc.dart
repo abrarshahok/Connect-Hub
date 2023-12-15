@@ -15,6 +15,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeAddPostButtonClickedEvent event,
     Emitter<HomeState> emit,
   ) {
-    emit(HomeNavigateToAddPostPageActionState());
+    emit(HomeShowAddPostOptionsModalSheetActionState());
   }
 }

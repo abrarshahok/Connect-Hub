@@ -7,4 +7,4 @@ class HomeActionState extends HomeState {}
 
 class HomeInitial extends HomeState {}
 
-class HomeNavigateToAddPostPageActionState extends HomeActionState {}
+class HomeShowAddPostOptionsModalSheetActionState extends HomeActionState {}
