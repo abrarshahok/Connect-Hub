@@ -36,7 +36,7 @@ class CustomAppTopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (showLeadingButton) leadingButton!,
+          if (showLeadingButton && leadingButton != null) leadingButton!,
           Text(
             title,
             style: MyFonts.logoFont(
@@ -46,7 +46,7 @@ class CustomAppTopBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          if (showActionButton) actionButton!,
+          if (showActionButton && actionButton != null) actionButton!,
         ],
       ),
     );
