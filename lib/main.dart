@@ -1,4 +1,5 @@
 import 'package:connecthub/constants/constants.dart';
+import 'package:connecthub/features/posts/screens/comments_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +39,7 @@ class MainApp extends StatelessWidget {
         UploadPostScreen.routeName: (context) => UploadPostScreen(),
         LikesScreen.routeName: (context) => const LikesScreen(),
         SavedPostsScreen.routeName: (context) => const SavedPostsScreen(),
+        CommentsScreen.routeName: (context) =>  CommentsScreen(),
       },
     );
   }
