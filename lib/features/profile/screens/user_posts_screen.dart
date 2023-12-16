@@ -34,26 +34,32 @@ class UserPostsScreen extends StatelessWidget {
           }
           final postDocuments = userPostSnapshots.data!.docs;
 
-          return ListView.builder(
-            padding: const EdgeInsets.only(bottom: 80),
-            itemCount: postDocuments.length,
-            itemBuilder: (context, index) {
-              bool isSaved = false;
-              if (savedPostSnapshots.data!.exists) {
-                isSaved = savedPostSnapshots.data!
-                    .data()!
-                    .containsKey(postDocuments[index].id);
-              }
-              final postInfo = PostDataModel.fromJson(
-                postDocuments[index].data(),
-                postDocuments[index].id,
-              );
-              return PostCard(
-                postDataModel: postInfo,
-                isSaved: isSaved,
-              );
-            },
-          );
+          return postDocuments.isEmpty
+              ? Center(
+                  child: Text(
+                  'No Posts!',
+                  style: MyFonts.bodyFont(fontColor: MyColors.secondaryColor),
+                ))
+              : ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 80),
+                  itemCount: postDocuments.length,
+                  itemBuilder: (context, index) {
+                    bool isSaved = false;
+                    if (savedPostSnapshots.data!.exists) {
+                      isSaved = savedPostSnapshots.data!
+                          .data()!
+                          .containsKey(postDocuments[index].id);
+                    }
+                    final postInfo = PostDataModel.fromJson(
+                      postDocuments[index].data(),
+                      postDocuments[index].id,
+                    );
+                    return PostCard(
+                      postDataModel: postInfo,
+                      isSaved: isSaved,
+                    );
+                  },
+                );
         },
       ),
     );
