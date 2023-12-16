@@ -1,3 +1,4 @@
+import 'package:connecthub/features/posts/screens/comments_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconly/iconly.dart';
@@ -14,12 +15,11 @@ import '/models/post_data_model.dart';
 class PostCard extends StatelessWidget {
   final PostDataModel postDataModel;
   final bool isSaved;
-  final bool likedFromSavedScreen;
+
   PostCard({
     super.key,
     required this.postDataModel,
     required this.isSaved,
-    this.likedFromSavedScreen = false,
   });
   final PostsBloc postsBloc = PostsBloc();
   @override
@@ -41,6 +41,9 @@ class PostCard extends StatelessWidget {
         } else if (state is PostNavigateToLikesScreenActionState) {
           Navigator.pushNamed(context, LikesScreen.routeName,
               arguments: postDataModel.likes);
+        } else if (state is PostNavigateToCommentsScreenActionState) {
+          Navigator.pushNamed(context, CommentsScreen.routeName,
+              arguments: postDataModel.postId);
         }
       },
       builder: (context, state) {
@@ -98,7 +101,11 @@ class PostCard extends StatelessWidget {
                   CustomIconButton(
                     icon: IconlyLight.document,
                     color: MyColors.secondaryColor,
-                    onPressed: () {},
+                    onPressed: () {
+                      postsBloc.add(
+                          PostNavigateToCommentScreenButtonClickedEvent(
+                              postDataModel.postId));
+                    },
                   ),
                   CustomIconButton(
                     icon: IconlyLight.send,
@@ -111,7 +118,7 @@ class PostCard extends StatelessWidget {
                     color: isSaved ? Colors.blueGrey : MyColors.secondaryColor,
                     onPressed: () {
                       postsBloc.add(
-                        PostSaveButtonClickedEvent(postDataModel),
+                        PostSaveButtonClickedEvent(postDataModel.postId),
                       );
                     },
                   ),
@@ -124,7 +131,8 @@ class PostCard extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        postsBloc.add(PostNavigateToLikeScreenButtonClicked());
+                        postsBloc
+                            .add(PostNavigateToLikeScreenButtonClickedEvent());
                       },
                       child: Text(
                         postDataModel.likes.isEmpty

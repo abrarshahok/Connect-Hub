@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/components/custom_app_top_bar.dart';
 import 'package:connecthub/components/custom_icon_button.dart';
+import 'package:connecthub/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '/features/posts/widgets/post_like_tile.dart';
@@ -41,13 +42,8 @@ class LikesScreen extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: MyColors.buttonColor1,
-              ),
-            );
+            return const Loading();
           }
-
           final likeDocs = snapshot.data!.docs;
           final userLikesData = likeDocs.where((user) {
             return likes.contains(user.id);

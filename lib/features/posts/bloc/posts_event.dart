@@ -21,13 +21,31 @@ class PostUploadButtonClickedEvent extends PostsEvent {
 
 class PostLikeButtonClickedEvent extends PostsEvent {
   final String postId;
+
   final List<dynamic> likes;
-  PostLikeButtonClickedEvent({required this.postId, required this.likes});
+  PostLikeButtonClickedEvent({
+    required this.postId,
+    required this.likes,
+  });
+}
+
+class PostAddCommentButtonClickedEvent extends PostsEvent {
+  final String postId;
+  final String comment;
+  PostAddCommentButtonClickedEvent({
+    required this.postId,
+    required this.comment,
+  });
 }
 
 class PostSaveButtonClickedEvent extends PostsEvent {
-  final PostDataModel clickedPost;
-  PostSaveButtonClickedEvent(this.clickedPost);
+  final String postId;
+  PostSaveButtonClickedEvent(this.postId);
 }
 
-class PostNavigateToLikeScreenButtonClicked extends PostsEvent {}
+class PostNavigateToCommentScreenButtonClickedEvent extends PostsEvent {
+  final String postId;
+  PostNavigateToCommentScreenButtonClickedEvent(this.postId);
+}
+
+class PostNavigateToLikeScreenButtonClickedEvent extends PostsEvent {}

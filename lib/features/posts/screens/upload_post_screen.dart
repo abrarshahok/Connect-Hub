@@ -23,7 +23,6 @@ class UploadPostScreen extends StatelessWidget {
       listenWhen: (previous, current) => current is PostsActionState,
       listener: (context, state) {
         if (state is PostChooseUploadOptionActionState) {
-          
           showModalBottomSheet(
             context: context,
             showDragHandle: true,
@@ -37,7 +36,7 @@ class UploadPostScreen extends StatelessWidget {
             builder: (context) => SizedBox(
               height: 300,
               width: double.infinity,
-              child: AddPostScreen(isChangingImage:state.isChangingImage),
+              child: AddPostScreen(isChangingImage: state.isChangingImage),
             ),
           );
         } else if (state is PostUploadSuccessActionState) {
@@ -129,7 +128,8 @@ class UploadPostScreen extends StatelessWidget {
               const SizedBox(height: 10),
               TextButton.icon(
                 onPressed: () {
-                  postsBloc.add(PostChooseImageButtonClickedEvent(isChagingImage: true));
+                  postsBloc.add(
+                      PostChooseImageButtonClickedEvent(isChagingImage: true));
                 },
                 icon: Icon(
                   IconlyLight.camera,

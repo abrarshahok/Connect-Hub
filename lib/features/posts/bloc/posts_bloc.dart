@@ -17,8 +17,11 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostUploadButtonClickedEvent>(postUploadButtonClickedEvent);
     on<PostLikeButtonClickedEvent>(postLikeButtonClickedEvent);
     on<PostSaveButtonClickedEvent>(postSaveButtonClickedEvent);
-    on<PostNavigateToLikeScreenButtonClicked>(
-        postNavigateToLikeScreenButtonClicked);
+    on<PostNavigateToLikeScreenButtonClickedEvent>(
+        postNavigateToLikeScreenButtonClickedEvent);
+    on<PostNavigateToCommentScreenButtonClickedEvent>(
+        postNavigateToCommentScreenButtonClickedEvent);
+    on<PostAddCommentButtonClickedEvent>(postAddCommentButtonClickedEvent);
   }
 
   FutureOr<void> postChooseImageButtonClickedEvent(
@@ -51,7 +54,6 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       postedOn: DateTime.now(),
       userImage: AuthRepo.currentUser!.userImage,
       likes: [],
-      comments: [],
     );
     if (isUploadingSuccess) {
       emit(PostUploadSuccessActionState());
@@ -67,6 +69,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     final isLikedOrDisliked = await PostRepo.likeOrDislikePost(
       likes: event.likes,
       postId: event.postId,
+      
     );
     if (!isLikedOrDisliked) {
       emit(PostLikingFailedActionState());
@@ -77,16 +80,38 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostSaveButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) async {
-    final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.clickedPost);
+    final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.postId);
     if (!isSavedOrUnsaved) {
       emit(PostSavingFailedActionState());
     }
   }
 
-  FutureOr<void> postNavigateToLikeScreenButtonClicked(
-    PostNavigateToLikeScreenButtonClicked event,
+  FutureOr<void> postNavigateToLikeScreenButtonClickedEvent(
+    PostNavigateToLikeScreenButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) {
     emit(PostNavigateToLikesScreenActionState());
+  }
+
+  FutureOr<void> postNavigateToCommentScreenButtonClickedEvent(
+    PostNavigateToCommentScreenButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostNavigateToCommentsScreenActionState());
+  }
+
+  FutureOr<void> postAddCommentButtonClickedEvent(
+    PostAddCommentButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) async {
+    bool isCommentSent = await PostRepo.addComment(
+      postId: event.postId,
+      comment: event.comment,
+    );
+    if (isCommentSent) {
+      print('Comment Sent');
+    } else {
+      print('Comment Sending failed');
+    }
   }
 }

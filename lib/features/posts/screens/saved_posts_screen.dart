@@ -1,3 +1,4 @@
+import 'package:connecthub/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../repos/auth_repo.dart';
@@ -11,12 +12,11 @@ class SavedPostsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final savedPostStream = FirebaseFirestore.instance
-        .collection('savedPosts')
-        .doc(AuthRepo.currentUser!.uid)
-        .snapshots();
     return StreamBuilder(
-      stream: savedPostStream,
+      stream: FirebaseFirestore.instance
+          .collection('savedPosts')
+          .doc(AuthRepo.currentUser!.uid)
+          .snapshots(),
       builder: (context, savedPostSnapshots) {
         if (savedPostSnapshots.connectionState == ConnectionState.waiting) {
           return Center(
@@ -25,8 +25,7 @@ class SavedPostsScreen extends StatelessWidget {
             ),
           );
         }
-
-        if (!savedPostSnapshots.data!.exists) {
+        if (savedPostSnapshots.data!.data()!.isEmpty) {
           return Center(
             child: Text(
               'No Saved Posts!',
@@ -36,23 +35,30 @@ class SavedPostsScreen extends StatelessWidget {
             ),
           );
         } else {
-          final postDocuments =
-              savedPostSnapshots.data!.data()!.values.toList();
           final postIdList = savedPostSnapshots.data!.data()!.keys.toList();
-          return ListView.builder(
-            padding: const EdgeInsets.only(bottom: 80),
-            itemCount: postDocuments.length,
-            itemBuilder: (context, index) {
-              bool isSaved = true;
-              final postInfo = PostDataModel.fromJson(
-                postDocuments[index],
-                postIdList[index],
-              );
-              return PostCard(
-                postDataModel: postInfo,
-                isSaved: isSaved,
-                likedFromSavedScreen: true,
-              );
+          return StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('posts')
+                .where(FieldPath.documentId, whereIn: postIdList)
+                .snapshots(),
+            builder: (context, postsSnapshot) {
+              if (postsSnapshot.connectionState == ConnectionState.waiting) {
+                return const Loading();
+              }
+              final postDocuments = postsSnapshot.data!.docs;
+              return ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 80),
+                  itemCount: postDocuments.length,
+                  itemBuilder: (context, index) {
+                    final postInfo = PostDataModel.fromJson(
+                      postDocuments[index].data(),
+                      postDocuments[index].id,
+                    );
+                    return PostCard(
+                      postDataModel: postInfo,
+                      isSaved: true,
+                    );
+                  });
             },
           );
         }

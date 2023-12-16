@@ -1,7 +1,8 @@
-import 'package:connecthub/components/custom_app_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:iconly/iconly.dart';
+import '/components/custom_app_top_bar.dart';
+import '/components/loading.dart';
 import '../../../repos/auth_repo.dart';
 import '/features/posts/widgets/post_card.dart';
 import '/constants/constants.dart';
@@ -44,11 +45,7 @@ class PostsFeed extends StatelessWidget {
           builder: (context, savedPostSnapshots) {
             if (postSnapshots.connectionState == ConnectionState.waiting ||
                 savedPostSnapshots.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: MyColors.buttonColor1,
-                ),
-              );
+              return const Loading();
             }
             final postDocuments = postSnapshots.data!.docs;
             if (postDocuments.isEmpty) {
@@ -61,16 +58,14 @@ class PostsFeed extends StatelessWidget {
                 ),
               );
             } else {
+              final savedPostsList =
+                  savedPostSnapshots.data!.data()!.keys.toList();
               return ListView.builder(
                 itemCount: postDocuments.length,
                 padding: const EdgeInsets.only(top: 10, bottom: 80),
                 itemBuilder: (context, index) {
-                  bool isSaved = false;
-                  if (savedPostSnapshots.data!.exists) {
-                    isSaved = savedPostSnapshots.data!
-                        .data()!
-                        .containsKey(postDocuments[index].id);
-                  }
+                  bool isSaved =
+                      savedPostsList.contains(postDocuments[index].id);
                   final postInfo = PostDataModel.fromJson(
                     postDocuments[index].data(),
                     postDocuments[index].id,
