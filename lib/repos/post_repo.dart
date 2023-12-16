@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import '/models/post_data_model.dart';
 import '/repos/auth_repo.dart';
 
@@ -16,7 +17,6 @@ class PostRepo {
     required File postImage,
     required DateTime postedOn,
     required List<String> likes,
-    required List<String> comments,
   }) async {
     try {
       String? postImageUrl = '';
@@ -33,7 +33,6 @@ class PostRepo {
         'postImageUrl': postImageUrl,
         'postedOn': postedOn.toIso8601String(),
         'likes': likes,
-        'comments': comments,
       };
       firebaseFirestore.collection('posts').doc(postId).set(newPost);
       return true;
@@ -48,23 +47,14 @@ class PostRepo {
   }) async {
     try {
       final postRef = firebaseFirestore.collection('posts').doc(postId);
-      // Also Update likes in Saved Posts
-      final savedPostRef = firebaseFirestore
-          .collection('savedPosts')
-          .doc(AuthRepo.currentUser!.uid);
+
       if (likes.contains(AuthRepo.currentUser!.uid)) {
         postRef.update({
           'likes': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
         });
-        savedPostRef.update({
-          '$postId.likes': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
-        });
       } else {
         postRef.update({
           'likes': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
-        });
-        savedPostRef.update({
-          '$postId.likes': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
         });
       }
 
@@ -74,23 +64,49 @@ class PostRepo {
     }
   }
 
-  static Future<bool> saveOrUnsavePost(PostDataModel postInfo) async {
+  static Future<bool> saveOrUnsavePost(String postId) async {
     try {
       final savedPostRef = firebaseFirestore
           .collection('savedPosts')
           .doc(AuthRepo.currentUser!.uid);
       final savedPostData = await savedPostRef.get();
       if (savedPostData.exists) {
-        final isPostSaved = savedPostData.data()!.containsKey(postInfo.postId);
+        final isPostSaved = savedPostData.data()!.containsKey(postId);
         if (isPostSaved) {
-          await savedPostRef.update({postInfo.postId: FieldValue.delete()});
+          await savedPostRef.update({postId: FieldValue.delete()});
         } else {
-          await savedPostRef.update({postInfo.postId: postInfo.toJson()});
+          await savedPostRef.update({postId: true});
         }
       } else {
-        await savedPostRef.set({postInfo.postId: postInfo.toJson()});
+        await savedPostRef.set({postId: true});
       }
 
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<bool> addComment({
+    required String postId,
+    required String comment,
+  }) async {
+    try {
+      final commentId = const Uuid().v1();
+      final postCommentDocReference = firebaseFirestore
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(commentId);
+      final commentJson = {
+        'userId': AuthRepo.currentUser!.uid,
+        'username': AuthRepo.currentUser!.username,
+        'userImageUrl': AuthRepo.currentUser!.userImage,
+        'comment': comment,
+        'commentId': commentId,
+        'commentedOn': DateTime.now().toIso8601String(),
+      };
+      postCommentDocReference.set(commentJson);
       return true;
     } catch (_) {
       return false;
