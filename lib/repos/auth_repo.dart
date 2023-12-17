@@ -18,18 +18,21 @@ class AuthRepo {
   static Future<bool> fetchCurrentUserInfo() async {
     try {
       if (firebaseAuth.currentUser == null) {
+        print(firebaseAuth.currentUser);
         return false;
       }
       final userInfo = await firebaseFirestore
           .collection('users')
           .doc(firebaseAuth.currentUser!.uid)
           .get();
+
       if (userInfo.exists) {
         currentUser = UserDataModel.fromJson(userInfo.data()!, userInfo.id);
         return true;
       }
       return false;
     } catch (e) {
+      print(e);
       return false;
     }
   }
@@ -43,7 +46,7 @@ class AuthRepo {
         email: email,
         password: password,
       );
-      await fetchCurrentUserInfo();
+      fetchCurrentUserInfo();
       return true;
     } catch (e) {
       return false;
@@ -65,9 +68,11 @@ class AuthRepo {
       firebaseFirestore.collection('users').doc(userCredential.user!.uid).set({
         'username': username,
         'email': email,
+        'followers': [],
+        'following': [],
         'userImageUrl': image ?? MyIcons.defaultProfilePicUrl,
       });
-      await fetchCurrentUserInfo();
+      fetchCurrentUserInfo();
       return true;
     } catch (e) {
       return false;

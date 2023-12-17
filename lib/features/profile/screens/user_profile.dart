@@ -4,19 +4,20 @@ import '/components/custom_app_top_bar.dart';
 import '/components/custom_icon_button.dart';
 import '/features/profile/screens/user_posts_screen.dart';
 import '../widgets/profile_info_card.dart';
-import '/features/posts/screens/saved_posts_screen.dart';
+import 'user_saved_posts_screen.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../../constants/constants.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key, required this.authBloc});
+class UserProfile extends StatefulWidget {
+  const UserProfile({super.key, required this.authBloc});
   final AuthBloc authBloc;
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<UserProfile> createState() => _UserProfileState();
 }
 
-class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
+class _UserProfileState extends State<UserProfile>
+    with SingleTickerProviderStateMixin {
   late TabController tabController;
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           controller: tabController,
           children: const [
             UserPostsScreen(),
-            SavedPostsScreen(),
+            UserSavedPostsScreen(),
           ],
         ),
       ),

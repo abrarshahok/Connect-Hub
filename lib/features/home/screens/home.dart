@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import '/features/auth/bloc/auth_bloc.dart';
-import '/features/profile/screens/profile.dart';
+import '../../profile/screens/user_profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
 import '../../posts/screens/posts_feed.dart';
 import '../bloc/home_bloc.dart';
@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
       const PostsFeed(),
       const Center(child: Text('In Making')),
       AddPostScreen(),
-      Profile(authBloc: widget.authBloc),
+      UserProfile(authBloc: widget.authBloc),
     ];
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,

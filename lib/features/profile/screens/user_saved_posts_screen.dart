@@ -6,9 +6,9 @@ import '/features/posts/widgets/post_card.dart';
 import '/constants/constants.dart';
 import '/models/post_data_model.dart';
 
-class SavedPostsScreen extends StatelessWidget {
+class UserSavedPostsScreen extends StatelessWidget {
   static const routeName = '/saved-posts';
-  const SavedPostsScreen({super.key});
+  const UserSavedPostsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
