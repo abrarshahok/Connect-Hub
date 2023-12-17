@@ -5,8 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import '/repos/auth_repo.dart';
 import '/repos/post_repo.dart';
-import '/models/post_data_model.dart';
-
 part 'posts_event.dart';
 part 'posts_state.dart';
 
@@ -69,7 +67,6 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     final isLikedOrDisliked = await PostRepo.likeOrDislikePost(
       likes: event.likes,
       postId: event.postId,
-      
     );
     if (!isLikedOrDisliked) {
       emit(PostLikingFailedActionState());

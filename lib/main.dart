@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '/features/posts/screens/upload_post_screen.dart';
 import '/features/posts/screens/likes_screen.dart';
-import 'features/profile/screens/user_saved_posts_screen.dart';
 import '/features/posts/screens/add_post_screen.dart';
 import '/features/auth/screens/auth.dart';
 
@@ -38,8 +37,6 @@ class MainApp extends StatelessWidget {
         AddPostScreen.routeName: (context) => AddPostScreen(),
         UploadPostScreen.routeName: (context) => UploadPostScreen(),
         LikesScreen.routeName: (context) => const LikesScreen(),
-        UserSavedPostsScreen.routeName: (context) =>
-            const UserSavedPostsScreen(),
         CommentsScreen.routeName: (context) => CommentsScreen(),
       },
     );

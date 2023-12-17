@@ -2,22 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/constants/constants.dart';
 import 'package:connecthub/features/posts/widgets/post_card.dart';
 import 'package:connecthub/models/post_data_model.dart';
-import 'package:connecthub/repos/auth_repo.dart';
 import 'package:flutter/material.dart';
 
-class UserPostsScreen extends StatelessWidget {
-  const UserPostsScreen({super.key});
+class UserPostsScreen extends StatefulWidget {
+  const UserPostsScreen({super.key, required this.userId});
+  final String userId;
 
+  @override
+  State<UserPostsScreen> createState() => _UserPostsScreenState();
+}
+
+class _UserPostsScreenState extends State<UserPostsScreen> {
   @override
   Widget build(BuildContext context) {
     final postStream = FirebaseFirestore.instance
         .collection('posts')
-        .where('userId', isEqualTo: AuthRepo.currentUser!.uid)
+        .where('userId', isEqualTo: widget.userId)
         .orderBy('postedOn', descending: true)
         .snapshots();
     final savedPostStream = FirebaseFirestore.instance
         .collection('savedPosts')
-        .doc(AuthRepo.currentUser!.uid)
+        .doc(widget.userId)
         .snapshots();
     return StreamBuilder(
       stream: postStream,
@@ -57,6 +62,7 @@ class UserPostsScreen extends StatelessWidget {
                     return PostCard(
                       postDataModel: postInfo,
                       isSaved: isSaved,
+                      onTapProfile: () {},
                     );
                   },
                 );

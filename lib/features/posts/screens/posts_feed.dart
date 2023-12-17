@@ -1,3 +1,6 @@
+import '/features/auth/bloc/auth_bloc.dart';
+import '/features/profile/screens/current_user_profile.dart';
+import '/features/profile/screens/other_users_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:iconly/iconly.dart';
@@ -10,7 +13,8 @@ import '/models/post_data_model.dart';
 import '../../../components/custom_icon_button.dart';
 
 class PostsFeed extends StatelessWidget {
-  const PostsFeed({super.key});
+  const PostsFeed({super.key, required this.authBloc});
+  final AuthBloc authBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +62,9 @@ class PostsFeed extends StatelessWidget {
                 ),
               );
             } else {
-              final savedPostsList =
-                  savedPostSnapshots.data!.data()!.keys.toList();
+              final savedPostsList = savedPostSnapshots.data!.exists
+                  ? savedPostSnapshots.data!.data()!.keys.toList()
+                  : List.empty();
               return ListView.builder(
                 itemCount: postDocuments.length,
                 padding: const EdgeInsets.only(top: 10, bottom: 80),
@@ -73,6 +78,24 @@ class PostsFeed extends StatelessWidget {
                   return PostCard(
                     postDataModel: postInfo,
                     isSaved: isSaved,
+                    onTapProfile: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AuthRepo.currentUser!.uid == postInfo.userId
+                                  ? CurrentUserProfile(
+                                      authBloc: authBloc,
+                                      showBackButton: true,
+                                    )
+                                  : OtherUsersProfile(
+                                      userId: postInfo.userId,
+                                      authBloc: authBloc,
+                                      showBackButton: true,
+                                    ),
+                        ),
+                      );
+                    },
                   );
                 },
               );

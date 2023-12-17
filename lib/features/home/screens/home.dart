@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import '/features/auth/bloc/auth_bloc.dart';
-import '../../profile/screens/user_profile.dart';
+import '../../profile/screens/current_user_profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
 import '../../posts/screens/posts_feed.dart';
 import '../bloc/home_bloc.dart';
@@ -23,10 +23,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetList = [
-      const PostsFeed(),
+      PostsFeed(authBloc:widget.authBloc),
       const Center(child: Text('In Making')),
       AddPostScreen(),
-      UserProfile(authBloc: widget.authBloc),
+      CurrentUserProfile(authBloc: widget.authBloc),
     ];
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,

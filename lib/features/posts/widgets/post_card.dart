@@ -15,11 +15,13 @@ import '/models/post_data_model.dart';
 class PostCard extends StatelessWidget {
   final PostDataModel postDataModel;
   final bool isSaved;
+  final VoidCallback onTapProfile;
 
   PostCard({
     super.key,
     required this.postDataModel,
     required this.isSaved,
+    required this.onTapProfile,
   });
   final PostsBloc postsBloc = PostsBloc();
   @override
@@ -52,25 +54,28 @@ class PostCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.white,
-                    backgroundImage: CachedNetworkImageProvider(
-                      postDataModel.userImage,
+              GestureDetector(
+                onTap: onTapProfile,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.white,
+                      backgroundImage: CachedNetworkImageProvider(
+                        postDataModel.userImage,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    postDataModel.username,
-                    style: MyFonts.bodyFont(
-                      fontColor: MyColors.secondaryColor,
-                      fontWeight: FontWeight.w500,
+                    const SizedBox(width: 5),
+                    Text(
+                      postDataModel.username,
+                      style: MyFonts.bodyFont(
+                        fontColor: MyColors.secondaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               showNetworkImage(

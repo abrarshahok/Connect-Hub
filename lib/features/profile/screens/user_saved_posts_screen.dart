@@ -7,7 +7,6 @@ import '/constants/constants.dart';
 import '/models/post_data_model.dart';
 
 class UserSavedPostsScreen extends StatelessWidget {
-  static const routeName = '/saved-posts';
   const UserSavedPostsScreen({super.key});
 
   @override
@@ -25,7 +24,8 @@ class UserSavedPostsScreen extends StatelessWidget {
             ),
           );
         }
-        if (savedPostSnapshots.data!.data()!.isEmpty) {
+        if (!savedPostSnapshots.data!.exists ||
+            savedPostSnapshots.data!.data()!.keys.toList().isEmpty) {
           return Center(
             child: Text(
               'No Saved Posts!',
@@ -36,6 +36,7 @@ class UserSavedPostsScreen extends StatelessWidget {
           );
         } else {
           final postIdList = savedPostSnapshots.data!.data()!.keys.toList();
+
           return StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('posts')
@@ -57,6 +58,7 @@ class UserSavedPostsScreen extends StatelessWidget {
                     return PostCard(
                       postDataModel: postInfo,
                       isSaved: true,
+                      onTapProfile: () {},
                     );
                   });
             },

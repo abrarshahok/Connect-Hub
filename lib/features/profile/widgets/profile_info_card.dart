@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connecthub/models/user_data_model.dart';
 import 'package:flutter/material.dart';
-
 import '../../../constants/constants.dart';
-import '../../../repos/auth_repo.dart';
 
 class ProfileInfoCard extends StatelessWidget {
-  const ProfileInfoCard({super.key});
+  const ProfileInfoCard({super.key, required this.userInfo, required this.totalPosts});
 
+  final UserDataModel userInfo;
+  final int totalPosts;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,12 +27,12 @@ class ProfileInfoCard extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage: CachedNetworkImageProvider(
-                      AuthRepo.currentUser!.userImage,
+                      userInfo.userImage,
                     ),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    AuthRepo.currentUser!.username,
+                    userInfo.username,
                     style: MyFonts.bodyFont(
                       fontColor: MyColors.secondaryColor,
                       fontSize: 18,
@@ -40,9 +41,18 @@ class ProfileInfoCard extends StatelessWidget {
                   ),
                 ],
               ),
-              customColumn(count: 13, title: 'Posts'),
-              customColumn(count: 262, title: 'Followers'),
-              customColumn(count: 200, title: 'Following'),
+              customColumn(
+                count: totalPosts,
+                title: 'Posts',
+              ),
+              customColumn(
+                count: userInfo.followers.length,
+                title: 'Followers',
+              ),
+              customColumn(
+                count: userInfo.following.length,
+                title: 'Following',
+              ),
             ],
           ),
         ],
