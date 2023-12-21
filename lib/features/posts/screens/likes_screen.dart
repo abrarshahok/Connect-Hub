@@ -22,21 +22,16 @@ class LikesScreen extends StatelessWidget {
     }
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: MyColors.primaryColor,
-        automaticallyImplyLeading: false,
-        title: CustomAppTopBar(
-          showLeadingButton: true,
-          leadingButton: CustomIconButton(
-            color: MyColors.secondaryColor,
-            icon: IconlyLight.arrow_left,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: 'Likes',
+      appBar: customAppBar(
+        showLeadingButton: true,
+        leadingButton: CustomIconButton(
+          color: MyColors.secondaryColor,
+          icon: IconlyLight.arrow_left,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
+        title: 'Likes',
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),

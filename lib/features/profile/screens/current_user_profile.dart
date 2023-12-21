@@ -41,29 +41,23 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
         .snapshots();
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: MyColors.primaryColor,
-        title: CustomAppTopBar(
-          title: 'Howdy :)',
-          centerTitle: true,
-          showActionButton: true,
-          showLeadingButton: widget.showBackButton,
-          leadingButton: CustomIconButton(
-            icon: IconlyLight.arrow_left,
-            color: MyColors.secondaryColor,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actionButton: CustomIconButton(
-            onPressed: () {
-              widget.authBloc.add(AuthLogoutButtonClickedEvent());
-            },
-            icon: IconlyLight.logout,
-            color: MyColors.secondaryColor,
-          ),
+      appBar: customAppBar(
+        title: 'Howdy :)',
+        showActionButton: true,
+        showLeadingButton: widget.showBackButton,
+        leadingButton: CustomIconButton(
+          icon: IconlyLight.arrow_left,
+          color: MyColors.secondaryColor,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actionButton: CustomIconButton(
+          onPressed: () {
+            widget.authBloc.add(AuthLogoutButtonClickedEvent());
+          },
+          icon: IconlyLight.logout,
+          color: MyColors.secondaryColor,
         ),
       ),
       body: StreamBuilder(
@@ -121,9 +115,3 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
     );
   }
 }
-
-// StreamBuilder(
-//                     stream: postsSnapshots,
-//                     builder: (context, snapshot) {
-
-//                       return

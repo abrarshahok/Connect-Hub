@@ -31,3 +31,7 @@ class PostSavingFailedActionState extends PostsActionState {}
 class PostNavigateToLikesScreenActionState extends PostsActionState {}
 
 class PostNavigateToCommentsScreenActionState extends PostsActionState {}
+
+class PostSavedActionState extends PostsActionState {}
+
+class PostUnSavedActionState extends PostsActionState {}

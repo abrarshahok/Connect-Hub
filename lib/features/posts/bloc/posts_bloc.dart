@@ -77,8 +77,12 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostSaveButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) async {
-    final isSavedOrUnsaved = await PostRepo.saveOrUnsavePost(event.postId);
-    if (!isSavedOrUnsaved) {
+    final checkIsSaved = await PostRepo.saveOrUnsavePost(event.postId);
+    if (checkIsSaved == 'saved') {
+      emit(PostSavedActionState());
+    } else if (checkIsSaved == 'unsaved') {
+      emit(PostUnSavedActionState());
+    } else {
       emit(PostSavingFailedActionState());
     }
   }

@@ -31,72 +31,67 @@ class OtherUsersProfile extends StatelessWidget {
         .snapshots();
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: MyColors.primaryColor,
-        title: CustomAppTopBar(
-          title: 'Howdy :)',
-          centerTitle: true,
-          showActionButton: userId == AuthRepo.currentUser!.uid,
-          showLeadingButton: showBackButton,
-          leadingButton: CustomIconButton(
-            icon: IconlyLight.arrow_left,
-            color: MyColors.secondaryColor,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actionButton: CustomIconButton(
-            onPressed: () {
-              authBloc.add(AuthLogoutButtonClickedEvent());
-            },
-            icon: IconlyLight.logout,
-            color: MyColors.secondaryColor,
-          ),
+      appBar: customAppBar(
+        title: 'Howdy :)',
+        centerTitle: true,
+        showActionButton: userId == AuthRepo.currentUser!.uid,
+        showLeadingButton: showBackButton,
+        leadingButton: CustomIconButton(
+          icon: IconlyLight.arrow_left,
+          color: MyColors.secondaryColor,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actionButton: CustomIconButton(
+          onPressed: () {
+            authBloc.add(AuthLogoutButtonClickedEvent());
+          },
+          icon: IconlyLight.logout,
+          color: MyColors.secondaryColor,
         ),
       ),
       body: StreamBuilder(
-          stream: userStream,
-          builder: (context, userSnapshots) {
-            return StreamBuilder(
-                stream: postsStream,
-                builder: (context, postSnapshots) {
-                  if (userSnapshots.connectionState ==
-                          ConnectionState.waiting ||
-                      postSnapshots.connectionState ==
-                          ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: MyColors.buttonColor1,
-                      ),
-                    );
-                  }
-                  final postsCount = postSnapshots.data!.docs.length;
-                  final userInfoModel = UserDataModel.fromJson(
-                    userSnapshots.data!.data()!,
-                    userSnapshots.data!.id,
-                  );
-                  return NestedScrollView(
-                    headerSliverBuilder: (context, isScrolling) {
-                      return [
-                        SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              ProfileInfoCard(
-                                userInfo: userInfoModel,
-                                totalPosts: postsCount,
-                              ),
-                              const SizedBox(height: 20),
-                            ],
+        stream: userStream,
+        builder: (context, userSnapshots) {
+          return StreamBuilder(
+            stream: postsStream,
+            builder: (context, postSnapshots) {
+              if (userSnapshots.connectionState == ConnectionState.waiting ||
+                  postSnapshots.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: MyColors.buttonColor1,
+                  ),
+                );
+              }
+              final postsCount = postSnapshots.data!.docs.length;
+              final userInfoModel = UserDataModel.fromJson(
+                userSnapshots.data!.data()!,
+                userSnapshots.data!.id,
+              );
+              return NestedScrollView(
+                headerSliverBuilder: (context, isScrolling) {
+                  return [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          ProfileInfoCard(
+                            userInfo: userInfoModel,
+                            totalPosts: postsCount,
                           ),
-                        )
-                      ];
-                    },
-                    body: UserPostsScreen(userId: userId),
-                  );
-                });
-          }),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    )
+                  ];
+                },
+                body: UserPostsScreen(userId: userId),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

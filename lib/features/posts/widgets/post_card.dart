@@ -118,12 +118,31 @@ class PostCard extends StatelessWidget {
                     onPressed: () {},
                   ),
                   const Spacer(),
-                  CustomIconButton(
-                    icon: isSaved ? IconlyBold.bookmark : IconlyLight.bookmark,
-                    color: isSaved ? Colors.blueGrey : MyColors.secondaryColor,
-                    onPressed: () {
-                      postsBloc.add(
-                        PostSaveButtonClickedEvent(postDataModel.postId),
+                  BlocBuilder<PostsBloc, PostsState>(
+                    bloc: postsBloc,
+                    buildWhen: (previous, current) =>
+                        current is PostsActionState,
+                    builder: (context, state) {
+                      bool newSavedValue = false;
+                      if (state is PostSavedActionState) {
+                        newSavedValue = true;
+                      } else if (state is PostUnSavedActionState) {
+                        newSavedValue = false;
+                      } else {
+                        newSavedValue = isSaved;
+                      }
+                      return CustomIconButton(
+                        icon: newSavedValue
+                            ? IconlyBold.bookmark
+                            : IconlyLight.bookmark,
+                        color: newSavedValue
+                            ? Colors.blueGrey
+                            : MyColors.secondaryColor,
+                        onPressed: () {
+                          postsBloc.add(
+                            PostSaveButtonClickedEvent(postDataModel.postId),
+                          );
+                        },
                       );
                     },
                   ),

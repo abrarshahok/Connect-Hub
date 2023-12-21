@@ -1,54 +1,29 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '/constants/constants.dart';
 
-class CustomAppTopBar extends StatelessWidget {
-  const CustomAppTopBar({
-    super.key,
-    required this.title,
-    this.centerTitle = false,
-    this.showActionButton = false,
-    this.showLeadingButton = false,
-    this.actionButton,
-    this.leadingButton,
-  });
-  final String title;
-  final bool centerTitle;
-  final bool showActionButton;
-  final bool showLeadingButton;
-  final Widget? actionButton;
-  final Widget? leadingButton;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      alignment: centerTitle ? Alignment.center : Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: MyColors.secondaryColor,
-          width: 0.1,
-        ),
+AppBar customAppBar({
+  bool? centerTitle,
+  required String title,
+  bool showLeadingButton = false,
+  bool showActionButton = false,
+  Widget? leadingButton,
+  Widget? actionButton,
+}) {
+  return AppBar(
+    backgroundColor: MyColors.primaryColor,
+    centerTitle: centerTitle,
+    title: Text(
+      title,
+      style: MyFonts.logoFont(
+        fontColor: MyColors.secondaryColor,
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
       ),
-      child: Row(
-        children: [
-          if (showLeadingButton && leadingButton != null) leadingButton!,
-          Text(
-            title,
-            style: MyFonts.logoFont(
-              fontColor: MyColors.secondaryColor,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Spacer(),
-          if (showActionButton && actionButton != null) actionButton!,
-        ],
-      ),
-    );
-  }
+    ),
+    leading:
+        (showLeadingButton && leadingButton != null) ? leadingButton : null,
+    actions: [
+      if (showActionButton && actionButton != null) actionButton,
+    ],
+  );
 }

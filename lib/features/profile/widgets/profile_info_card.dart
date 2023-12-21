@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../constants/constants.dart';
 
 class ProfileInfoCard extends StatelessWidget {
-  const ProfileInfoCard({super.key, required this.userInfo, required this.totalPosts});
+  const ProfileInfoCard(
+      {super.key, required this.userInfo, required this.totalPosts});
 
   final UserDataModel userInfo;
   final int totalPosts;

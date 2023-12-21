@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> widgetList = [
-      PostsFeed(authBloc:widget.authBloc),
+      PostsFeed(authBloc: widget.authBloc),
       const Center(child: Text('In Making')),
       AddPostScreen(),
       CurrentUserProfile(authBloc: widget.authBloc),

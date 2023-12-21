@@ -31,21 +31,16 @@ class CommentsScreen extends StatelessWidget {
       listener: (context, state) {},
       child: Scaffold(
         backgroundColor: MyColors.primaryColor,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: MyColors.primaryColor,
-          automaticallyImplyLeading: false,
-          title: CustomAppTopBar(
-            showLeadingButton: true,
-            leadingButton: CustomIconButton(
-              color: MyColors.secondaryColor,
-              icon: IconlyLight.arrow_left,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            title: 'Comments',
+        appBar: customAppBar(
+          showLeadingButton: true,
+          leadingButton: CustomIconButton(
+            color: MyColors.secondaryColor,
+            icon: IconlyLight.arrow_left,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
+          title: 'Comments',
         ),
         body: StreamBuilder(
           stream: postCommentsStream,

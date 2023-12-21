@@ -63,7 +63,7 @@ class PostRepo {
     }
   }
 
-  static Future<bool> saveOrUnsavePost(String postId) async {
+  static Future<dynamic> saveOrUnsavePost(String postId) async {
     try {
       final savedPostRef = firebaseFirestore
           .collection('savedPosts')
@@ -72,15 +72,16 @@ class PostRepo {
       if (savedPostData.exists) {
         final isPostSaved = savedPostData.data()!.containsKey(postId);
         if (isPostSaved) {
-          await savedPostRef.update({postId: FieldValue.delete()});
+          savedPostRef.update({postId: FieldValue.delete()});
+          return 'unsaved';
         } else {
-          await savedPostRef.update({postId: true});
+          savedPostRef.update({postId: true});
+          return 'saved';
         }
       } else {
-        await savedPostRef.set({postId: true});
+        savedPostRef.set({postId: true});
+        return 'saved';
       }
-
-      return true;
     } catch (_) {
       return false;
     }
