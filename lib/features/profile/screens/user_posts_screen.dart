@@ -15,8 +15,8 @@ class UserPostsScreen extends StatefulWidget {
 }
 
 class _UserPostsScreenState extends State<UserPostsScreen> {
-  List<String> savedPosts = [];
   bool isLoading = false;
+  List<String> savedPosts = [];
   @override
   void initState() {
     getSavedPosts();

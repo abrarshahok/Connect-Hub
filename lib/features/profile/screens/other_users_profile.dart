@@ -51,29 +51,33 @@ class OtherUsersProfile extends StatelessWidget {
           color: MyColors.secondaryColor,
         ),
       ),
-      body: StreamBuilder(
-        stream: userStream,
-        builder: (context, userSnapshots) {
-          return StreamBuilder(
-            stream: postsStream,
-            builder: (context, postSnapshots) {
-              if (userSnapshots.connectionState == ConnectionState.waiting ||
-                  postSnapshots.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: MyColors.buttonColor1,
-                  ),
-                );
-              }
-              final postsCount = postSnapshots.data!.docs.length;
-              final userInfoModel = UserDataModel.fromJson(
-                userSnapshots.data!.data()!,
-                userSnapshots.data!.id,
-              );
-              return NestedScrollView(
-                headerSliverBuilder: (context, isScrolling) {
-                  return [
-                    SliverToBoxAdapter(
+      body: NestedScrollView(
+        headerSliverBuilder: (context, isScrolling) {
+          return [
+            StreamBuilder(
+              stream: userStream,
+              builder: (context, userSnapshots) {
+                return StreamBuilder(
+                  stream: postsStream,
+                  builder: (context, postSnapshots) {
+                    if (userSnapshots.connectionState ==
+                            ConnectionState.waiting ||
+                        postSnapshots.connectionState ==
+                            ConnectionState.waiting) {
+                      return SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: MyColors.buttonColor1,
+                          ),
+                        ),
+                      );
+                    }
+                    final postsCount = postSnapshots.data!.docs.length;
+                    final userInfoModel = UserDataModel.fromJson(
+                      userSnapshots.data!.data()!,
+                      userSnapshots.data!.id,
+                    );
+                    return SliverToBoxAdapter(
                       child: Column(
                         children: [
                           ProfileInfoCard(
@@ -83,14 +87,14 @@ class OtherUsersProfile extends StatelessWidget {
                           const SizedBox(height: 20),
                         ],
                       ),
-                    )
-                  ];
-                },
-                body: UserPostsScreen(userId: userId),
-              );
-            },
-          );
+                    );
+                  },
+                );
+              },
+            )
+          ];
         },
+        body: UserPostsScreen(userId: userId),
       ),
     );
   }

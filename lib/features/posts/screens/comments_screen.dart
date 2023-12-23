@@ -63,7 +63,7 @@ class CommentsScreen extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      '${commentData.username} on $formatedDateTime',
+                      '${commentData.username == AuthRepo.currentUser!.username ? 'You' : commentData.username} on $formatedDateTime',
                       style: MyFonts.bodyFont(
                         fontColor: MyColors.secondaryColor,
                         fontSize: 12,
