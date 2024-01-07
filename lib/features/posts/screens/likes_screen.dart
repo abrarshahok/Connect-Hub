@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/components/custom_app_top_bar.dart';
 import 'package:connecthub/components/custom_icon_button.dart';
 import 'package:connecthub/components/loading.dart';
+import 'package:connecthub/models/user_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '/features/posts/widgets/post_like_tile.dart';
@@ -34,17 +35,16 @@ class LikesScreen extends StatelessWidget {
         title: 'Likes',
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where(FieldPath.documentId, whereIn: likes)
+            .snapshots(),
+        builder: (context, userInfoSnapshot) {
+          if (userInfoSnapshot.connectionState == ConnectionState.waiting) {
             return const Loading();
           }
-          final likeDocs = snapshot.data!.docs;
-          final userLikesData = likeDocs.where((user) {
-            return likes.contains(user.id);
-          }).toList();
-
-          userLikesData.sort((a, b) {
+          final usersData = userInfoSnapshot.data!.docs;
+          usersData.sort((a, b) {
             if (a.id == AuthRepo.currentUser!.uid) {
               return -1;
             } else if (b.id == AuthRepo.currentUser!.uid) {
@@ -66,17 +66,18 @@ class LikesScreen extends StatelessWidget {
           } else {
             return ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              itemCount: userLikesData.length,
+              itemCount: usersData.length,
               itemBuilder: (context, index) {
-                bool isYou =
-                    userLikesData[index].id == AuthRepo.currentUser!.uid;
-                final userName =
-                    isYou ? 'You' : userLikesData[index]['username'];
-                final imageUrl = userLikesData[index]['userImageUrl'];
+                final userInfo = UserDataModel.fromJson(
+                  usersData[index].data(),
+                  usersData[index].id,
+                );
+
                 return PostLikeTile(
-                  userImageUrl: imageUrl,
-                  userName: userName,
-                  isYou: isYou,
+                  userInfo: userInfo,
+                  isFollowing:
+                      userInfo.followers.contains(AuthRepo.currentUser!.uid),
+                  isYou: userInfo.uid == AuthRepo.currentUser!.uid,
                 );
               },
             );

@@ -74,7 +74,9 @@ class ProfileInfoCard extends StatelessWidget {
               CustomElevatedButton(
                 onPressed: () {
                   _profileBloc.add(ProfileFollowOrUnfollowButtonClickedEvent(
-                      userId: userInfo.uid, followers: userInfo.followers));
+                    userId: userInfo.uid,
+                    followers: userInfo.followers,
+                  ));
                 },
                 title: userInfo.followers.contains(AuthRepo.currentUser!.uid)
                     ? 'Unfollow'

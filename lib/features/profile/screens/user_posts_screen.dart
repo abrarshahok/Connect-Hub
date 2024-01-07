@@ -32,9 +32,11 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
         .doc(AuthRepo.currentUser!.uid)
         .get();
     savedPosts = docData.exists ? docData.data()!.keys.toList() : List.empty();
-    setState(() {
-      isLoading = false;
-    });
+    if (context.mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -45,7 +47,7 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
         .orderBy('postedOn', descending: true)
         .snapshots();
     return isLoading
-        ? Loading()
+        ? const Loading()
         : StreamBuilder(
             stream: postStream,
             builder: (context, userPostSnapshots) {

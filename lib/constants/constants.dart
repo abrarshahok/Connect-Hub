@@ -11,6 +11,7 @@ class MyColors {
   static Color secondaryColor = Colors.white;
   static Color tercharyColor = Colors.grey[600]!;
   static Color buttonColor1 = Colors.blueGrey;
+  static Color onlineColor = Colors.greenAccent;
   static Color buttonColor2 = Colors.blueGrey.shade200;
 }
 

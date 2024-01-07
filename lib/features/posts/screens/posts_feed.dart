@@ -13,8 +13,13 @@ import '/models/post_data_model.dart';
 import '../../../components/custom_icon_button.dart';
 
 class PostsFeed extends StatefulWidget {
-  const PostsFeed({super.key, required this.authBloc});
+  const PostsFeed({
+    super.key,
+    required this.authBloc,
+    required this.onTapChatIcon,
+  });
   final AuthBloc authBloc;
+  final VoidCallback onTapChatIcon;
 
   @override
   State<PostsFeed> createState() => _PostsFeedState();
@@ -58,11 +63,11 @@ class _PostsFeedState extends State<PostsFeed> {
         actionButton: CustomIconButton(
           icon: IconlyLight.chat,
           color: MyColors.secondaryColor,
-          onPressed: () {},
+          onPressed: widget.onTapChatIcon,
         ),
       ),
       body: isLoading
-          ? Loading()
+          ? const Loading()
           : StreamBuilder(
               stream: postStream,
               builder: (context, postSnapshots) {
