@@ -11,6 +11,7 @@ AppBar customAppBar({
 }) {
   return AppBar(
     backgroundColor: MyColors.primaryColor,
+    automaticallyImplyLeading: false,
     centerTitle: centerTitle,
     title: Text(
       title,

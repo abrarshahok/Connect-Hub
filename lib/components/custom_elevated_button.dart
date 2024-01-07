@@ -8,21 +8,20 @@ class CustomElevatedButton extends StatelessWidget {
     required this.title,
     required this.width,
     required this.height,
-    this.color,
+    required this.color,
   });
   final VoidCallback onPressed;
   final String title;
   final double height;
   final double width;
-  final Color? color;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor:
-            color!,
+        backgroundColor: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
