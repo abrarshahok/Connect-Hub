@@ -6,7 +6,7 @@ class ProfileRepo {
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-static  Future<bool> followOrUnfollow({
+  static Future<bool> followOrUnfollow({
     required List<dynamic> followers,
     required String userId,
   }) async {
@@ -22,7 +22,6 @@ static  Future<bool> followOrUnfollow({
         currentUserRef.update({
           'following': FieldValue.arrayRemove([userId])
         });
-        print('Unfollowed');
       } else {
         otherUserRef.update({
           'followers': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
@@ -30,7 +29,6 @@ static  Future<bool> followOrUnfollow({
         currentUserRef.update({
           'following': FieldValue.arrayUnion([userId])
         });
-        print('Followed');
       }
       return true;
     } catch (e) {

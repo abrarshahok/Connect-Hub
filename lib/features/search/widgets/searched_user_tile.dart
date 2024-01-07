@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/models/user_data_model.dart';
-import '/repos/auth_repo.dart';
 import '/constants/constants.dart';
 
-class ChatUserTile extends StatelessWidget {
-  const ChatUserTile({
+class SearchedUserTile extends StatelessWidget {
+  const SearchedUserTile({
     super.key,
     required this.userInfo,
-    required this.isYou,
     required this.isFollowing,
+    required this.onTap,
   });
-  final bool isYou;
+
   final bool isFollowing;
   final UserDataModel userInfo;
-
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       leading: CircleAvatar(
         backgroundImage: CachedNetworkImageProvider(
           userInfo.userImage,
         ),
       ),
       title: Text(
-        userInfo.username == AuthRepo.currentUser!.username
-            ? 'You'
-            : userInfo.username,
+        userInfo.username,
         style: MyFonts.bodyFont(
           fontColor: MyColors.secondaryColor,
-        ),
-      ),
-      subtitle: Text(
-        'online',
-        style: MyFonts.bodyFont(
-          fontColor: MyColors.onlineColor,
         ),
       ),
     );

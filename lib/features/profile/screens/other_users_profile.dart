@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '/features/auth/bloc/auth_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/features/profile/screens/user_posts_screen.dart';
-import '/features/profile/widgets/profile_info_card.dart';
+import 'user_posts_screen.dart';
+import '../widgets/profile_info_card.dart';
 import '../../../components/custom_app_top_bar.dart';
 import '../../../components/custom_icon_button.dart';
 import '../../../constants/constants.dart';
@@ -14,11 +14,11 @@ class OtherUsersProfile extends StatelessWidget {
   const OtherUsersProfile({
     super.key,
     required this.userId,
-    required this.authBloc,
+    this.authBloc,
     this.showBackButton = false,
   });
   final String userId;
-  final AuthBloc authBloc;
+  final AuthBloc? authBloc;
   final bool showBackButton;
 
   @override
@@ -45,7 +45,7 @@ class OtherUsersProfile extends StatelessWidget {
         ),
         actionButton: CustomIconButton(
           onPressed: () {
-            authBloc.add(AuthLogoutButtonClickedEvent());
+            authBloc!.add(AuthLogoutButtonClickedEvent());
           },
           icon: IconlyLight.logout,
           color: MyColors.secondaryColor,

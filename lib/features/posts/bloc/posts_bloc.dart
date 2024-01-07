@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:connecthub/models/post_data_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -13,6 +14,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostChooseImageButtonClickedEvent>(postChooseImageButtonClickedEvent);
     on<PostImageChoosenSuccessEvent>(postImageChoosenSuccessEvent);
     on<PostUploadButtonClickedEvent>(postUploadButtonClickedEvent);
+    on<PostUpdateButtonClickedEvent>(postUpdateButtonClickedEvent);
     on<PostLikeButtonClickedEvent>(postLikeButtonClickedEvent);
     on<PostSaveButtonClickedEvent>(postSaveButtonClickedEvent);
     on<PostNavigateToLikeScreenButtonClickedEvent>(
@@ -20,6 +22,13 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     on<PostNavigateToCommentScreenButtonClickedEvent>(
         postNavigateToCommentScreenButtonClickedEvent);
     on<PostAddCommentButtonClickedEvent>(postAddCommentButtonClickedEvent);
+    on<PostShowAllPostOptionsButtonClickedEvent>(
+        postShowAllPostOptionsButtonClickedEvent);
+    on<PostHideAllPostOptionsButtonClickedEvent>(
+        postHideAllPostOptionsButtonClickedEvent);
+    on<PostEditPostButtonClickedEvent>(postEditPostButtonClickedEvent);
+    on<PostDeletePostButtonClickedEvent>(postDeletePostButtonClickedEvent);
+    on<PostDeleteConfirmationEvent>(postDeleteConfirmationEvent);
   }
 
   FutureOr<void> postChooseImageButtonClickedEvent(
@@ -43,15 +52,25 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     Emitter<PostsState> emit,
   ) async {
     emit(PostUploadingActionState());
-    bool isUploadingSuccess = await PostRepo.uploadPost(
-      postId: const Uuid().v1(),
+    final postId = const Uuid().v1();
+    final String postUrl = await PostRepo.uploadImage(
+      postImage: event.image,
+      postId: postId,
+      ref: 'user_posts',
+    );
+    final postInfo = PostDataModel(
+      postId: postId,
       userId: AuthRepo.currentUser!.uid,
       username: AuthRepo.currentUser!.username,
-      caption: event.caption,
-      postImage: event.image,
-      postedOn: DateTime.now(),
       userImage: AuthRepo.currentUser!.userImage,
+      caption: event.caption,
+      postUrl: postUrl,
+      postedOn: DateTime.now(),
       likes: [],
+    );
+    bool isUploadingSuccess = await PostRepo.uploadPost(
+      postInfo: postInfo,
+      postImage: event.image,
     );
     if (isUploadingSuccess) {
       emit(PostUploadSuccessActionState());
@@ -113,6 +132,59 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       print('Comment Sent');
     } else {
       print('Comment Sending failed');
+    }
+  }
+
+  FutureOr<void> postShowAllPostOptionsButtonClickedEvent(
+    PostShowAllPostOptionsButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostShowAllPostOptionsState());
+  }
+
+  FutureOr<void> postHideAllPostOptionsButtonClickedEvent(
+    PostHideAllPostOptionsButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostHideAllPostOptionsState());
+  }
+
+  FutureOr<void> postEditPostButtonClickedEvent(
+    PostEditPostButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostEditPostActionState());
+  }
+
+  FutureOr<void> postUpdateButtonClickedEvent(
+    PostUpdateButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) async {
+    emit(PostUploadingActionState());
+    final postInfo = event.postDataModel;
+    bool isUploadingSuccess =
+        await PostRepo.updatePost(postDataModel: postInfo);
+    if (isUploadingSuccess) {
+      emit(PostUploadSuccessActionState());
+    } else {
+      emit(PostUploadFailedActionState());
+    }
+  }
+
+  FutureOr<void> postDeletePostButtonClickedEvent(
+    PostDeletePostButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostDeleteActionState());
+  }
+
+  FutureOr<void> postDeleteConfirmationEvent(
+    PostDeleteConfirmationEvent event,
+    Emitter<PostsState> emit,
+  ) async {
+    bool isDeleted = await PostRepo.deletePost(postId: event.postId);
+    if (isDeleted) {
+      emit(PostDeleteSuccessActionState());
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:connecthub/features/chat/screens/chat_users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +38,6 @@ class MainApp extends StatelessWidget {
         UploadPostScreen.routeName: (context) => UploadPostScreen(),
         LikesScreen.routeName: (context) => const LikesScreen(),
         CommentsScreen.routeName: (context) => CommentsScreen(),
-        ChatUsersScreen.routeName: (context) => const ChatUsersScreen(),
       },
     );
   }

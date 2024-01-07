@@ -77,8 +77,12 @@ class CommentsScreen extends StatelessWidget {
                       ),
                     ),
                     trailing: commentData.userId == AuthRepo.currentUser!.uid
-                        ? Icon(IconlyLight.more_square,
-                            color: MyColors.secondaryColor)
+                        ? IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: MyColors.secondaryColor,
+                            ))
                         : null,
                   );
                 });

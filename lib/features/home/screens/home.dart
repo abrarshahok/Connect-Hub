@@ -1,8 +1,8 @@
+import 'package:connecthub/features/search/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:iconly/iconly.dart';
-import '../../chat/screens/chat_users_screen.dart';
 import '/features/auth/bloc/auth_bloc.dart';
 import '../../profile/screens/current_user_profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
@@ -24,14 +24,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    bool isKeyBoardEnabled = MediaQuery.of(context).viewInsets.bottom != 0;
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: homeBloc,
       listenWhen: (previous, current) => current is HomeActionState,
       buildWhen: (previous, current) => current is! HomeActionState,
       listener: (context, state) {
-        if (state is HomeNavigateToChatScreenActionState) {
-          Navigator.pushNamed(context, ChatUsersScreen.routeName);
-        } else if (state is HomeShowAddPostOptionsModalSheetActionState) {
+        if (state is HomeShowAddPostOptionsModalSheetActionState) {
           showPostOptions();
         }
       },
@@ -54,16 +53,10 @@ class _HomeState extends State<Home> {
                   index: currentIndex,
                   children: [
                     // Screen for Posts
-                    PostsFeed(
-                      authBloc: widget.authBloc,
-                      onTapChatIcon: () {
-                        homeBloc
-                            .add(HomeNavigateToChatScreenButtonClickedEvent());
-                      },
-                    ),
+                    PostsFeed(authBloc: widget.authBloc),
 
                     // Screen to Search Profiles
-                    const Center(child: Text('In Making')),
+                    const SearchScreen(),
 
                     // Skip it
                     const SizedBox(),
@@ -72,12 +65,13 @@ class _HomeState extends State<Home> {
                     CurrentUserProfile(authBloc: widget.authBloc),
                   ],
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 5,
-                  right: 5,
-                  child: appNavigationBar(),
-                )
+                if (!isKeyBoardEnabled)
+                  Positioned(
+                    bottom: 0,
+                    left: 5,
+                    right: 5,
+                    child: appNavigationBar(),
+                  )
               ],
             ),
           ),

@@ -67,6 +67,7 @@ class AddCommentField extends StatelessWidget {
             onSubmitted: (comment) {
               postsBloc.add(PostAddCommentButtonClickedEvent(
                   postId: postId, comment: _commentTextController.text));
+              _commentTextController.clear();
             },
             onTapOutside: (_) => FocusManager.instance.primaryFocus!.unfocus(),
           ),

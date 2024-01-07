@@ -32,7 +32,7 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
         .doc(AuthRepo.currentUser!.uid)
         .get();
     savedPosts = docData.exists ? docData.data()!.keys.toList() : List.empty();
-    if (context.mounted) {
+    if (mounted) {
       setState(() {
         isLoading = false;
       });

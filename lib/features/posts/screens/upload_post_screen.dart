@@ -1,9 +1,10 @@
 import 'package:connecthub/constants/constants.dart';
 import 'package:connecthub/features/posts/bloc/posts_bloc.dart';
+import 'package:connecthub/models/post_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-
+import '../../../components/network_image_widget.dart';
 import '../../../components/show_snackbar.dart';
 import 'add_post_screen.dart';
 
@@ -17,7 +18,17 @@ class UploadPostScreen extends StatelessWidget {
     final routeData =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     final postsBloc = routeData['postBloc'];
-    final image = routeData['image'];
+    final isEditing = routeData['isEditing'];
+    dynamic image;
+    PostDataModel? postDataModel;
+    if (!isEditing) {
+      image = routeData['image'];
+    }
+    if (isEditing) {
+      postDataModel = routeData['postDataModel'];
+      _captionTextController.text = postDataModel!.caption;
+    }
+
     return BlocListener<PostsBloc, PostsState>(
       bloc: postsBloc,
       listenWhen: (previous, current) => current is PostsActionState,
@@ -43,7 +54,9 @@ class UploadPostScreen extends StatelessWidget {
           Navigator.pop(context);
           ShowSnackBar(
             context: context,
-            label: 'Post successfully uploaded.',
+            label: isEditing
+                ? 'Post successfully updated.'
+                : 'Post successfully uploaded.',
             color: MyColors.buttonColor1,
           ).show();
         }
@@ -56,12 +69,21 @@ class UploadPostScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                postsBloc.add(
-                  PostUploadButtonClickedEvent(
-                    caption: _captionTextController.text,
-                    image: image,
-                  ),
-                );
+                if (isEditing) {
+                  postsBloc.add(PostUpdateButtonClickedEvent(
+                    postDataModel: postDataModel!.copyWith(
+                      caption: _captionTextController.text,
+                      postedOn: DateTime.now(),
+                    ),
+                  ));
+                } else {
+                  postsBloc.add(
+                    PostUploadButtonClickedEvent(
+                      caption: _captionTextController.text,
+                      image: image,
+                    ),
+                  );
+                }
               },
               child: BlocBuilder<PostsBloc, PostsState>(
                 bloc: postsBloc,
@@ -76,7 +98,7 @@ class UploadPostScreen extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          'Post',
+                          isEditing ? 'Save' : 'Post',
                           style: MyFonts.bodyFont(
                             fontColor: MyColors.secondaryColor,
                             fontWeight: FontWeight.w400,
@@ -120,28 +142,35 @@ class UploadPostScreen extends StatelessWidget {
                   horizontal: 10,
                   vertical: 5,
                 ),
-                child: Image.file(
-                  image,
-                  fit: BoxFit.cover,
-                ),
+                child: isEditing
+                    ? NetworkImageWidget(
+                        height: 300,
+                        width: double.infinity,
+                        imageUrl: postDataModel!.postUrl,
+                      )
+                    : Image.file(
+                        image,
+                        fit: BoxFit.cover,
+                      ),
               ),
               const SizedBox(height: 10),
-              TextButton.icon(
-                onPressed: () {
-                  postsBloc.add(
-                      PostChooseImageButtonClickedEvent(isChagingImage: true));
-                },
-                icon: Icon(
-                  IconlyLight.camera,
-                  color: MyColors.secondaryColor,
-                ),
-                label: Text(
-                  'Change Image',
-                  style: MyFonts.bodyFont(
-                    fontColor: MyColors.secondaryColor,
+              if (!isEditing)
+                TextButton.icon(
+                  onPressed: () {
+                    postsBloc.add(PostChooseImageButtonClickedEvent(
+                        isChagingImage: true));
+                  },
+                  icon: Icon(
+                    IconlyLight.camera,
+                    color: MyColors.secondaryColor,
+                  ),
+                  label: Text(
+                    'Change Image',
+                    style: MyFonts.bodyFont(
+                      fontColor: MyColors.secondaryColor,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

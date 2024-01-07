@@ -5,7 +5,6 @@ import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import '/features/posts/screens/upload_post_screen.dart';
 import '/constants/constants.dart';
-
 import '../bloc/posts_bloc.dart';
 
 class AddPostScreen extends StatelessWidget {
@@ -31,66 +30,68 @@ class AddPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostsBloc, PostsState>(
-        bloc: postsBloc,
-        listenWhen: (previous, current) => current is PostsActionState,
-        buildWhen: (previous, current) => current is! PostsActionState,
-        listener: (context, state) {
-          if (state is PostChoosenSuccessActionState) {
-            final image = state.choosenImage;
-            if (isChangingImage) {
-              Navigator.pushReplacementNamed(
-                  context, UploadPostScreen.routeName,
-                  arguments: {
-                    'postBloc': postsBloc,
-                    'image': image,
-                  });
-            } else {
-              Navigator.pushNamed(context, UploadPostScreen.routeName,
-                  arguments: {
-                    'postBloc': postsBloc,
-                    'image': image,
-                  });
-            }
+      bloc: postsBloc,
+      listenWhen: (previous, current) => current is PostsActionState,
+      buildWhen: (previous, current) => current is! PostsActionState,
+      listener: (context, state) {
+        if (state is PostChoosenSuccessActionState) {
+          final image = state.choosenImage;
+          if (isChangingImage) {
+            Navigator.pushReplacementNamed(context, UploadPostScreen.routeName,
+                arguments: {
+                  'postBloc': postsBloc,
+                  'image': image,
+                  'isEditing': false,
+                });
+          } else {
+            Navigator.pushNamed(context, UploadPostScreen.routeName,
+                arguments: {
+                  'postBloc': postsBloc,
+                  'image': image,
+                  'isEditing': false,
+                });
           }
-        },
-        builder: (context, state) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 50),
-              TextButton.icon(
-                icon: Icon(
-                  IconlyLight.camera,
-                  color: MyColors.secondaryColor,
-                  size: 25,
-                ),
-                onPressed: () => _pickImage(ImageSource.camera, context),
-                label: Text(
-                  'Capture new image',
-                  style: MyFonts.bodyFont(
-                    fontColor: MyColors.secondaryColor,
-                    fontSize: 20,
-                  ),
+        }
+      },
+      builder: (context, state) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 50),
+            TextButton.icon(
+              icon: Icon(
+                IconlyLight.camera,
+                color: MyColors.secondaryColor,
+                size: 25,
+              ),
+              onPressed: () => _pickImage(ImageSource.camera, context),
+              label: Text(
+                'Capture new image',
+                style: MyFonts.bodyFont(
+                  fontColor: MyColors.secondaryColor,
+                  fontSize: 20,
                 ),
               ),
-              TextButton.icon(
-                icon: Icon(
-                  IconlyLight.image,
-                  color: MyColors.secondaryColor,
-                  size: 25,
-                ),
-                onPressed: () => _pickImage(ImageSource.gallery, context),
-                label: Text(
-                  'Choose from gallery',
-                  style: MyFonts.bodyFont(
-                    fontColor: MyColors.secondaryColor,
-                    fontSize: 20,
-                  ),
+            ),
+            TextButton.icon(
+              icon: Icon(
+                IconlyLight.image,
+                color: MyColors.secondaryColor,
+                size: 25,
+              ),
+              onPressed: () => _pickImage(ImageSource.gallery, context),
+              label: Text(
+                'Choose from gallery',
+                style: MyFonts.bodyFont(
+                  fontColor: MyColors.secondaryColor,
+                  fontSize: 20,
                 ),
               ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 }

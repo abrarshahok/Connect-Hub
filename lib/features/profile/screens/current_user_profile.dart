@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/custom_icon_button.dart';
-import '/features/profile/screens/user_posts_screen.dart';
+import 'user_posts_screen.dart';
 import '../widgets/profile_info_card.dart';
 import 'user_saved_posts_screen.dart';
 import '../../auth/bloc/auth_bloc.dart';

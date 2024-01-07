@@ -7,6 +7,10 @@ class PostsActionState extends PostsState {}
 
 class PostsInitial extends PostsState {}
 
+class PostShowAllPostOptionsState extends PostsState {}
+
+class PostHideAllPostOptionsState extends PostsState {}
+
 class PostChoosenSuccessActionState extends PostsActionState {
   final File choosenImage;
 
@@ -35,3 +39,9 @@ class PostNavigateToCommentsScreenActionState extends PostsActionState {}
 class PostSavedActionState extends PostsActionState {}
 
 class PostUnSavedActionState extends PostsActionState {}
+
+class PostEditPostActionState extends PostsActionState {}
+
+class PostDeleteActionState extends PostsActionState {}
+
+class PostDeleteSuccessActionState extends PostsActionState {}

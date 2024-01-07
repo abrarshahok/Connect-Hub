@@ -19,6 +19,11 @@ class PostUploadButtonClickedEvent extends PostsEvent {
   PostUploadButtonClickedEvent({required this.caption, required this.image});
 }
 
+class PostUpdateButtonClickedEvent extends PostsEvent {
+  final PostDataModel postDataModel;
+  PostUpdateButtonClickedEvent({required this.postDataModel});
+}
+
 class PostLikeButtonClickedEvent extends PostsEvent {
   final String postId;
 
@@ -49,3 +54,17 @@ class PostNavigateToCommentScreenButtonClickedEvent extends PostsEvent {
 }
 
 class PostNavigateToLikeScreenButtonClickedEvent extends PostsEvent {}
+
+class PostShowAllPostOptionsButtonClickedEvent extends PostsEvent {}
+
+class PostHideAllPostOptionsButtonClickedEvent extends PostsEvent {}
+
+class PostEditPostButtonClickedEvent extends PostsEvent {}
+
+class PostDeletePostButtonClickedEvent extends PostsEvent {}
+
+class PostDeleteConfirmationEvent extends PostsEvent {
+  final String postId;
+
+  PostDeleteConfirmationEvent({required this.postId});
+}

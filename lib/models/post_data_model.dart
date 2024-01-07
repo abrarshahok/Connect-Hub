@@ -40,4 +40,25 @@ class PostDataModel {
         postedOn: DateTime.parse(json['postedOn']),
         likes: List<String>.from(json['likes']),
       );
+  PostDataModel copyWith({
+    String? postId,
+    String? userId,
+    String? username,
+    String? userImage,
+    String? caption,
+    String? postUrl,
+    DateTime? postedOn,
+    List<dynamic>? likes,
+  }) {
+    return PostDataModel(
+      postId: postId ?? this.postId,
+      userId: userId ?? this.userId,
+      username: username ?? this.username,
+      userImage: userImage ?? this.userImage,
+      caption: caption ?? this.caption,
+      postUrl: postUrl ?? this.postUrl,
+      postedOn: postedOn ?? this.postedOn,
+      likes: likes ?? this.likes,
+    );
+  }
 }

@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/features/auth/bloc/auth_bloc.dart';
-import '/features/profile/screens/current_user_profile.dart';
-import '/features/profile/screens/other_users_profile.dart';
+import '../../profile/screens/current_user_profile.dart';
+import '../../profile/screens/other_users_profile.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/loading.dart';
 import '../../../repos/auth_repo.dart';
 import '/features/posts/widgets/post_card.dart';
 import '/constants/constants.dart';
 import '/models/post_data_model.dart';
-import '../../../components/custom_icon_button.dart';
 
 class PostsFeed extends StatefulWidget {
   const PostsFeed({
     super.key,
     required this.authBloc,
-    required this.onTapChatIcon,
   });
   final AuthBloc authBloc;
-  final VoidCallback onTapChatIcon;
 
   @override
   State<PostsFeed> createState() => _PostsFeedState();
@@ -59,12 +55,7 @@ class _PostsFeedState extends State<PostsFeed> {
       backgroundColor: MyColors.primaryColor,
       appBar: customAppBar(
         title: 'Connect Hub',
-        showActionButton: true,
-        actionButton: CustomIconButton(
-          icon: IconlyLight.chat,
-          color: MyColors.secondaryColor,
-          onPressed: widget.onTapChatIcon,
-        ),
+        centerTitle: true,
       ),
       body: isLoading
           ? const Loading()

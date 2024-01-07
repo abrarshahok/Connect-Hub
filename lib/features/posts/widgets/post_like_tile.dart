@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/components/custom_elevated_button.dart';
-import '/features/profile/bloc/profile_bloc.dart';
+import '../../profile/bloc/profile_bloc.dart';
 import '/models/user_data_model.dart';
 import '/repos/auth_repo.dart';
 import '/constants/constants.dart';
