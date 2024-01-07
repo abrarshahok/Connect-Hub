@@ -9,6 +9,8 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<HomeAddPostButtonClickedEvent>(homeAddPostButtonClickedEvent);
+    on<HomeNavigateToChatScreenButtonClickedEvent>(
+        homeNavigateToChatScreenButtonClickedEvent);
   }
 
   FutureOr<void> homeAddPostButtonClickedEvent(
@@ -16,5 +18,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) {
     emit(HomeShowAddPostOptionsModalSheetActionState());
+  }
+
+  FutureOr<void> homeNavigateToChatScreenButtonClickedEvent(
+    HomeNavigateToChatScreenButtonClickedEvent event,
+    Emitter<HomeState> emit,
+  ) {
+    emit(HomeNavigateToChatScreenActionState());
   }
 }

@@ -8,3 +8,5 @@ class HomeActionState extends HomeState {}
 class HomeInitial extends HomeState {}
 
 class HomeShowAddPostOptionsModalSheetActionState extends HomeActionState {}
+
+class HomeNavigateToChatScreenActionState extends HomeActionState {}
