@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/components/custom_app_top_bar.dart';
 import 'package:connecthub/components/custom_icon_button.dart';
 import 'package:connecthub/components/loading.dart';
-import 'package:connecthub/models/user_data_model.dart';
+import 'package:connecthub/features/auth/domain/user_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '/features/posts/widgets/post_like_tile.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/repository/auth_repository.dart';
 import '../../../constants/constants.dart';
 
 class LikesScreen extends StatelessWidget {
@@ -45,9 +45,9 @@ class LikesScreen extends StatelessWidget {
           }
           final usersData = userInfoSnapshot.data!.docs;
           usersData.sort((a, b) {
-            if (a.id == AuthRepo.currentUser!.uid) {
+            if (a.id == AuthRepository.currentUser!.uid) {
               return -1;
-            } else if (b.id == AuthRepo.currentUser!.uid) {
+            } else if (b.id == AuthRepository.currentUser!.uid) {
               return 1;
             } else {
               return a.id.compareTo(b.id);
@@ -75,9 +75,9 @@ class LikesScreen extends StatelessWidget {
 
                 return PostLikeTile(
                   userInfo: userInfo,
-                  isFollowing:
-                      userInfo.followers.contains(AuthRepo.currentUser!.uid),
-                  isYou: userInfo.uid == AuthRepo.currentUser!.uid,
+                  isFollowing: userInfo.followers
+                      .contains(AuthRepository.currentUser!.uid),
+                  isYou: userInfo.uid == AuthRepository.currentUser!.uid,
                 );
               },
             );

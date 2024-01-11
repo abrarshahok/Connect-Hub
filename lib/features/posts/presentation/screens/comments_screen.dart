@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/components/loading.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/repository/auth_repository.dart';
 import '/service_locator/service_locator.dart';
 import '../bloc/posts_bloc.dart';
 import '/constants/constants.dart';
@@ -64,7 +64,7 @@ class CommentsScreen extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      '${commentData.username == AuthRepo.currentUser!.username ? 'You' : commentData.username} on $formatedDateTime',
+                      '${commentData.username == AuthRepository.currentUser!.username ? 'You' : commentData.username} on $formatedDateTime',
                       style: MyFonts.bodyFont(
                         fontColor: MyColors.secondaryColor,
                         fontSize: 12,
@@ -77,14 +77,15 @@ class CommentsScreen extends StatelessWidget {
                         fontColor: MyColors.secondaryColor,
                       ),
                     ),
-                    trailing: commentData.userId == AuthRepo.currentUser!.uid
-                        ? IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.more_vert,
-                              color: MyColors.secondaryColor,
-                            ))
-                        : null,
+                    trailing:
+                        commentData.userId == AuthRepository.currentUser!.uid
+                            ? IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: MyColors.secondaryColor,
+                                ))
+                            : null,
                   );
                 });
           },

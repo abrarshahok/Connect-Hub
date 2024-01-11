@@ -1,12 +1,11 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connecthub/models/post_data_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/repository/auth_repository.dart';
+import '/features/posts/domain/post_data_model.dart';
 
-class PostRepo {
+class PostRepository {
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   static Future<bool> uploadPost({
@@ -53,7 +52,6 @@ class PostRepo {
     try {
       firebaseFirestore.collection('posts').doc(postId).delete();
       firebaseStorage.ref().child('user_posts').child(postId).delete();
-      log(postId);
       return true;
     } catch (_) {
       return false;
@@ -67,13 +65,13 @@ class PostRepo {
     try {
       final postRef = firebaseFirestore.collection('posts').doc(postId);
 
-      if (likes.contains(AuthRepo.currentUser!.uid)) {
+      if (likes.contains(AuthRepository.currentUser!.uid)) {
         postRef.update({
-          'likes': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
+          'likes': FieldValue.arrayRemove([AuthRepository.currentUser!.uid])
         });
       } else {
         postRef.update({
-          'likes': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
+          'likes': FieldValue.arrayUnion([AuthRepository.currentUser!.uid])
         });
       }
 
@@ -87,7 +85,7 @@ class PostRepo {
     try {
       final savedPostRef = firebaseFirestore
           .collection('savedPosts')
-          .doc(AuthRepo.currentUser!.uid);
+          .doc(AuthRepository.currentUser!.uid);
       final savedPostData = await savedPostRef.get();
       if (savedPostData.exists) {
         final isPostSaved = savedPostData.data()!.containsKey(postId);
@@ -119,9 +117,9 @@ class PostRepo {
           .collection('comments')
           .doc(commentId);
       final commentJson = {
-        'userId': AuthRepo.currentUser!.uid,
-        'username': AuthRepo.currentUser!.username,
-        'userImageUrl': AuthRepo.currentUser!.userImage,
+        'userId': AuthRepository.currentUser!.uid,
+        'username': AuthRepository.currentUser!.username,
+        'userImageUrl': AuthRepository.currentUser!.userImage,
         'comment': comment,
         'commentId': commentId,
         'commentedOn': DateTime.now().toIso8601String(),

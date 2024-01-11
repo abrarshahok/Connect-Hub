@@ -4,7 +4,7 @@ import '../../profile/screens/current_user_profile.dart';
 import '../../profile/screens/other_users_profile.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/loading.dart';
-import '../../../repos/auth_repo.dart';
+import '../../auth/repository/auth_repository.dart';
 import '/features/posts/widgets/post_card.dart';
 import '/constants/constants.dart';
 import '/models/post_data_model.dart';
@@ -31,7 +31,7 @@ class _PostsFeedState extends State<PostsFeed> {
     });
     final docData = await FirebaseFirestore.instance
         .collection('savedPosts')
-        .doc(AuthRepo.currentUser!.uid)
+        .doc(AuthRepository.currentUser!.uid)
         .get();
     savedPosts = docData.exists ? docData.data()!.keys.toList() : List.empty();
     setState(() {
@@ -89,7 +89,8 @@ class _PostsFeedState extends State<PostsFeed> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  AuthRepo.currentUser!.uid == postInfo.userId
+                                  AuthRepository.currentUser!.uid ==
+                                          postInfo.userId
                                       ? const CurrentUserProfile(
                                           showBackButton: true,
                                         )

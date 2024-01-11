@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:uuid/uuid.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '/repos/auth_repo.dart';
-import '/repos/post_repo.dart';
-import '/models/post_data_model.dart';
+import '../../auth/repository/auth_repository.dart';
+import '../respository/post_repository.dart';
+import '../domain/post_data_model.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';
 
@@ -53,22 +53,22 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   ) async {
     emit(PostUploadingActionState());
     final postId = const Uuid().v1();
-    final String postUrl = await PostRepo.uploadImage(
+    final String postUrl = await PostRepository.uploadImage(
       postImage: event.image,
       postId: postId,
       ref: 'user_posts',
     );
     final postInfo = PostDataModel(
       postId: postId,
-      userId: AuthRepo.currentUser!.uid,
-      username: AuthRepo.currentUser!.username,
-      userImage: AuthRepo.currentUser!.userImage,
+      userId: AuthRepository.currentUser!.uid,
+      username: AuthRepository.currentUser!.username,
+      userImage: AuthRepository.currentUser!.userImage,
       caption: event.caption,
       postUrl: postUrl,
       postedOn: DateTime.now(),
       likes: [],
     );
-    bool isUploadingSuccess = await PostRepo.uploadPost(
+    bool isUploadingSuccess = await PostRepository.uploadPost(
       postInfo: postInfo,
       postImage: event.image,
     );
@@ -83,7 +83,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostLikeButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) async {
-    final isLikedOrDisliked = await PostRepo.likeOrDislikePost(
+    final isLikedOrDisliked = await PostRepository.likeOrDislikePost(
       likes: event.likes,
       postId: event.postId,
     );
@@ -96,7 +96,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostSaveButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) async {
-    final checkIsSaved = await PostRepo.saveOrUnsavePost(event.postId);
+    final checkIsSaved = await PostRepository.saveOrUnsavePost(event.postId);
     if (checkIsSaved == 'saved') {
       emit(PostSavedActionState());
     } else if (checkIsSaved == 'unsaved') {
@@ -124,7 +124,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostAddCommentButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) async {
-    bool isCommentSent = await PostRepo.addComment(
+    bool isCommentSent = await PostRepository.addComment(
       postId: event.postId,
       comment: event.comment,
     );
@@ -163,7 +163,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     emit(PostUploadingActionState());
     final postInfo = event.postDataModel;
     bool isUploadingSuccess =
-        await PostRepo.updatePost(postDataModel: postInfo);
+        await PostRepository.updatePost(postDataModel: postInfo);
     if (isUploadingSuccess) {
       emit(PostUploadSuccessActionState());
     } else {
@@ -182,7 +182,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostDeleteConfirmationEvent event,
     Emitter<PostsState> emit,
   ) async {
-    bool isDeleted = await PostRepo.deletePost(postId: event.postId);
+    bool isDeleted = await PostRepository.deletePost(postId: event.postId);
     if (isDeleted) {
       emit(PostDeleteSuccessActionState());
     }

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connecthub/repos/auth_repo.dart';
+import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfileRepo {
@@ -11,20 +11,21 @@ class ProfileRepo {
     required String userId,
   }) async {
     try {
-      final currentUserRef =
-          firebaseFirestore.collection('users').doc(AuthRepo.currentUser!.uid);
+      final currentUserRef = firebaseFirestore
+          .collection('users')
+          .doc(AuthRepository.currentUser!.uid);
       final otherUserRef = firebaseFirestore.collection('users').doc(userId);
 
-      if (followers.contains(AuthRepo.currentUser!.uid)) {
+      if (followers.contains(AuthRepository.currentUser!.uid)) {
         otherUserRef.update({
-          'followers': FieldValue.arrayRemove([AuthRepo.currentUser!.uid])
+          'followers': FieldValue.arrayRemove([AuthRepository.currentUser!.uid])
         });
         currentUserRef.update({
           'following': FieldValue.arrayRemove([userId])
         });
       } else {
         otherUserRef.update({
-          'followers': FieldValue.arrayUnion([AuthRepo.currentUser!.uid])
+          'followers': FieldValue.arrayUnion([AuthRepository.currentUser!.uid])
         });
         currentUserRef.update({
           'following': FieldValue.arrayUnion([userId])

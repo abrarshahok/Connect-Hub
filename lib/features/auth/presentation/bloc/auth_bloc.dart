@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '/repos/auth_repo.dart';
+import '../../repository/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -22,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthInitialEvent event,
     Emitter<AuthState> emit,
   ) async {
-    bool isUserFound = await AuthRepo.fetchCurrentUserInfo();
+    bool isUserFound = await AuthRepository.fetchCurrentUserInfo();
     if (isUserFound) {
       emit(AuthUserAuthenticationSuccessState());
     } else {
@@ -35,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthButtonLoadingActionState());
-    bool isLoginSuccess = await AuthRepo.signIn(
+    bool isLoginSuccess = await AuthRepository.signIn(
       email: event.email,
       password: event.password,
     );
@@ -52,7 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthButtonLoadingActionState());
-    bool isSignupSuccess = await AuthRepo.signUp(
+    bool isSignupSuccess = await AuthRepository.signUp(
       email: event.email,
       password: event.password,
       username: event.username,
@@ -70,7 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutButtonClickedEvent event,
     Emitter<AuthState> emit,
   ) async {
-    bool isLogoutSuccess = await AuthRepo.signOut();
+    bool isLogoutSuccess = await AuthRepository.signOut();
     if (isLogoutSuccess) {
       emit(AuthUserUnAuthenticatedState());
     }

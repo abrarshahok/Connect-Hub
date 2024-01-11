@@ -6,7 +6,7 @@ import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconly/iconly.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/repository/auth_repository.dart';
 import '/features/posts/screens/likes_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +111,8 @@ class PostCard extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      if (postDataModel.userId == AuthRepo.currentUser!.uid)
+                      if (postDataModel.userId ==
+                          AuthRepository.currentUser!.uid)
                         IconButton(
                           onPressed: () {
                             if (state is! PostShowAllPostOptionsState) {
@@ -139,11 +140,11 @@ class PostCard extends StatelessWidget {
                     children: [
                       CustomIconButton(
                         icon: postDataModel.likes
-                                .contains(AuthRepo.currentUser!.uid)
+                                .contains(AuthRepository.currentUser!.uid)
                             ? IconlyBold.heart
                             : IconlyLight.heart,
                         color: postDataModel.likes
-                                .contains(AuthRepo.currentUser!.uid)
+                                .contains(AuthRepository.currentUser!.uid)
                             ? Colors.red
                             : MyColors.secondaryColor,
                         onPressed: () {

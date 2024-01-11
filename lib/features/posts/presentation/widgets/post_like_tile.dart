@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/components/custom_elevated_button.dart';
 import '../../profile/bloc/profile_bloc.dart';
-import '/models/user_data_model.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/domain/user_data_model.dart';
+import '../../auth/repository/auth_repository.dart';
 import '/constants/constants.dart';
 
 class PostLikeTile extends StatelessWidget {
@@ -29,7 +29,7 @@ class PostLikeTile extends StatelessWidget {
         ),
       ),
       title: Text(
-        userInfo.username == AuthRepo.currentUser!.username
+        userInfo.username == AuthRepository.currentUser!.username
             ? 'You'
             : userInfo.username,
         style: MyFonts.bodyFont(

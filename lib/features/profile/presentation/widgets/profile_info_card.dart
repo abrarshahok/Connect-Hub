@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connecthub/components/custom_elevated_button.dart';
 import 'package:connecthub/features/profile/bloc/profile_bloc.dart';
-import 'package:connecthub/repos/auth_repo.dart';
+import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/models/user_data_model.dart';
+import '../../auth/domain/user_data_model.dart';
 import '../../../constants/constants.dart';
 
 class ProfileInfoCard extends StatelessWidget {
@@ -71,7 +71,7 @@ class ProfileInfoCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            if (userInfo.uid != AuthRepo.currentUser!.uid)
+            if (userInfo.uid != AuthRepository.currentUser!.uid)
               CustomElevatedButton(
                 onPressed: () {
                   _profileBloc.add(ProfileFollowOrUnfollowButtonClickedEvent(
@@ -79,14 +79,16 @@ class ProfileInfoCard extends StatelessWidget {
                     followers: userInfo.followers,
                   ));
                 },
-                title: userInfo.followers.contains(AuthRepo.currentUser!.uid)
-                    ? 'Unfollow'
-                    : 'Follow',
+                title:
+                    userInfo.followers.contains(AuthRepository.currentUser!.uid)
+                        ? 'Unfollow'
+                        : 'Follow',
                 width: double.infinity,
                 height: 40,
-                color: userInfo.followers.contains(AuthRepo.currentUser!.uid)
-                    ? MyColors.secondaryColor.withOpacity(0.01)
-                    : MyColors.buttonColor1,
+                color:
+                    userInfo.followers.contains(AuthRepository.currentUser!.uid)
+                        ? MyColors.secondaryColor.withOpacity(0.01)
+                        : MyColors.buttonColor1,
               )
           ],
         ),

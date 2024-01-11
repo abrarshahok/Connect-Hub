@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/features/search/widgets/search_text_field.dart';
 import '/features/search/widgets/searched_user_tile.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/repository/auth_repository.dart';
 import '/components/loading.dart';
 import '/constants/constants.dart';
-import '/models/user_data_model.dart';
+import '../../auth/domain/user_data_model.dart';
 import '../../profile/screens/other_users_profile.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     return SearchedUserTile(
                       userInfo: userData,
                       isFollowing: userData.followers.contains(
-                        AuthRepo.currentUser!.uid,
+                        AuthRepository.currentUser!.uid,
                       ),
                       onTap: () {
                         Navigator.push(

@@ -3,7 +3,7 @@ import 'package:connecthub/components/loading.dart';
 import 'package:connecthub/constants/constants.dart';
 import 'package:connecthub/features/posts/widgets/post_card.dart';
 import 'package:connecthub/models/post_data_model.dart';
-import 'package:connecthub/repos/auth_repo.dart';
+import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 
 class UserPostsScreen extends StatefulWidget {
@@ -29,7 +29,7 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
     });
     final docData = await FirebaseFirestore.instance
         .collection('savedPosts')
-        .doc(AuthRepo.currentUser!.uid)
+        .doc(AuthRepository.currentUser!.uid)
         .get();
     savedPosts = docData.exists ? docData.data()!.keys.toList() : List.empty();
     if (mounted) {

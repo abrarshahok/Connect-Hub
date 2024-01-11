@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '../../../service_locator/service_locator.dart';
-import '/features/auth/bloc/auth_bloc.dart';
+import '../../auth/presentation/bloc/auth_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'user_posts_screen.dart';
 import '../widgets/profile_info_card.dart';
 import '../../../components/custom_app_top_bar.dart';
 import '../../../components/custom_icon_button.dart';
 import '../../../constants/constants.dart';
-import '/models/user_data_model.dart';
-import '/repos/auth_repo.dart';
+import '../../auth/domain/user_data_model.dart';
+import '../../auth/repository/auth_repository.dart';
 
 class OtherUsersProfile extends StatelessWidget {
   OtherUsersProfile({
@@ -33,7 +33,7 @@ class OtherUsersProfile extends StatelessWidget {
       appBar: customAppBar(
         title: 'Howdy :)',
         centerTitle: true,
-        showActionButton: userId == AuthRepo.currentUser!.uid,
+        showActionButton: userId == AuthRepository.currentUser!.uid,
         showLeadingButton: showBackButton,
         leadingButton: CustomIconButton(
           icon: IconlyLight.arrow_left,

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connecthub/repos/auth_repo.dart';
+import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import '../../../service_locator/service_locator.dart';
@@ -8,7 +8,7 @@ import '/components/custom_icon_button.dart';
 import 'user_posts_screen.dart';
 import '../widgets/profile_info_card.dart';
 import 'user_saved_posts_screen.dart';
-import '../../auth/bloc/auth_bloc.dart';
+import '../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../constants/constants.dart';
 
 class CurrentUserProfile extends StatefulWidget {
@@ -37,7 +37,7 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
   Widget build(BuildContext context) {
     final postsStream = FirebaseFirestore.instance
         .collection('posts')
-        .where('userId', isEqualTo: AuthRepo.currentUser!.uid)
+        .where('userId', isEqualTo: AuthRepository.currentUser!.uid)
         .snapshots();
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
@@ -76,7 +76,7 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
                   child: Column(
                     children: [
                       ProfileInfoCard(
-                        userInfo: AuthRepo.currentUser!,
+                        userInfo: AuthRepository.currentUser!,
                         totalPosts: postsCount,
                       ),
                       TabBar(
@@ -106,7 +106,7 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
               body: TabBarView(
                 controller: tabController,
                 children: [
-                  UserPostsScreen(userId: AuthRepo.currentUser!.uid),
+                  UserPostsScreen(userId: AuthRepository.currentUser!.uid),
                   const UserSavedPostsScreen(),
                 ],
               ),

@@ -1,13 +1,12 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '/constants/constants.dart';
 
-import '../models/user_data_model.dart';
+import '../domain/user_data_model.dart';
 
-class AuthRepo {
+class AuthRepository {
   static FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -18,7 +17,6 @@ class AuthRepo {
   static Future<bool> fetchCurrentUserInfo() async {
     try {
       if (firebaseAuth.currentUser == null) {
-        print(firebaseAuth.currentUser);
         return false;
       }
       final userInfo = await firebaseFirestore
@@ -32,7 +30,6 @@ class AuthRepo {
       }
       return false;
     } catch (e) {
-      print(e);
       return false;
     }
   }
