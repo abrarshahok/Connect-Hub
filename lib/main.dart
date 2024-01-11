@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import '/constants/constants.dart';
 import '/features/auth/screens/auth.dart';
+import '/service_locator/service_locator.dart';
 import '/features/posts/screens/likes_screen.dart';
 import '/features/posts/screens/comments_screen.dart';
 import '/features/posts/screens/add_post_screen.dart';
@@ -11,6 +12,8 @@ import '/features/posts/screens/upload_post_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // SettingUp service Locators
+  ServiceLocator.setupLocators();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: MyColors.primaryColor,

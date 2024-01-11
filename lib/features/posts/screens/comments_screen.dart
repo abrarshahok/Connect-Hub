@@ -1,11 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connecthub/components/loading.dart';
-import 'package:connecthub/repos/auth_repo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import '/components/loading.dart';
+import '/repos/auth_repo.dart';
+import '/service_locator/service_locator.dart';
 import '../bloc/posts_bloc.dart';
 import '/constants/constants.dart';
 import '/models/comment_data_model.dart';
@@ -16,7 +17,7 @@ import '/features/posts/widgets/add_comment_field.dart';
 class CommentsScreen extends StatelessWidget {
   static const routeName = '/comments-screen';
   CommentsScreen({super.key});
-  final postsBloc = PostsBloc();
+  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
   @override
   Widget build(BuildContext context) {
     final postId = ModalRoute.of(context)?.settings.arguments as String;

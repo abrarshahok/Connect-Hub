@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import '../../../service_locator/service_locator.dart';
 import '/features/auth/bloc/auth_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'user_posts_screen.dart';
@@ -11,16 +12,14 @@ import '/models/user_data_model.dart';
 import '/repos/auth_repo.dart';
 
 class OtherUsersProfile extends StatelessWidget {
-  const OtherUsersProfile({
+  OtherUsersProfile({
     super.key,
     required this.userId,
-    this.authBloc,
     this.showBackButton = false,
   });
   final String userId;
-  final AuthBloc? authBloc;
   final bool showBackButton;
-
+  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
   @override
   Widget build(BuildContext context) {
     final userStream =
@@ -45,7 +44,7 @@ class OtherUsersProfile extends StatelessWidget {
         ),
         actionButton: CustomIconButton(
           onPressed: () {
-            authBloc!.add(AuthLogoutButtonClickedEvent());
+            authBloc.add(AuthLogoutButtonClickedEvent());
           },
           icon: IconlyLight.logout,
           color: MyColors.secondaryColor,

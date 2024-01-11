@@ -1,11 +1,11 @@
-import 'dart:async';
 import 'dart:io';
-import 'package:connecthub/models/post_data_model.dart';
+import 'dart:async';
 import 'package:uuid/uuid.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import '/repos/auth_repo.dart';
 import '/repos/post_repo.dart';
+import '/models/post_data_model.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';
 

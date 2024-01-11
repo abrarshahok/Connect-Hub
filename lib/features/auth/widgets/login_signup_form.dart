@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../service_locator/service_locator.dart';
 import '/features/auth/bloc/auth_bloc.dart';
 import '../../../components/custom_text_form_field.dart';
 import '../../../constants/constants.dart';
@@ -7,8 +8,7 @@ import '../../../constants/constants.dart';
 enum AuthMode { login, signUp }
 
 class LoginSignUpForm extends StatefulWidget {
-  final AuthBloc authBloc;
-  const LoginSignUpForm({super.key, required this.authBloc});
+  const LoginSignUpForm({super.key});
 
   @override
   State<LoginSignUpForm> createState() => _LoginSignUpFormState();
@@ -18,7 +18,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
   AuthMode authMode = AuthMode.login;
   final formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-
+  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
   final authData = {
     'username': '',
     'email': '',
@@ -129,7 +129,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                     ),
                   ),
                   child: BlocBuilder<AuthBloc, AuthState>(
-                    bloc: widget.authBloc,
+                    bloc: authBloc,
                     buildWhen: (previous, current) =>
                         current is AuthActionState,
                     builder: (context, state) {
@@ -201,14 +201,14 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
     }
     formKey.currentState!.save();
     if (authMode == AuthMode.login) {
-      widget.authBloc.add(
+      authBloc.add(
         AuthLoginFormSubmitedEvent(
           email: authData['email']!,
           password: authData['password']!,
         ),
       );
     } else {
-      widget.authBloc.add(AuthSignupFormSubmitedEvent(
+      authBloc.add(AuthSignupFormSubmitedEvent(
         email: authData['email']!,
         password: authData['password']!,
         username: authData['username']!,

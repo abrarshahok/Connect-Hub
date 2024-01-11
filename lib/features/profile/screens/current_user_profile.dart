@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/repos/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import '../../../service_locator/service_locator.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/custom_icon_button.dart';
 import 'user_posts_screen.dart';
@@ -13,11 +14,9 @@ import '../../../constants/constants.dart';
 class CurrentUserProfile extends StatefulWidget {
   const CurrentUserProfile({
     super.key,
-    required this.authBloc,
     this.showBackButton = false,
   });
   final bool showBackButton;
-  final AuthBloc authBloc;
 
   @override
   State<CurrentUserProfile> createState() => _CurrentUserProfileState();
@@ -33,6 +32,7 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
     super.initState();
   }
 
+  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
   @override
   Widget build(BuildContext context) {
     final postsStream = FirebaseFirestore.instance
@@ -54,7 +54,7 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
         ),
         actionButton: CustomIconButton(
           onPressed: () {
-            widget.authBloc.add(AuthLogoutButtonClickedEvent());
+            authBloc.add(AuthLogoutButtonClickedEvent());
           },
           icon: IconlyLight.logout,
           color: MyColors.secondaryColor,

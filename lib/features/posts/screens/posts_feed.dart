@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/features/auth/bloc/auth_bloc.dart';
 import '../../profile/screens/current_user_profile.dart';
 import '../../profile/screens/other_users_profile.dart';
 import '/components/custom_app_top_bar.dart';
@@ -11,11 +10,7 @@ import '/constants/constants.dart';
 import '/models/post_data_model.dart';
 
 class PostsFeed extends StatefulWidget {
-  const PostsFeed({
-    super.key,
-    required this.authBloc,
-  });
-  final AuthBloc authBloc;
+  const PostsFeed({super.key});
 
   @override
   State<PostsFeed> createState() => _PostsFeedState();
@@ -95,13 +90,11 @@ class _PostsFeedState extends State<PostsFeed> {
                             MaterialPageRoute(
                               builder: (context) =>
                                   AuthRepo.currentUser!.uid == postInfo.userId
-                                      ? CurrentUserProfile(
-                                          authBloc: widget.authBloc,
+                                      ? const CurrentUserProfile(
                                           showBackButton: true,
                                         )
                                       : OtherUsersProfile(
                                           userId: postInfo.userId,
-                                          authBloc: widget.authBloc,
                                           showBackButton: true,
                                         ),
                             ),

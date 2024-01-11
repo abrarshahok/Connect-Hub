@@ -1,3 +1,4 @@
+import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/components/custom_elevated_button.dart';
@@ -17,7 +18,7 @@ class PostLikeTile extends StatelessWidget {
   final bool isFollowing;
   final UserDataModel userInfo;
 
-  final _profileBloc = ProfileBloc();
+  final ProfileBloc _profileBloc = ServiceLocator.instance.get<ProfileBloc>();
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
+import '/service_locator/service_locator.dart';
 import '/features/posts/screens/upload_post_screen.dart';
 import '/constants/constants.dart';
 import '../bloc/posts_bloc.dart';
@@ -11,7 +12,7 @@ class AddPostScreen extends StatelessWidget {
   AddPostScreen({super.key, this.isChangingImage = false});
   final bool isChangingImage;
   static const routeName = '/add-post-screen';
-  final PostsBloc postsBloc = PostsBloc();
+  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
 
   void _pickImage(
     ImageSource imageSource,

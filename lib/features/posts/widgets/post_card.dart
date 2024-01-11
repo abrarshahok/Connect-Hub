@@ -2,6 +2,7 @@ import 'package:connecthub/components/confirmation_dialogue.dart';
 import 'package:connecthub/components/network_image_widget.dart';
 import 'package:connecthub/features/posts/screens/upload_post_screen.dart';
 import 'package:connecthub/features/posts/screens/comments_screen.dart';
+import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconly/iconly.dart';
@@ -26,7 +27,7 @@ class PostCard extends StatelessWidget {
     required this.isSaved,
     required this.onTapProfile,
   });
-  final PostsBloc postsBloc = PostsBloc();
+  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
 
   @override
   Widget build(BuildContext context) {

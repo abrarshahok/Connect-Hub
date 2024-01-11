@@ -1,9 +1,9 @@
 import 'package:connecthub/features/search/screens/search_screen.dart';
+import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:iconly/iconly.dart';
-import '/features/auth/bloc/auth_bloc.dart';
 import '../../profile/screens/current_user_profile.dart';
 import '/features/posts/screens/add_post_screen.dart';
 import '../../posts/screens/posts_feed.dart';
@@ -11,15 +11,14 @@ import '../bloc/home_bloc.dart';
 import '/constants/constants.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key, required this.authBloc});
-  final AuthBloc authBloc;
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final HomeBloc homeBloc = HomeBloc();
+  final HomeBloc homeBloc = ServiceLocator.instance.get<HomeBloc>();
   int currentIndex = 0;
 
   @override
@@ -51,18 +50,18 @@ class _HomeState extends State<Home> {
               children: [
                 IndexedStack(
                   index: currentIndex,
-                  children: [
+                  children: const [
                     // Screen for Posts
-                    PostsFeed(authBloc: widget.authBloc),
+                    PostsFeed(),
 
                     // Screen to Search Profiles
-                    const SearchScreen(),
+                    SearchScreen(),
 
                     // Skip it
-                    const SizedBox(),
+                    SizedBox(),
 
                     // Screen for Disply Current User Profile
-                    CurrentUserProfile(authBloc: widget.authBloc),
+                    CurrentUserProfile(),
                   ],
                 ),
                 if (!isKeyBoardEnabled)

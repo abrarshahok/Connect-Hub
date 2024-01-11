@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connecthub/components/custom_elevated_button.dart';
 import 'package:connecthub/features/profile/bloc/profile_bloc.dart';
 import 'package:connecthub/repos/auth_repo.dart';
+import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/models/user_data_model.dart';
@@ -17,7 +18,7 @@ class ProfileInfoCard extends StatelessWidget {
   final UserDataModel userInfo;
   final int totalPosts;
 
-  final _profileBloc = ProfileBloc();
+  final ProfileBloc _profileBloc = ServiceLocator.instance.get<ProfileBloc>();
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileBloc, ProfileState>(

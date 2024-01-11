@@ -1,3 +1,4 @@
+import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/components/show_snackbar.dart';
@@ -13,12 +14,13 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
-  final AuthBloc authBloc = AuthBloc();
   @override
   void initState() {
     authBloc.add(AuthInitialEvent());
     super.initState();
   }
+
+  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +46,9 @@ class _AuthState extends State<Auth> {
       builder: (context, state) {
         switch (state.runtimeType) {
           case const (AuthUserAuthenticationSuccessState):
-            return Home(authBloc: authBloc);
+            return const Home();
           case const (AuthUserUnAuthenticatedState):
-            return LoginSignUpForm(authBloc: authBloc);
+            return const LoginSignUpForm();
           default:
             return const SizedBox();
         }
