@@ -1,20 +1,20 @@
-import 'package:connecthub/components/confirmation_dialogue.dart';
-import 'package:connecthub/components/network_image_widget.dart';
-import 'package:connecthub/features/posts/screens/upload_post_screen.dart';
-import 'package:connecthub/features/posts/screens/comments_screen.dart';
-import 'package:connecthub/service_locator/service_locator.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconly/iconly.dart';
-import '../../auth/repository/auth_repository.dart';
-import '/features/posts/screens/likes_screen.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
+import '/service_locator/service_locator.dart';
+import '/components/confirmation_dialogue.dart';
+import '/components/network_image_widget.dart';
+import '/features/posts/presentation/screens/upload_post_screen.dart';
+import '/features/posts/presentation/screens/comments_screen.dart';
+import '../../../auth/repository/auth_repository.dart';
+import '../screens/likes_screen.dart';
 import '/components/show_snackbar.dart';
 import '../bloc/posts_bloc.dart';
 import '/constants/constants.dart';
 import '/components/custom_icon_button.dart';
-import '/models/post_data_model.dart';
+import '../../domain/post_data_model.dart';
 
 class PostCard extends StatelessWidget {
   final PostDataModel postDataModel;
@@ -162,7 +162,8 @@ class PostCard extends StatelessWidget {
                         onPressed: () {
                           postsBloc.add(
                             PostNavigateToCommentScreenButtonClickedEvent(
-                                postDataModel.postId),
+                              postDataModel.postId,
+                            ),
                           );
                         },
                       ),
@@ -172,34 +173,9 @@ class PostCard extends StatelessWidget {
                         onPressed: () {},
                       ),
                       const Spacer(),
-                      BlocBuilder<PostsBloc, PostsState>(
-                        bloc: postsBloc,
-                        buildWhen: (previous, current) =>
-                            current is PostsActionState,
-                        builder: (context, state) {
-                          bool newSavedValue = false;
-                          if (state is PostSavedActionState) {
-                            newSavedValue = true;
-                          } else if (state is PostUnSavedActionState) {
-                            newSavedValue = false;
-                          } else {
-                            newSavedValue = isSaved;
-                          }
-                          return CustomIconButton(
-                            icon: newSavedValue
-                                ? IconlyBold.bookmark
-                                : IconlyLight.bookmark,
-                            color: newSavedValue
-                                ? Colors.blueGrey
-                                : MyColors.secondaryColor,
-                            onPressed: () {
-                              postsBloc.add(
-                                PostSaveButtonClickedEvent(
-                                    postDataModel.postId),
-                              );
-                            },
-                          );
-                        },
+                      SavePostButtonWidget(
+                        isSaved: isSaved,
+                        postId: postDataModel.postId,
                       ),
                     ],
                   ),
@@ -258,69 +234,122 @@ class PostCard extends StatelessWidget {
             Positioned(
               right: 0,
               top: 40,
-              child: BlocBuilder<PostsBloc, PostsState>(
-                bloc: postsBloc,
-                builder: (context, state) {
-                  return AnimatedContainer(
-                    height: state is PostShowAllPostOptionsState ? 120 : 0,
-                    curve: Curves.easeIn,
-                    duration: const Duration(milliseconds: 400),
-                    width: 100,
-                    color: MyColors.primaryColor,
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              postsBloc.add(PostEditPostButtonClickedEvent());
-                            },
-                            child: Text(
-                              'Edit',
-                              style: MyFonts.bodyFont(
-                                fontColor: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              postsBloc.add(PostDeletePostButtonClickedEvent());
-                            },
-                            child: Text(
-                              'Delete',
-                              style: MyFonts.bodyFont(
-                                fontColor: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Text(
-                              'Share',
-                              style: MyFonts.bodyFont(
-                                fontColor: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              child: PostOptionsWidget(),
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class SavePostButtonWidget extends StatelessWidget {
+  SavePostButtonWidget({
+    super.key,
+    required this.isSaved,
+    required this.postId,
+  });
+
+  final bool isSaved;
+  final String postId;
+  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PostsBloc, PostsState>(
+      bloc: postsBloc,
+      buildWhen: (previous, current) => current is PostsActionState,
+      builder: (context, state) {
+        bool newSavedValue = switch (state) {
+          PostSavedActionState _ => true,
+          PostUnSavedActionState _ => false,
+          _ => isSaved,
+        };
+        if (state is PostSavedActionState) {
+          newSavedValue = true;
+        } else if (state is PostUnSavedActionState) {
+          newSavedValue = false;
+        } else {
+          newSavedValue = isSaved;
+        }
+        return CustomIconButton(
+          icon: newSavedValue ? IconlyBold.bookmark : IconlyLight.bookmark,
+          color: newSavedValue ? Colors.blueGrey : MyColors.secondaryColor,
+          onPressed: () {
+            postsBloc.add(
+              PostSaveButtonClickedEvent(postId),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class PostOptionsWidget extends StatelessWidget {
+  PostOptionsWidget({super.key});
+  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PostsBloc, PostsState>(
+      bloc: postsBloc,
+      builder: (context, state) {
+        return AnimatedContainer(
+          height: state is PostShowAllPostOptionsState ? 120 : 0,
+          curve: Curves.easeIn,
+          duration: const Duration(milliseconds: 400),
+          width: 100,
+          color: MyColors.primaryColor,
+          padding: const EdgeInsets.only(left: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    postsBloc.add(PostEditPostButtonClickedEvent());
+                  },
+                  child: Text(
+                    'Edit',
+                    style: MyFonts.bodyFont(
+                      fontColor: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    postsBloc.add(PostDeletePostButtonClickedEvent());
+                  },
+                  child: Text(
+                    'Delete',
+                    style: MyFonts.bodyFont(
+                      fontColor: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Share',
+                    style: MyFonts.bodyFont(
+                      fontColor: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
