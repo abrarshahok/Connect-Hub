@@ -1,5 +1,5 @@
 import 'package:connecthub/constants/constants.dart';
-import 'package:connecthub/features/posts/bloc/posts_bloc.dart';
+import 'package:connecthub/features/posts/presentation/bloc/posts_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 

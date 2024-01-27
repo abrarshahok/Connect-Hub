@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/components/loading.dart';
 import 'package:connecthub/constants/constants.dart';
-import 'package:connecthub/features/posts/widgets/post_card.dart';
-import 'package:connecthub/models/post_data_model.dart';
+import 'package:connecthub/features/posts/presentation/widgets/post_card.dart';
+import 'package:connecthub/features/posts/domain/post_data_model.dart';
 import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 

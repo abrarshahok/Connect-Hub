@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:uuid/uuid.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../auth/repository/auth_repository.dart';
-import '../respository/post_repository.dart';
-import '../domain/post_data_model.dart';
+import '../../../auth/repository/auth_repository.dart';
+import '../../respository/post_repository.dart';
+import '../../domain/post_data_model.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';
 

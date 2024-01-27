@@ -21,13 +21,12 @@ class PostCard extends StatelessWidget {
   final bool isSaved;
   final VoidCallback onTapProfile;
 
-  PostCard({
+  const PostCard({
     super.key,
     required this.postDataModel,
     required this.isSaved,
     required this.onTapProfile,
   });
-  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +230,7 @@ class PostCard extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
+            const Positioned(
               right: 0,
               top: 40,
               child: PostOptionsWidget(),
@@ -244,7 +243,7 @@ class PostCard extends StatelessWidget {
 }
 
 class SavePostButtonWidget extends StatelessWidget {
-  SavePostButtonWidget({
+  const SavePostButtonWidget({
     super.key,
     required this.isSaved,
     required this.postId,
@@ -252,7 +251,6 @@ class SavePostButtonWidget extends StatelessWidget {
 
   final bool isSaved;
   final String postId;
-  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -287,8 +285,7 @@ class SavePostButtonWidget extends StatelessWidget {
 }
 
 class PostOptionsWidget extends StatelessWidget {
-  PostOptionsWidget({super.key});
-  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
+  const PostOptionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

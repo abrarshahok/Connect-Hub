@@ -5,19 +5,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/components/loading.dart';
-import '../../auth/repository/auth_repository.dart';
+import '../../../auth/repository/auth_repository.dart';
 import '/service_locator/service_locator.dart';
 import '../bloc/posts_bloc.dart';
 import '/constants/constants.dart';
-import '/models/comment_data_model.dart';
-import '../../../components/custom_app_top_bar.dart';
-import '../../../components/custom_icon_button.dart';
-import '/features/posts/widgets/add_comment_field.dart';
+import '../../domain/comment_data_model.dart';
+import '../../../../components/custom_app_top_bar.dart';
+import '../../../../components/custom_icon_button.dart';
+import '../widgets/add_comment_field.dart';
 
 class CommentsScreen extends StatelessWidget {
   static const routeName = '/comments-screen';
-  CommentsScreen({super.key});
-  final PostsBloc postsBloc = ServiceLocator.instance.get<PostsBloc>();
+  const CommentsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final postId = ModalRoute.of(context)?.settings.arguments as String;

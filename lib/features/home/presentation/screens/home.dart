@@ -1,12 +1,12 @@
-import 'package:connecthub/features/search/screens/search_screen.dart';
+import 'package:connecthub/features/search/presentation/screens/search_screen.dart';
 import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:iconly/iconly.dart';
-import '../../profile/screens/current_user_profile.dart';
-import '/features/posts/screens/add_post_screen.dart';
-import '../../posts/screens/posts_feed.dart';
+import '../../../profile/presentation/screens/current_user_profile.dart';
+import '../../../posts/presentation/screens/add_post_screen.dart';
+import '../../../posts/presentation/screens/posts_feed.dart';
 import '../bloc/home_bloc.dart';
 import '/constants/constants.dart';
 
@@ -18,7 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final HomeBloc homeBloc = ServiceLocator.instance.get<HomeBloc>();
   int currentIndex = 0;
 
   @override
@@ -69,7 +68,7 @@ class _HomeState extends State<Home> {
                     bottom: 0,
                     left: 5,
                     right: 5,
-                    child: appNavigationBar(),
+                    child: _buildNavigationBar(),
                   )
               ],
             ),
@@ -90,7 +89,7 @@ class _HomeState extends State<Home> {
           topRight: Radius.circular(16),
         ),
       ),
-      builder: (context) => SizedBox(
+      builder: (context) => const SizedBox(
         height: 300,
         width: double.infinity,
         child: AddPostScreen(),
@@ -98,7 +97,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  CrystalNavigationBar appNavigationBar() {
+  CrystalNavigationBar _buildNavigationBar() {
     return CrystalNavigationBar(
       height: 0,
       borderRadius: 16,

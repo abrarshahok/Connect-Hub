@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../profile/screens/current_user_profile.dart';
-import '../../profile/screens/other_users_profile.dart';
+import '../../../profile/presentation/screens/current_user_profile.dart';
+import '../../../profile/presentation/screens/other_users_profile.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/loading.dart';
-import '../../auth/repository/auth_repository.dart';
-import '/features/posts/widgets/post_card.dart';
+import '../../../auth/repository/auth_repository.dart';
+import '../widgets/post_card.dart';
 import '/constants/constants.dart';
-import '/models/post_data_model.dart';
+import '../../domain/post_data_model.dart';
 
 class PostsFeed extends StatefulWidget {
   const PostsFeed({super.key});

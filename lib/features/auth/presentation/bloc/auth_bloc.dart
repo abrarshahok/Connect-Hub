@@ -23,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     bool isUserFound = await AuthRepository.fetchCurrentUserInfo();
+    print(isUserFound);
     if (isUserFound) {
       emit(AuthUserAuthenticationSuccessState());
     } else {

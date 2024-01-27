@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import '../../../service_locator/service_locator.dart';
+import '../../../../service_locator/service_locator.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/custom_icon_button.dart';
 import 'user_posts_screen.dart';
 import '../widgets/profile_info_card.dart';
 import 'user_saved_posts_screen.dart';
-import '../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../constants/constants.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../../constants/constants.dart';
 
 class CurrentUserProfile extends StatefulWidget {
   const CurrentUserProfile({
@@ -32,7 +32,6 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
     super.initState();
   }
 
-  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
   @override
   Widget build(BuildContext context) {
     final postsStream = FirebaseFirestore.instance

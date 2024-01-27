@@ -1,9 +1,10 @@
+import 'package:connecthub/components/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../service_locator/service_locator.dart';
-import '/features/auth/bloc/auth_bloc.dart';
-import '../../../components/custom_text_form_field.dart';
-import '../../../constants/constants.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../bloc/auth_bloc.dart';
+import '../../../../components/custom_text_form_field.dart';
+import '../../../../constants/constants.dart';
 
 enum AuthMode { login, signUp }
 
@@ -18,17 +19,38 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
   AuthMode authMode = AuthMode.login;
   final formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
   final authData = {
     'username': '',
     'email': '',
     'password': '',
   };
 
+  bool _hidePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Container(
+          width: 45,
+          height: 45,
+          decoration: BoxDecoration(
+            color: MyColors.buttonColor1,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: MyColors.primaryColor,
+            ),
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
@@ -36,17 +58,33 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 100),
+                const SizedBox(height: 20),
                 Center(
-                  child: Text(
-                    'Connect Hub',
-                    style: MyFonts.bodyFont(
-                      fontWeight: FontWeight.bold,
-                      fontColor: MyColors.secondaryColor,
-                      fontSize: 40,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        authMode == AuthMode.login ? 'Hello Again!' : 'Hello!',
+                        style: MyFonts.bodyFont(
+                          fontWeight: FontWeight.bold,
+                          fontColor: MyColors.secondaryColor,
+                          fontSize: 40,
+                        ),
+                      ),
+                      Text(
+                        authMode == AuthMode.login
+                            ? 'Sign in to your account'
+                            : 'Sign up a new account',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: MyColors.tercharyColor.withOpacity(0.67),
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 100),
@@ -100,7 +138,14 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                     }
                     return null;
                   },
-                  obscureText: true,
+                  obscureText: _hidePassword,
+                  suffixIcon: CustomIconButton(
+                    icon: _hidePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: MyColors.tercharyColor,
+                    onPressed: _togglePasswordVisibility,
+                  ),
                 ),
                 if (authMode == AuthMode.signUp) ...[
                   const SizedBox(height: 10),
@@ -119,7 +164,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                 ],
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: onFormSubmitted,
+                  onPressed: _onFormSubmitted,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
                     fixedSize: const Size(double.infinity, 50),
@@ -146,13 +191,30 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                               style: MyFonts.bodyFont(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
-                                fontColor: MyColors.secondaryColor,
+                                fontColor: MyColors.primaryColor,
                               ),
                             );
                     },
                   ),
                 ),
                 const SizedBox(height: 20),
+                Text(
+                  'Or with',
+                  style: MyFonts.bodyFont(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontColor: MyColors.tercharyColor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // SocialLoginButton(
+                //   icon: MyImages.googleImage,
+                //   title: authMode == AuthMode.login
+                //       ? 'Sign in With Google'
+                //       : 'Sign up With Google',
+                //   onTap: () {},
+                // ),
+                // const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -165,7 +227,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: toggleAuthMode,
+                      onTap: _toggleAuthMode,
                       child: Text(
                         authMode == AuthMode.login ? 'Sign Up' : 'Login',
                         style: MyFonts.bodyFont(
@@ -184,7 +246,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
     );
   }
 
-  void toggleAuthMode() {
+  void _toggleAuthMode() {
     setState(() {
       if (authMode == AuthMode.signUp) {
         authMode = AuthMode.login;
@@ -194,7 +256,13 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
     });
   }
 
-  void onFormSubmitted() {
+  void _togglePasswordVisibility() {
+    setState(() {
+      _hidePassword = !_hidePassword;
+    });
+  }
+
+  void _onFormSubmitted() {
     bool isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -208,12 +276,14 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
         ),
       );
     } else {
-      authBloc.add(AuthSignupFormSubmitedEvent(
-        email: authData['email']!,
-        password: authData['password']!,
-        username: authData['username']!,
-        userImage: null,
-      ));
+      authBloc.add(
+        AuthSignupFormSubmitedEvent(
+          email: authData['email']!,
+          password: authData['password']!,
+          username: authData['username']!,
+          userImage: null,
+        ),
+      );
     }
   }
 }

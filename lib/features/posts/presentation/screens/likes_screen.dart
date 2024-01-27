@@ -5,9 +5,9 @@ import 'package:connecthub/components/loading.dart';
 import 'package:connecthub/features/auth/domain/user_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import '/features/posts/widgets/post_like_tile.dart';
-import '../../auth/repository/auth_repository.dart';
-import '../../../constants/constants.dart';
+import '../widgets/post_like_tile.dart';
+import '../../../auth/repository/auth_repository.dart';
+import '../../../../constants/constants.dart';
 
 class LikesScreen extends StatelessWidget {
   static const routeName = '/likes-screen';

@@ -1,10 +1,10 @@
 import 'package:connecthub/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../auth/repository/auth_repository.dart';
-import '/features/posts/widgets/post_card.dart';
+import '../../../auth/repository/auth_repository.dart';
+import '../../../posts/presentation/widgets/post_card.dart';
 import '/constants/constants.dart';
-import '/models/post_data_model.dart';
+import '../../../posts/domain/post_data_model.dart';
 
 class UserSavedPostsScreen extends StatelessWidget {
   const UserSavedPostsScreen({super.key});

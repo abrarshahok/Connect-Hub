@@ -67,7 +67,7 @@ class AuthRepository {
         'email': email,
         'followers': [],
         'following': [],
-        'userImageUrl': image ?? MyIcons.defaultProfilePicUrl,
+        'userImageUrl': image ?? MyImages.defaultProfilePicUrl,
       });
       fetchCurrentUserInfo();
       return true;

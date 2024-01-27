@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '/features/search/widgets/search_text_field.dart';
-import '/features/search/widgets/searched_user_tile.dart';
-import '../../auth/repository/auth_repository.dart';
+import '../widgets/search_text_field.dart';
+import '../widgets/searched_user_tile.dart';
+import '../../../auth/repository/auth_repository.dart';
 import '/components/loading.dart';
 import '/constants/constants.dart';
-import '../../auth/domain/user_data_model.dart';
-import '../../profile/screens/other_users_profile.dart';
+import '../../../auth/domain/user_data_model.dart';
+import '../../../profile/presentation/screens/other_users_profile.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

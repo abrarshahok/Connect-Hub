@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connecthub/components/custom_elevated_button.dart';
-import 'package:connecthub/features/profile/bloc/profile_bloc.dart';
+import 'package:connecthub/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:connecthub/features/auth/repository/auth_repository.dart';
 import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../auth/domain/user_data_model.dart';
-import '../../../constants/constants.dart';
+import '../../../auth/domain/user_data_model.dart';
+import '../../../../constants/constants.dart';
 
 class ProfileInfoCard extends StatelessWidget {
-  ProfileInfoCard({
+  const ProfileInfoCard({
     super.key,
     required this.userInfo,
     required this.totalPosts,
@@ -18,11 +18,10 @@ class ProfileInfoCard extends StatelessWidget {
   final UserDataModel userInfo;
   final int totalPosts;
 
-  final ProfileBloc _profileBloc = ServiceLocator.instance.get<ProfileBloc>();
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileBloc, ProfileState>(
-      bloc: _profileBloc,
+      bloc: profileBloc,
       listenWhen: (previous, current) => current is ProfileActionState,
       listener: (context, state) {},
       child: Padding(
@@ -74,7 +73,7 @@ class ProfileInfoCard extends StatelessWidget {
             if (userInfo.uid != AuthRepository.currentUser!.uid)
               CustomElevatedButton(
                 onPressed: () {
-                  _profileBloc.add(ProfileFollowOrUnfollowButtonClickedEvent(
+                  profileBloc.add(ProfileFollowOrUnfollowButtonClickedEvent(
                     userId: userInfo.uid,
                     followers: userInfo.followers,
                   ));

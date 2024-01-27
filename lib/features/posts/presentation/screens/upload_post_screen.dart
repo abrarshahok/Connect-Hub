@@ -1,11 +1,11 @@
 import 'package:connecthub/constants/constants.dart';
-import 'package:connecthub/features/posts/bloc/posts_bloc.dart';
-import 'package:connecthub/models/post_data_model.dart';
+import 'package:connecthub/features/posts/presentation/bloc/posts_bloc.dart';
+import 'package:connecthub/features/posts/domain/post_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
-import '../../../components/network_image_widget.dart';
-import '../../../components/show_snackbar.dart';
+import '../../../../components/network_image_widget.dart';
+import '../../../../components/show_snackbar.dart';
 import 'add_post_screen.dart';
 
 class UploadPostScreen extends StatelessWidget {

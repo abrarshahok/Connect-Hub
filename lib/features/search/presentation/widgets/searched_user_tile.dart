@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '/models/user_data_model.dart';
+import '../../../auth/domain/user_data_model.dart';
 import '/constants/constants.dart';
 
 class SearchedUserTile extends StatelessWidget {

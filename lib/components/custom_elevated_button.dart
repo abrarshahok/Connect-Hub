@@ -25,7 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
-            color: MyColors.secondaryColor,
+            color: MyColors.primaryColor,
             width: 0.1,
           ),
         ),
@@ -35,8 +35,9 @@ class CustomElevatedButton extends StatelessWidget {
       child: Text(
         title,
         style: MyFonts.bodyFont(
-          fontColor: MyColors.secondaryColor,
+          fontColor: MyColors.primaryColor,
           fontSize: 16,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

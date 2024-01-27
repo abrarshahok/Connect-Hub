@@ -1,13 +1,14 @@
+import 'package:connecthub/constants/constants.dart';
+import 'package:connecthub/features/app/presentation/screens/app_screen.dart';
+import 'package:connecthub/features/auth/presentation/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import '/constants/constants.dart';
-import '/features/auth/screens/auth.dart';
 import '/service_locator/service_locator.dart';
-import '/features/posts/screens/likes_screen.dart';
-import '/features/posts/screens/comments_screen.dart';
-import '/features/posts/screens/add_post_screen.dart';
-import '/features/posts/screens/upload_post_screen.dart';
+import 'features/posts/presentation/screens/likes_screen.dart';
+import 'features/posts/presentation/screens/comments_screen.dart';
+import 'features/posts/presentation/screens/add_post_screen.dart';
+import 'features/posts/presentation/screens/upload_post_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,13 +35,15 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.grey,
         ),
+        pageTransitionsTheme: customPageTransitionsTheme,
       ),
-      home: const Auth(),
+      home: const AppScreen(),
       routes: {
-        AddPostScreen.routeName: (context) => AddPostScreen(),
+        AddPostScreen.routeName: (context) => const AddPostScreen(),
         UploadPostScreen.routeName: (context) => UploadPostScreen(),
         LikesScreen.routeName: (context) => const LikesScreen(),
-        CommentsScreen.routeName: (context) => CommentsScreen(),
+        CommentsScreen.routeName: (context) => const CommentsScreen(),
+        AuthScreen.routeName: (context) => const AuthScreen()
       },
     );
   }

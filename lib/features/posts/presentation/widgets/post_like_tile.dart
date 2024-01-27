@@ -2,13 +2,13 @@ import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '/components/custom_elevated_button.dart';
-import '../../profile/bloc/profile_bloc.dart';
-import '../../auth/domain/user_data_model.dart';
-import '../../auth/repository/auth_repository.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../auth/domain/user_data_model.dart';
+import '../../../auth/repository/auth_repository.dart';
 import '/constants/constants.dart';
 
 class PostLikeTile extends StatelessWidget {
-  PostLikeTile({
+  const PostLikeTile({
     super.key,
     required this.userInfo,
     required this.isYou,
@@ -17,8 +17,6 @@ class PostLikeTile extends StatelessWidget {
   final bool isYou;
   final bool isFollowing;
   final UserDataModel userInfo;
-
-  final ProfileBloc _profileBloc = ServiceLocator.instance.get<ProfileBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class PostLikeTile extends StatelessWidget {
           ? null
           : CustomElevatedButton(
               onPressed: () {
-                _profileBloc.add(ProfileFollowOrUnfollowButtonClickedEvent(
+                profileBloc.add(ProfileFollowOrUnfollowButtonClickedEvent(
                   userId: userInfo.uid,
                   followers: userInfo.followers,
                 ));

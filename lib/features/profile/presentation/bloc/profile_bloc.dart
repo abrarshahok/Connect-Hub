@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:connecthub/repos/profile_repo.dart';
+import 'package:connecthub/features/profile/domain/profile_repo.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_event.dart';

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import '../../../service_locator/service_locator.dart';
-import '../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'user_posts_screen.dart';
 import '../widgets/profile_info_card.dart';
-import '../../../components/custom_app_top_bar.dart';
-import '../../../components/custom_icon_button.dart';
-import '../../../constants/constants.dart';
-import '../../auth/domain/user_data_model.dart';
-import '../../auth/repository/auth_repository.dart';
+import '../../../../components/custom_app_top_bar.dart';
+import '../../../../components/custom_icon_button.dart';
+import '../../../../constants/constants.dart';
+import '../../../auth/domain/user_data_model.dart';
+import '../../../auth/repository/auth_repository.dart';
 
 class OtherUsersProfile extends StatelessWidget {
-  OtherUsersProfile({
+  const OtherUsersProfile({
     super.key,
     required this.userId,
     this.showBackButton = false,
   });
   final String userId;
   final bool showBackButton;
-  final AuthBloc authBloc = ServiceLocator.instance.get<AuthBloc>();
+
   @override
   Widget build(BuildContext context) {
     final userStream =
