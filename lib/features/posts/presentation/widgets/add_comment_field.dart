@@ -31,14 +31,14 @@ class AddCommentField extends StatelessWidget {
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: MyColors.secondaryColor,
-              width: 0.1,
+              color: MyColors.tercharyColor,
+              width: 0.5,
             ),
           ),
           child: TextField(
             key: const ValueKey('commentField'),
             style: MyFonts.bodyFont(
-              fontColor: MyColors.secondaryColor,
+              fontColor: MyColors.tercharyColor,
               fontWeight: FontWeight.w300,
             ),
             decoration: InputDecoration(
@@ -53,18 +53,25 @@ class AddCommentField extends StatelessWidget {
               ),
               suffixIcon: IconButton(
                 onPressed: () {
+                  if (_commentTextController.text.trim().isEmpty) {
+                    return;
+                  }
                   postsBloc.add(PostAddCommentButtonClickedEvent(
                       postId: postId, comment: _commentTextController.text));
                   FocusManager.instance.primaryFocus!.unfocus();
+                  _commentTextController.clear();
                 },
                 icon: Icon(
                   IconlyLight.send,
-                  color: MyColors.secondaryColor,
+                  color: MyColors.buttonColor1,
                 ),
               ),
             ),
             controller: _commentTextController,
             onSubmitted: (comment) {
+              if (comment.trim().isEmpty) {
+                return;
+              }
               postsBloc.add(PostAddCommentButtonClickedEvent(
                   postId: postId, comment: _commentTextController.text));
               _commentTextController.clear();

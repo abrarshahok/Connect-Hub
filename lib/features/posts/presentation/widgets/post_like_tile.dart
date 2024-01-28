@@ -4,11 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '/components/custom_elevated_button.dart';
 import '../../../profile/presentation/bloc/profile_bloc.dart';
 import '../../../auth/domain/user_data_model.dart';
-import '../../../auth/repository/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 import '/constants/constants.dart';
 
 class PostLikeTile extends StatelessWidget {
-  const PostLikeTile({
+  PostLikeTile({
     super.key,
     required this.userInfo,
     required this.isYou,
@@ -17,6 +17,8 @@ class PostLikeTile extends StatelessWidget {
   final bool isYou;
   final bool isFollowing;
   final UserDataModel userInfo;
+
+  final profileBloc = ServiceLocator.instance.get<ProfileBloc>();
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import '../../../profile/presentation/screens/current_user_profile.dart';
 import '../../../profile/presentation/screens/other_users_profile.dart';
 import '/components/custom_app_top_bar.dart';
 import '/components/loading.dart';
-import '../../../auth/repository/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 import '../widgets/post_card.dart';
 import '/constants/constants.dart';
 import '../../domain/post_data_model.dart';
@@ -48,10 +48,7 @@ class _PostsFeedState extends State<PostsFeed> {
 
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
-      appBar: customAppBar(
-        title: 'Connect Hub',
-        centerTitle: true,
-      ),
+      appBar: customAppBar(title: 'Connect Hub'),
       body: isLoading
           ? const Loading()
           : StreamBuilder(
@@ -73,7 +70,8 @@ class _PostsFeedState extends State<PostsFeed> {
                 } else {
                   return ListView.builder(
                     itemCount: postDocuments.length,
-                    padding: const EdgeInsets.only(top: 10, bottom: 80),
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 80, left: 20, right: 20),
                     itemBuilder: (context, index) {
                       bool isSaved =
                           savedPosts.contains(postDocuments[index].id);
@@ -81,8 +79,12 @@ class _PostsFeedState extends State<PostsFeed> {
                         postDocuments[index].data(),
                         postDocuments[index].id,
                       );
+                      final userInfo = AuthRepository.allUsers
+                          .firstWhere((user) => user.uid == postInfo.userId);
                       return PostCard(
+                        key: ValueKey(postInfo.postId),
                         postDataModel: postInfo,
+                        userInfo: userInfo,
                         isSaved: isSaved,
                         onTapProfile: () {
                           Navigator.push(

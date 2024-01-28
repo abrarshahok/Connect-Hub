@@ -19,7 +19,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currentIndex = 0;
-
+  final homeBloc = ServiceLocator.instance.get<HomeBloc>();
   @override
   Widget build(BuildContext context) {
     bool isKeyBoardEnabled = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
           topRight: Radius.circular(16),
         ),
       ),
-      builder: (context) => const SizedBox(
+      builder: (context) => SizedBox(
         height: 300,
         width: double.infinity,
         child: AddPostScreen(),
@@ -105,9 +105,9 @@ class _HomeState extends State<Home> {
       paddingR: const EdgeInsets.all(0),
       margin: const EdgeInsets.all(0),
       currentIndex: currentIndex,
-      indicatorColor: Colors.white,
-      unselectedItemColor: Colors.white70,
-      backgroundColor: Colors.black.withOpacity(0.1),
+      indicatorColor: MyColors.buttonColor1,
+      unselectedItemColor: Colors.white,
+      backgroundColor: Colors.black.withOpacity(0.3),
       onTap: (index) {
         if (index == 2) {
           homeBloc.add(HomeAddPostButtonClickedEvent());
@@ -121,22 +121,22 @@ class _HomeState extends State<Home> {
         CrystalNavigationBarItem(
           icon: IconlyBold.home,
           unselectedIcon: IconlyLight.home,
-          selectedColor: Colors.white,
+          selectedColor: MyColors.buttonColor1,
         ),
         CrystalNavigationBarItem(
           icon: IconlyBold.search,
           unselectedIcon: IconlyLight.search,
-          selectedColor: Colors.white,
+          selectedColor: MyColors.buttonColor1,
         ),
         CrystalNavigationBarItem(
           icon: IconlyBold.plus,
           unselectedIcon: IconlyLight.plus,
-          selectedColor: Colors.white,
+          selectedColor: MyColors.buttonColor1,
         ),
         CrystalNavigationBarItem(
           icon: IconlyBold.user_2,
           unselectedIcon: IconlyLight.user,
-          selectedColor: Colors.white,
+          selectedColor: MyColors.buttonColor1,
         ),
       ],
     );

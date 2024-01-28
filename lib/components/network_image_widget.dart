@@ -23,6 +23,8 @@ class NetworkImageWidget extends StatelessWidget {
       width: width,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: MyColors.tercharyColor),
           image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.cover,

@@ -19,6 +19,7 @@ class SearchedUserTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       leading: CircleAvatar(
+        radius: 25,
         backgroundImage: CachedNetworkImageProvider(
           userInfo.userImage,
         ),
@@ -27,6 +28,7 @@ class SearchedUserTile extends StatelessWidget {
         userInfo.username,
         style: MyFonts.bodyFont(
           fontColor: MyColors.secondaryColor,
+          fontSize: 16,
         ),
       ),
     );

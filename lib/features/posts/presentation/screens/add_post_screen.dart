@@ -9,7 +9,7 @@ import '/constants/constants.dart';
 import '../bloc/posts_bloc.dart';
 
 class AddPostScreen extends StatelessWidget {
-  const AddPostScreen({super.key, this.isChangingImage = false});
+  AddPostScreen({super.key, this.isChangingImage = false});
   final bool isChangingImage;
   static const routeName = '/add-post-screen';
 
@@ -26,6 +26,8 @@ class AddPostScreen extends StatelessWidget {
       postsBloc.add(PostImageChoosenSuccessEvent(pickedImage: pickedImage));
     });
   }
+
+  final postsBloc = ServiceLocator.instance.get<PostsBloc>();
 
   @override
   Widget build(BuildContext context) {

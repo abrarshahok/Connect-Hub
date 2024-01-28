@@ -1,7 +1,7 @@
 import 'package:connecthub/components/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../auth/repository/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 import '../../../posts/presentation/widgets/post_card.dart';
 import '/constants/constants.dart';
 import '../../../posts/domain/post_data_model.dart';
@@ -36,7 +36,6 @@ class UserSavedPostsScreen extends StatelessWidget {
           );
         } else {
           final postIdList = savedPostSnapshots.data!.data()!.keys.toList();
-
           return StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('posts')
@@ -55,8 +54,11 @@ class UserSavedPostsScreen extends StatelessWidget {
                       postDocuments[index].data(),
                       postDocuments[index].id,
                     );
+                    final userInfo = AuthRepository.allUsers
+                        .firstWhere((user) => user.uid == postInfo.userId);
                     return PostCard(
                       postDataModel: postInfo,
+                      userInfo: userInfo,
                       isSaved: true,
                       onTapProfile: () {},
                     );

@@ -1,6 +1,7 @@
 import 'package:connecthub/components/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../bloc/auth_bloc.dart';
 import '../../../../components/custom_text_form_field.dart';
@@ -26,6 +27,8 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
   };
 
   bool _hidePassword = true;
+
+  final authBloc = ServiceLocator.instance.get<AuthBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                         style: MyFonts.bodyFont(
                           fontWeight: FontWeight.bold,
                           fontColor: MyColors.secondaryColor,
-                          fontSize: 40,
+                          fontSize: 40.sp,
                         ),
                       ),
                       Text(
@@ -79,7 +82,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: MyColors.tercharyColor.withOpacity(0.67),
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                         ),
@@ -87,7 +90,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: 50),
                 if (authMode == AuthMode.signUp) ...[
                   CustomTextFormField(
                     key: const ValueKey('username'),
@@ -183,7 +186,7 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
-                                color: MyColors.secondaryColor,
+                                color: MyColors.primaryColor,
                               ),
                             )
                           : Text(
@@ -198,15 +201,15 @@ class _LoginSignUpFormState extends State<LoginSignUpForm> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  'Or with',
-                  style: MyFonts.bodyFont(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontColor: MyColors.tercharyColor,
-                  ),
-                ),
-                const SizedBox(height: 20),
+                // Text(
+                //   'Or with',
+                //   style: MyFonts.bodyFont(
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w500,
+                //     fontColor: MyColors.tercharyColor,
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
                 // SocialLoginButton(
                 //   icon: MyImages.googleImage,
                 //   title: authMode == AuthMode.login

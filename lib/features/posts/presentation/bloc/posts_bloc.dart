@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:uuid/uuid.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../../auth/repository/auth_repository.dart';
-import '../../respository/post_repository.dart';
+import '../../../../firebase/upload_image.dart';
+import '../../../auth/data/auth_repository.dart';
+import '../../data/post_repository.dart';
 import '../../domain/post_data_model.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';
@@ -26,6 +27,10 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         postShowAllPostOptionsButtonClickedEvent);
     on<PostHideAllPostOptionsButtonClickedEvent>(
         postHideAllPostOptionsButtonClickedEvent);
+    on<PostShowAllCommentOptionsButtonClickedEvent>(
+        postShowAllCommentOptionsButtonClickedEvent);
+    on<PostHideAllCommentOptionsButtonClickedEvent>(
+        postHideAllCommentOptionsButtonClickedEvent);
     on<PostEditPostButtonClickedEvent>(postEditPostButtonClickedEvent);
     on<PostDeletePostButtonClickedEvent>(postDeletePostButtonClickedEvent);
     on<PostDeleteConfirmationEvent>(postDeleteConfirmationEvent);
@@ -53,7 +58,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   ) async {
     emit(PostUploadingActionState());
     final postId = const Uuid().v1();
-    final String postUrl = await PostRepository.uploadImage(
+    final String postUrl = await uploadImage(
       postImage: event.image,
       postId: postId,
       ref: 'user_posts',
@@ -117,6 +122,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     PostNavigateToCommentScreenButtonClickedEvent event,
     Emitter<PostsState> emit,
   ) {
+    print("PostNavigateToCommentsScreenActionState()");
     emit(PostNavigateToCommentsScreenActionState());
   }
 
@@ -186,5 +192,19 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     if (isDeleted) {
       emit(PostDeleteSuccessActionState());
     }
+  }
+
+  FutureOr<void> postShowAllCommentOptionsButtonClickedEvent(
+    PostShowAllCommentOptionsButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostShowAllCommentOptionsState());
+  }
+
+  FutureOr<void> postHideAllCommentOptionsButtonClickedEvent(
+    PostHideAllCommentOptionsButtonClickedEvent event,
+    Emitter<PostsState> emit,
+  ) {
+    emit(PostHideAllCommentOptionsState());
   }
 }

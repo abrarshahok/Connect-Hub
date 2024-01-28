@@ -1,9 +1,11 @@
-import 'package:connecthub/constants/constants.dart';
-import 'package:connecthub/features/app/presentation/screens/app_screen.dart';
-import 'package:connecthub/features/auth/presentation/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '/constants/constants.dart';
+import '/features/app/presentation/screens/app_screen.dart';
+import '/features/auth/presentation/screens/auth_screen.dart';
+import '/features/profile/presentation/screens/profile_settings_screen.dart';
 import '/service_locator/service_locator.dart';
 import 'features/posts/presentation/screens/likes_screen.dart';
 import 'features/posts/presentation/screens/comments_screen.dart';
@@ -21,6 +23,7 @@ void main() async {
       systemNavigationBarColor: MyColors.primaryColor,
     ),
   );
+
   runApp(const MainApp());
 }
 
@@ -37,13 +40,18 @@ class MainApp extends StatelessWidget {
         ),
         pageTransitionsTheme: customPageTransitionsTheme,
       ),
-      home: const AppScreen(),
+      home: ScreenUtilInit(
+        designSize: const Size(360, 650),
+        ensureScreenSize: true,
+        builder: (context, _) => const AppScreen(),
+      ),
       routes: {
-        AddPostScreen.routeName: (context) => const AddPostScreen(),
+        AddPostScreen.routeName: (context) => AddPostScreen(),
         UploadPostScreen.routeName: (context) => UploadPostScreen(),
         LikesScreen.routeName: (context) => const LikesScreen(),
-        CommentsScreen.routeName: (context) => const CommentsScreen(),
-        AuthScreen.routeName: (context) => const AuthScreen()
+        CommentsScreen.routeName: (context) => CommentsScreen(),
+        AuthScreen.routeName: (context) => const AuthScreen(),
+        ProfileSettingsScreen.routeName: (context) => ProfileSettingsScreen(),
       },
     );
   }

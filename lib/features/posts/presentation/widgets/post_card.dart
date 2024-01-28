@@ -3,12 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconly/iconly.dart';
+import '../../../auth/domain/user_data_model.dart';
 import '/service_locator/service_locator.dart';
 import '/components/confirmation_dialogue.dart';
 import '/components/network_image_widget.dart';
 import '/features/posts/presentation/screens/upload_post_screen.dart';
 import '/features/posts/presentation/screens/comments_screen.dart';
-import '../../../auth/repository/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 import '../screens/likes_screen.dart';
 import '/components/show_snackbar.dart';
 import '../bloc/posts_bloc.dart';
@@ -16,65 +17,29 @@ import '/constants/constants.dart';
 import '/components/custom_icon_button.dart';
 import '../../domain/post_data_model.dart';
 
+// ignore: must_be_immutable
 class PostCard extends StatelessWidget {
   final PostDataModel postDataModel;
-  final bool isSaved;
   final VoidCallback onTapProfile;
+  final UserDataModel userInfo;
+  final bool isSaved;
 
-  const PostCard({
+  PostCard({
     super.key,
     required this.postDataModel,
     required this.isSaved,
     required this.onTapProfile,
+    required this.userInfo,
   });
-
+  final _postsBloc = PostsBloc();
   @override
   Widget build(BuildContext context) {
-    String formatedDateTime =
-        DateFormat().add_MMMMd().format(postDataModel.postedOn);
     return BlocConsumer<PostsBloc, PostsState>(
-      bloc: postsBloc,
+      bloc: _postsBloc,
       listenWhen: (previous, current) => current is PostsActionState,
       buildWhen: (previous, current) => current is! PostsActionState,
-      listener: (context, state) async {
-        if (state is PostLikingFailedActionState ||
-            state is PostSavingFailedActionState) {
-          ShowSnackBar(
-            context: context,
-            label: 'Something went wrong!',
-            color: Colors.red,
-          ).show();
-        } else if (state is PostNavigateToLikesScreenActionState) {
-          Navigator.pushNamed(context, LikesScreen.routeName,
-              arguments: postDataModel.likes);
-        } else if (state is PostNavigateToCommentsScreenActionState) {
-          Navigator.pushNamed(context, CommentsScreen.routeName,
-              arguments: postDataModel.postId);
-        } else if (state is PostEditPostActionState) {
-          // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, UploadPostScreen.routeName, arguments: {
-            'postBloc': postsBloc,
-            'postDataModel': postDataModel,
-            'isEditing': true,
-          });
-        } else if (state is PostDeleteActionState) {
-          ConfirmationDialogue(
-            context: context,
-            message: 'Do you want to delete post',
-            onTapYes: () {
-              postsBloc.add(PostDeleteConfirmationEvent(
-                postId: postDataModel.postId,
-              ));
-              Navigator.pop(context);
-            },
-          ).show();
-        } else if (state is PostDeleteSuccessActionState) {
-          ShowSnackBar(
-            context: context,
-            label: 'Post deleted successfully',
-            color: MyColors.buttonColor1,
-          ).show();
-        }
+      listener: (context, state) {
+        _handleStates(state, context);
       },
       builder: (context, state) {
         return Stack(
@@ -88,26 +53,7 @@ class PostCard extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: onTapProfile,
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 10),
-                            CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white,
-                              backgroundImage: CachedNetworkImageProvider(
-                                postDataModel.userImage,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              postDataModel.username,
-                              style: MyFonts.bodyFont(
-                                fontColor: MyColors.secondaryColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: _buildUserInfoTile(),
                       ),
                       const Spacer(),
                       if (postDataModel.userId ==
@@ -115,16 +61,16 @@ class PostCard extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             if (state is! PostShowAllPostOptionsState) {
-                              postsBloc.add(
+                              _postsBloc.add(
                                   PostShowAllPostOptionsButtonClickedEvent());
                             } else {
-                              postsBloc.add(
+                              _postsBloc.add(
                                   PostHideAllPostOptionsButtonClickedEvent());
                             }
                           },
                           icon: Icon(
                             Icons.more_vert,
-                            color: MyColors.secondaryColor,
+                            color: MyColors.tercharyColor,
                           ),
                         )
                     ],
@@ -135,49 +81,12 @@ class PostCard extends StatelessWidget {
                     width: double.infinity,
                     imageUrl: postDataModel.postUrl,
                   ),
-                  Row(
-                    children: [
-                      CustomIconButton(
-                        icon: postDataModel.likes
-                                .contains(AuthRepository.currentUser!.uid)
-                            ? IconlyBold.heart
-                            : IconlyLight.heart,
-                        color: postDataModel.likes
-                                .contains(AuthRepository.currentUser!.uid)
-                            ? Colors.red
-                            : MyColors.secondaryColor,
-                        onPressed: () {
-                          postsBloc.add(
-                            PostLikeButtonClickedEvent(
-                              postId: postDataModel.postId,
-                              likes: postDataModel.likes,
-                            ),
-                          );
-                        },
-                      ),
-                      CustomIconButton(
-                        icon: IconlyLight.document,
-                        color: MyColors.secondaryColor,
-                        onPressed: () {
-                          postsBloc.add(
-                            PostNavigateToCommentScreenButtonClickedEvent(
-                              postDataModel.postId,
-                            ),
-                          );
-                        },
-                      ),
-                      CustomIconButton(
-                        icon: IconlyLight.send,
-                        color: MyColors.secondaryColor,
-                        onPressed: () {},
-                      ),
-                      const Spacer(),
-                      SavePostButtonWidget(
-                        isSaved: isSaved,
-                        postId: postDataModel.postId,
-                      ),
-                    ],
+                  const SizedBox(height: 10),
+                  Text(
+                    postDataModel.caption,
+                    style: MyFonts.bodyFont(),
                   ),
+                  _buildPostButtonsTile(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
@@ -185,7 +94,7 @@ class PostCard extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            postsBloc.add(
+                            _postsBloc.add(
                                 PostNavigateToLikeScreenButtonClickedEvent());
                           },
                           child: Text(
@@ -194,7 +103,8 @@ class PostCard extends StatelessWidget {
                                 : '${postDataModel.likes.length} ${postDataModel.likes.length == 1 ? 'Like' : 'Likes'}',
                             style: MyFonts.bodyFont(
                               fontColor: MyColors.secondaryColor,
-                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -215,14 +125,6 @@ class PostCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Text(
-                          formatedDateTime,
-                          style: MyFonts.bodyFont(
-                            fontColor: MyColors.secondaryColor,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w200,
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -230,20 +132,179 @@ class PostCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Positioned(
+            Positioned(
               right: 0,
               top: 40,
-              child: PostOptionsWidget(),
+              child: BlocBuilder<PostsBloc, PostsState>(
+                bloc: _postsBloc,
+                builder: (context, state) {
+                  return DropDownOptionsWidget(
+                    enable: state is PostShowAllPostOptionsState,
+                    onEditClicked: () {
+                      _postsBloc.add(PostEditPostButtonClickedEvent());
+                    },
+                    onDeleteClicked: () {
+                      _postsBloc.add(PostDeletePostButtonClickedEvent());
+                    },
+                    onShareCliked: () {},
+                  );
+                },
+              ),
             ),
           ],
         );
       },
     );
   }
+
+  Row _buildPostButtonsTile() {
+    return Row(
+      children: [
+        CustomIconButton(
+          icon: postDataModel.likes.contains(AuthRepository.currentUser!.uid)
+              ? IconlyBold.heart
+              : IconlyLight.heart,
+          color: postDataModel.likes.contains(AuthRepository.currentUser!.uid)
+              ? Colors.red
+              : MyColors.tercharyColor,
+          onPressed: () {
+            _postsBloc.add(
+              PostLikeButtonClickedEvent(
+                postId: postDataModel.postId,
+                likes: postDataModel.likes,
+              ),
+            );
+          },
+        ),
+        CustomIconButton(
+          icon: IconlyLight.document,
+          color: MyColors.tercharyColor,
+          onPressed: () {
+            _postsBloc.add(
+              PostNavigateToCommentScreenButtonClickedEvent(
+                postDataModel.postId,
+              ),
+            );
+          },
+        ),
+        CustomIconButton(
+          icon: IconlyLight.send,
+          color: MyColors.tercharyColor,
+          onPressed: () {},
+        ),
+        const Spacer(),
+        SavePostButtonWidget(
+          isSaved: isSaved,
+          postId: postDataModel.postId,
+        ),
+      ],
+    );
+  }
+
+  Row _buildUserInfoTile() {
+    String formatedDateTime = _getTimeAgo(postDataModel.postedOn);
+    return Row(
+      children: [
+        const SizedBox(width: 10),
+        CircleAvatar(
+          radius: 25,
+          backgroundColor: Colors.white,
+          backgroundImage: CachedNetworkImageProvider(
+            userInfo.userImage,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              userInfo.username,
+              style: MyFonts.bodyFont(
+                fontColor: MyColors.secondaryColor,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              formatedDateTime,
+              style: MyFonts.bodyFont(
+                fontColor: MyColors.secondaryColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _handleStates(PostsState state, BuildContext context) {
+    if (state is PostLikingFailedActionState ||
+        state is PostSavingFailedActionState) {
+      ShowSnackBar(
+        context: context,
+        label: 'Something went wrong!',
+        color: Colors.red,
+      ).show();
+    } else if (state is PostNavigateToLikesScreenActionState) {
+      Navigator.pushNamed(context, LikesScreen.routeName,
+          arguments: postDataModel.likes);
+    } else if (state is PostNavigateToCommentsScreenActionState) {
+      Navigator.pushNamed(context, CommentsScreen.routeName,
+          arguments: postDataModel.postId);
+    } else if (state is PostEditPostActionState) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(
+        context,
+        UploadPostScreen.routeName,
+        arguments: {
+          'postBloc': _postsBloc,
+          'postDataModel': postDataModel,
+          'isEditing': true,
+        },
+      );
+    } else if (state is PostDeleteActionState) {
+      ConfirmationDialogue(
+        context: context,
+        message: 'Do you want to delete post',
+        onTapYes: () {
+          _postsBloc.add(PostDeleteConfirmationEvent(
+            postId: postDataModel.postId,
+          ));
+          Navigator.pop(context);
+        },
+      ).show();
+    } else if (state is PostDeleteSuccessActionState) {
+      ShowSnackBar(
+        context: context,
+        label: 'Post deleted successfully',
+        color: MyColors.buttonColor1,
+      ).show();
+    }
+  }
+
+  String _getTimeAgo(DateTime postDateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(postDateTime);
+    if (difference.inDays > 365) {
+      return DateFormat('MMMM d, y').format(postDateTime);
+    } else if (difference.inDays > 7) {
+      return DateFormat('MMMM d').format(postDateTime);
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} day(s) ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hour(s) ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} minute(s) ago';
+    } else {
+      return 'Just now';
+    }
+  }
 }
 
 class SavePostButtonWidget extends StatelessWidget {
-  const SavePostButtonWidget({
+  SavePostButtonWidget({
     super.key,
     required this.isSaved,
     required this.postId,
@@ -251,6 +312,7 @@ class SavePostButtonWidget extends StatelessWidget {
 
   final bool isSaved;
   final String postId;
+  final postsBloc = ServiceLocator.instance.get<PostsBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +334,7 @@ class SavePostButtonWidget extends StatelessWidget {
         }
         return CustomIconButton(
           icon: newSavedValue ? IconlyBold.bookmark : IconlyLight.bookmark,
-          color: newSavedValue ? Colors.blueGrey : MyColors.secondaryColor,
+          color: MyColors.buttonColor1,
           onPressed: () {
             postsBloc.add(
               PostSaveButtonClickedEvent(postId),
@@ -284,71 +346,72 @@ class SavePostButtonWidget extends StatelessWidget {
   }
 }
 
-class PostOptionsWidget extends StatelessWidget {
-  const PostOptionsWidget({super.key});
-
+class DropDownOptionsWidget extends StatelessWidget {
+  const DropDownOptionsWidget({
+    super.key,
+    required this.onEditClicked,
+    required this.onDeleteClicked,
+    required this.enable,
+    this.onShareCliked,
+  });
+  final Function()? onEditClicked;
+  final Function()? onDeleteClicked;
+  final Function()? onShareCliked;
+  final bool enable;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostsBloc, PostsState>(
-      bloc: postsBloc,
-      builder: (context, state) {
-        return AnimatedContainer(
-          height: state is PostShowAllPostOptionsState ? 120 : 0,
-          curve: Curves.easeIn,
-          duration: const Duration(milliseconds: 400),
-          width: 100,
-          color: MyColors.primaryColor,
-          padding: const EdgeInsets.only(left: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    postsBloc.add(PostEditPostButtonClickedEvent());
-                  },
-                  child: Text(
-                    'Edit',
-                    style: MyFonts.bodyFont(
-                      fontColor: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+    return AnimatedContainer(
+      height: enable ? 120 : 0,
+      curve: Curves.easeIn,
+      duration: const Duration(milliseconds: 400),
+      width: 100,
+      color: MyColors.tercharyColor,
+      padding: const EdgeInsets.only(left: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: onEditClicked,
+              child: Text(
+                'Edit',
+                style: MyFonts.bodyFont(
+                  fontColor: MyColors.primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    postsBloc.add(PostDeletePostButtonClickedEvent());
-                  },
-                  child: Text(
-                    'Delete',
-                    style: MyFonts.bodyFont(
-                      fontColor: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: InkWell(
-                  onTap: () {},
-                  child: Text(
-                    'Share',
-                    style: MyFonts.bodyFont(
-                      fontColor: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        );
-      },
+          Expanded(
+            child: InkWell(
+              onTap: onDeleteClicked,
+              child: Text(
+                'Delete',
+                style: MyFonts.bodyFont(
+                  fontColor: MyColors.primaryColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+          if (onShareCliked != null)
+            Expanded(
+              child: InkWell(
+                onTap: () {},
+                child: Text(
+                  'Share',
+                  style: MyFonts.bodyFont(
+                    fontColor: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

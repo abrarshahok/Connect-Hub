@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/constants.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -43,6 +44,7 @@ class CustomTextFormField extends StatelessWidget {
             label,
             style: MyFonts.bodyFont(
               fontColor: MyColors.tercharyColor.withOpacity(0.5),
+              fontSize: 14.sp,
               fontWeight: FontWeight.w400,
             ),
           ),

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
-import '../../auth/repository/auth_repository.dart';
+import '../../auth/data/auth_repository.dart';
 import '/features/posts/domain/post_data_model.dart';
 
 class PostRepository {
@@ -23,18 +23,18 @@ class PostRepository {
     }
   }
 
-  static Future<String> uploadImage({
-    required File postImage,
-    required String postId,
-    required String ref,
-  }) async {
-    String? imageUrl = '';
-    final firebaseStorageRef = firebaseStorage.ref().child(ref).child(postId);
-    await firebaseStorageRef.putFile(postImage).whenComplete(() async {
-      imageUrl = await firebaseStorageRef.getDownloadURL();
-    });
-    return imageUrl!;
-  }
+  //  uploadImage({
+  //   required File postImage,
+  //   required String postId,
+  //   required String ref,
+  // }) async {
+  //   String? imageUrl = '';
+  //   final firebaseStorageRef = firebaseStorage.ref().child(ref).child(postId);
+  //   await firebaseStorageRef.putFile(postImage).whenComplete(() async {
+  //     imageUrl = await firebaseStorageRef.getDownloadURL();
+  //   });
+  //   return imageUrl!;
+  // }
 
   static Future<bool> updatePost({required PostDataModel postDataModel}) async {
     try {

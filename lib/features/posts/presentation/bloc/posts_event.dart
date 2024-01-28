@@ -59,6 +59,10 @@ class PostShowAllPostOptionsButtonClickedEvent extends PostsEvent {}
 
 class PostHideAllPostOptionsButtonClickedEvent extends PostsEvent {}
 
+class PostShowAllCommentOptionsButtonClickedEvent extends PostsEvent {}
+
+class PostHideAllCommentOptionsButtonClickedEvent extends PostsEvent {}
+
 class PostEditPostButtonClickedEvent extends PostsEvent {}
 
 class PostDeletePostButtonClickedEvent extends PostsEvent {}

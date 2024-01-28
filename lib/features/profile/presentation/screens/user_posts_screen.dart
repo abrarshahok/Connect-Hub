@@ -3,7 +3,7 @@ import 'package:connecthub/components/loading.dart';
 import 'package:connecthub/constants/constants.dart';
 import 'package:connecthub/features/posts/presentation/widgets/post_card.dart';
 import 'package:connecthub/features/posts/domain/post_data_model.dart';
-import 'package:connecthub/features/auth/repository/auth_repository.dart';
+import 'package:connecthub/features/auth/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 
 class UserPostsScreen extends StatefulWidget {
@@ -78,8 +78,11 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
                           postDocuments[index].data(),
                           postDocuments[index].id,
                         );
+                        final userInfo = AuthRepository.allUsers
+                            .firstWhere((user) => user.uid == postInfo.userId);
                         return PostCard(
                           postDataModel: postInfo,
+                          userInfo: userInfo,
                           isSaved: isSaved,
                           onTapProfile: () {},
                         );

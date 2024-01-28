@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../repository/auth_repository.dart';
+import '../../data/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -22,8 +22,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthInitialEvent event,
     Emitter<AuthState> emit,
   ) async {
-    bool isUserFound = await AuthRepository.fetchCurrentUserInfo();
-    print(isUserFound);
+    await AuthRepository.fetchAllUsers();
+    bool isUserFound = AuthRepository.fetchCurrentUserInfo();
     if (isUserFound) {
       emit(AuthUserAuthenticationSuccessState());
     } else {

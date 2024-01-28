@@ -1,25 +1,27 @@
 import 'package:connecthub/constants/constants.dart';
 import 'package:flutter/material.dart';
 
-class SearchTextField extends StatelessWidget {
-  const SearchTextField({
+class CustomTextField extends StatelessWidget {
+  const CustomTextField({
     super.key,
-    required this.searchController,
-    required this.onChanged,
+    required this.textController,
+    this.onChanged,
+    required this.hintText,
   });
 
-  final TextEditingController searchController;
-  final Function(String) onChanged;
+  final TextEditingController textController;
+  final Function(String)? onChanged;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: searchController,
-      style: MyFonts.bodyFont(fontColor: Colors.white),
+      controller: textController,
+      style: MyFonts.bodyFont(fontColor: MyColors.tercharyColor),
       decoration: InputDecoration(
-        hintText: 'Search by name',
+        hintText: hintText,
         hintStyle: MyFonts.bodyFont(
-          fontColor: Colors.white,
+          fontColor: MyColors.tercharyColor.withOpacity(0.7),
           fontSize: 14,
         ),
         border: OutlineInputBorder(

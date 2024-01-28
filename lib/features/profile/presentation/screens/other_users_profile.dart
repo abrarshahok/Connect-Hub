@@ -9,17 +9,17 @@ import '../../../../components/custom_app_top_bar.dart';
 import '../../../../components/custom_icon_button.dart';
 import '../../../../constants/constants.dart';
 import '../../../auth/domain/user_data_model.dart';
-import '../../../auth/repository/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 
 class OtherUsersProfile extends StatelessWidget {
-  const OtherUsersProfile({
+  OtherUsersProfile({
     super.key,
     required this.userId,
     this.showBackButton = false,
   });
   final String userId;
   final bool showBackButton;
-
+  final authBloc = ServiceLocator.instance.get<AuthBloc>();
   @override
   Widget build(BuildContext context) {
     final userStream =
@@ -31,17 +31,10 @@ class OtherUsersProfile extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
       appBar: customAppBar(
-        title: 'Howdy :)',
-        centerTitle: true,
+        title: 'Profile',
+        context: context,
         showActionButton: userId == AuthRepository.currentUser!.uid,
         showLeadingButton: showBackButton,
-        leadingButton: CustomIconButton(
-          icon: IconlyLight.arrow_left,
-          color: MyColors.secondaryColor,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         actionButton: CustomIconButton(
           onPressed: () {
             authBloc.add(AuthLogoutButtonClickedEvent());
@@ -50,50 +43,51 @@ class OtherUsersProfile extends StatelessWidget {
           color: MyColors.secondaryColor,
         ),
       ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, isScrolling) {
-          return [
-            StreamBuilder(
-              stream: userStream,
-              builder: (context, userSnapshots) {
-                return StreamBuilder(
-                  stream: postsStream,
-                  builder: (context, postSnapshots) {
-                    if (userSnapshots.connectionState ==
-                            ConnectionState.waiting ||
-                        postSnapshots.connectionState ==
-                            ConnectionState.waiting) {
-                      return SliverToBoxAdapter(
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: MyColors.buttonColor1,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: NestedScrollView(
+          headerSliverBuilder: (context, isScrolling) {
+            return [
+              StreamBuilder(
+                stream: userStream,
+                builder: (context, userSnapshots) {
+                  return StreamBuilder(
+                    stream: postsStream,
+                    builder: (context, postSnapshots) {
+                      if (userSnapshots.connectionState ==
+                              ConnectionState.waiting ||
+                          postSnapshots.connectionState ==
+                              ConnectionState.waiting) {
+                        return SliverToBoxAdapter(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: MyColors.buttonColor1,
+                            ),
                           ),
+                        );
+                      }
+                      final postsCount = postSnapshots.data!.docs.length;
+                      final userInfoModel =
+                          UserDataModel.fromJson(userSnapshots.data!.data()!);
+                      return SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            ProfileInfoCard(
+                              userInfo: userInfoModel,
+                              totalPosts: postsCount,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
                         ),
                       );
-                    }
-                    final postsCount = postSnapshots.data!.docs.length;
-                    final userInfoModel = UserDataModel.fromJson(
-                      userSnapshots.data!.data()!,
-                      userSnapshots.data!.id,
-                    );
-                    return SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          ProfileInfoCard(
-                            userInfo: userInfoModel,
-                            totalPosts: postsCount,
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            )
-          ];
-        },
-        body: UserPostsScreen(userId: userId),
+                    },
+                  );
+                },
+              )
+            ];
+          },
+          body: UserPostsScreen(userId: userId),
+        ),
       ),
     );
   }

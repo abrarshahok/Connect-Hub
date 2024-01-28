@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '/constants/constants.dart';
-
 import '../domain/user_data_model.dart';
 
 class AuthRepository {
@@ -11,21 +11,36 @@ class AuthRepository {
   static FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   static UserDataModel? currentUser;
-
+  static List<UserDataModel> allUsers = [];
   static bool get isYou => currentUser!.uid == firebaseAuth.currentUser!.uid;
 
-  static Future<bool> fetchCurrentUserInfo() async {
+  static Future<void> fetchAllUsers() async {
+    try {
+      final userDocs =
+          await FirebaseFirestore.instance.collection('users').get();
+      if (userDocs.docs.isEmpty) {
+        return;
+      }
+      for (var user in userDocs.docs) {
+        final userModel = UserDataModel.fromJson(user.data());
+        if (!allUsers.contains(userModel)) {
+          allUsers.add(userModel);
+        }
+      }
+    } catch (err) {
+      log(err.toString());
+    }
+  }
+
+  static bool fetchCurrentUserInfo() {
     try {
       if (firebaseAuth.currentUser == null) {
         return false;
       }
-      final userInfo = await firebaseFirestore
-          .collection('users')
-          .doc(firebaseAuth.currentUser!.uid)
-          .get();
 
-      if (userInfo.exists) {
-        currentUser = UserDataModel.fromJson(userInfo.data()!, userInfo.id);
+      if (allUsers.isNotEmpty) {
+        currentUser = allUsers
+            .firstWhere((user) => user.uid == firebaseAuth.currentUser!.uid);
         return true;
       }
       return false;
@@ -62,14 +77,19 @@ class AuthRepository {
         email: email,
         password: password,
       );
-      firebaseFirestore.collection('users').doc(userCredential.user!.uid).set({
-        'username': username,
-        'email': email,
-        'followers': [],
-        'following': [],
-        'userImageUrl': image ?? MyImages.defaultProfilePicUrl,
-      });
-      fetchCurrentUserInfo();
+      final user = UserDataModel(
+        uid: userCredential.user!.uid,
+        username: username,
+        email: email,
+        userImage: MyImages.defaultProfilePicUrl,
+        followers: [],
+        following: [],
+      );
+      currentUser = user;
+      await firebaseFirestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set(user.toJson());
       return true;
     } catch (e) {
       return false;

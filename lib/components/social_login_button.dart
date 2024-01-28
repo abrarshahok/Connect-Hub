@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class SocialLoginButton extends StatelessWidget {
   const SocialLoginButton({
     super.key,
-    required this.icon,
+    this.icon,
     required this.title,
     required this.onTap,
+    this.assetIcon,
   });
   final String title;
-  final String icon;
+  final IconData? icon;
+  final String? assetIcon;
   final VoidCallback onTap;
 
   @override
@@ -17,23 +19,26 @@ class SocialLoginButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 50,
-        width: double.infinity,
-        padding: const EdgeInsets.all(10),
+        height: 40,
+        width: 150,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: MyColors.tercharyColor),
+          border: Border.all(color: MyColors.buttonColor1),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(icon, height: 50),
+            if (assetIcon != null) Image.asset(assetIcon!, height: 50),
+            if (icon != null)
+              Icon(icon, size: 30, color: MyColors.buttonColor1),
             const SizedBox(width: 20),
             Text(
               title,
               style: MyFonts.buttonFont(
-                fontColor: MyColors.tercharyColor,
+                fontColor: MyColors.buttonColor1,
                 fontWeight: FontWeight.w500,
               ),
             ),

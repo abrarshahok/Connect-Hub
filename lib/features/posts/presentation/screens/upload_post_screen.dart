@@ -1,3 +1,4 @@
+import 'package:connecthub/components/custom_elevated_button.dart';
 import 'package:connecthub/constants/constants.dart';
 import 'package:connecthub/features/posts/presentation/bloc/posts_bloc.dart';
 import 'package:connecthub/features/posts/domain/post_data_model.dart';
@@ -6,18 +7,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import '../../../../components/network_image_widget.dart';
 import '../../../../components/show_snackbar.dart';
+import '../../../../service_locator/service_locator.dart';
 import 'add_post_screen.dart';
 
 class UploadPostScreen extends StatelessWidget {
   static const routeName = '/upload-post-screen';
   final TextEditingController _captionTextController = TextEditingController();
-
+  final postsBloc = ServiceLocator.instance.get<PostsBloc>();
   UploadPostScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final routeData =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    final postsBloc = routeData['postBloc'];
+
     final isEditing = routeData['isEditing'];
     dynamic image;
     PostDataModel? postDataModel;
@@ -67,57 +69,56 @@ class UploadPostScreen extends StatelessWidget {
           backgroundColor: MyColors.primaryColor,
           iconTheme: IconThemeData(color: MyColors.secondaryColor),
           actions: [
-            TextButton(
-              onPressed: () {
-                if (isEditing) {
-                  postsBloc.add(PostUpdateButtonClickedEvent(
-                    postDataModel: postDataModel!.copyWith(
-                      caption: _captionTextController.text,
-                      postedOn: DateTime.now(),
-                    ),
-                  ));
-                } else {
-                  postsBloc.add(
-                    PostUploadButtonClickedEvent(
-                      caption: _captionTextController.text,
-                      image: image,
-                    ),
-                  );
-                }
+            BlocBuilder<PostsBloc, PostsState>(
+              bloc: postsBloc,
+              buildWhen: (previous, current) => current is PostsActionState,
+              builder: (context, state) {
+                return state is PostUploadingActionState
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: MyColors.buttonColor1,
+                        ),
+                      )
+                    : CustomElevatedButton(
+                        onPressed: () {
+                          if (isEditing) {
+                            postsBloc.add(PostUpdateButtonClickedEvent(
+                              postDataModel: postDataModel!.copyWith(
+                                caption: _captionTextController.text,
+                                postedOn: DateTime.now(),
+                              ),
+                            ));
+                          } else {
+                            postsBloc.add(
+                              PostUploadButtonClickedEvent(
+                                caption: _captionTextController.text,
+                                image: image,
+                              ),
+                            );
+                          }
+                        },
+                        title: isEditing ? 'Save' : 'Post',
+                        width: 100,
+                        height: 40,
+                        color: MyColors.buttonColor1,
+                      );
               },
-              child: BlocBuilder<PostsBloc, PostsState>(
-                bloc: postsBloc,
-                buildWhen: (previous, current) => current is PostsActionState,
-                builder: (context, state) {
-                  return state is PostUploadingActionState
-                      ? SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: MyColors.buttonColor1,
-                          ),
-                        )
-                      : Text(
-                          isEditing ? 'Save' : 'Post',
-                          style: MyFonts.bodyFont(
-                            fontColor: MyColors.secondaryColor,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        );
-                },
-              ),
             ),
+            const SizedBox(width: 10),
           ],
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               TextField(
-                maxLines: 5,
+                maxLines: 3,
                 style: MyFonts.bodyFont(
                   fontColor: MyColors.secondaryColor,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Write a caption',
@@ -135,6 +136,7 @@ class UploadPostScreen extends StatelessWidget {
                 onTapOutside: (_) =>
                     FocusManager.instance.primaryFocus!.unfocus(),
               ),
+              const SizedBox(height: 10),
               Container(
                 height: 300,
                 width: double.infinity,

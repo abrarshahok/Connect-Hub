@@ -11,6 +11,10 @@ class PostShowAllPostOptionsState extends PostsState {}
 
 class PostHideAllPostOptionsState extends PostsState {}
 
+class PostShowAllCommentOptionsState extends PostsState {}
+
+class PostHideAllCommentOptionsState extends PostsState {}
+
 class PostChoosenSuccessActionState extends PostsActionState {
   final File choosenImage;
 

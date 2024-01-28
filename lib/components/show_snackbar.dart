@@ -21,7 +21,7 @@ class ShowSnackBar {
         content: Text(
           label,
           style: MyFonts.bodyFont(
-            fontColor: MyColors.secondaryColor,
+            fontColor: MyColors.primaryColor,
             fontSize: 15,
           ),
         ),

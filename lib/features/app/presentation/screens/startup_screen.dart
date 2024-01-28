@@ -49,14 +49,19 @@ class StartupScreen extends StatelessWidget {
                           child: PageView(
                             controller: _controller,
                             children: [
-                              _buildTextWidget(title: "Your Digital Community"),
                               _buildTextWidget(
-                                  title: "Uniting People, Inspiring Moments"),
+                                  title: "Your Digital Community",
+                                  ctx: context),
                               _buildTextWidget(
-                                  title: "Connecting You to the World"),
+                                  title: "Uniting People, Inspiring Moments",
+                                  ctx: context),
+                              _buildTextWidget(
+                                  title: "Connecting You to the World",
+                                  ctx: context),
                             ],
                           ),
                         ),
+                        const SizedBox(height: 30),
                         SmoothPageIndicator(
                           controller: _controller,
                           count: 3,
@@ -91,14 +96,18 @@ class StartupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextWidget({required String title}) {
-    return Text(
-      title,
-      textAlign: TextAlign.center,
-      style: MyFonts.headingFont(
-        fontColor: MyColors.primaryColor,
-        fontSize: 35,
-        fontWeight: FontWeight.w600,
+  Widget _buildTextWidget({required String title, required BuildContext ctx}) {
+    final deviceSize = MediaQuery.of(ctx).size;
+    final fontSize = deviceSize.width * 0.08;
+    return FittedBox(
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: MyFonts.headingFont(
+          fontColor: MyColors.primaryColor,
+          fontSize: fontSize,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

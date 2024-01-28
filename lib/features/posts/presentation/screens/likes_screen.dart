@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connecthub/components/custom_app_top_bar.dart';
-import 'package:connecthub/components/custom_icon_button.dart';
 import 'package:connecthub/components/loading.dart';
 import 'package:connecthub/features/auth/domain/user_data_model.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import '../widgets/post_like_tile.dart';
-import '../../../auth/repository/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 import '../../../../constants/constants.dart';
 
 class LikesScreen extends StatelessWidget {
@@ -24,14 +22,8 @@ class LikesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
       appBar: customAppBar(
+        context: context,
         showLeadingButton: true,
-        leadingButton: CustomIconButton(
-          color: MyColors.secondaryColor,
-          icon: IconlyLight.arrow_left,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: 'Likes',
       ),
       body: StreamBuilder(
@@ -68,10 +60,8 @@ class LikesScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               itemCount: usersData.length,
               itemBuilder: (context, index) {
-                final userInfo = UserDataModel.fromJson(
-                  usersData[index].data(),
-                  usersData[index].id,
-                );
+                final userInfo =
+                    UserDataModel.fromJson(usersData[index].data());
 
                 return PostLikeTile(
                   userInfo: userInfo,

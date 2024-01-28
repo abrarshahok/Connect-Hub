@@ -21,6 +21,8 @@ class _AppScreenState extends State<AppScreen> {
     super.initState();
   }
 
+  final authBloc = ServiceLocator.instance.get<AuthBloc>();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(

@@ -14,8 +14,3 @@ class ServiceLocator {
       ..registerSingleton<ProfileBloc>(ProfileBloc());
   }
 }
-
-AuthBloc get authBloc => ServiceLocator.instance.get<AuthBloc>();
-PostsBloc get postsBloc => ServiceLocator.instance.get<PostsBloc>();
-HomeBloc get homeBloc => ServiceLocator.instance.get<HomeBloc>();
-ProfileBloc get profileBloc => ServiceLocator.instance.get<ProfileBloc>();
