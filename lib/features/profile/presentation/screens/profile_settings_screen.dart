@@ -53,7 +53,6 @@ class ProfileSettingsScreen extends StatelessWidget {
           backgroundColor: MyColors.primaryColor,
           appBar: customAppBar(
             title: 'Settings',
-            context: context,
             showLeadingButton: true,
             showActionButton: true,
             actionButton: CustomIconButton(

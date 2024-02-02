@@ -83,7 +83,7 @@ class _PostsFeedState extends State<PostsFeed> {
                           .firstWhere((user) => user.uid == postInfo.userId);
                       return PostCard(
                         key: ValueKey(postInfo.postId),
-                        postDataModel: postInfo,
+                        postInfo: postInfo,
                         userInfo: userInfo,
                         isSaved: isSaved,
                         onTapProfile: () {

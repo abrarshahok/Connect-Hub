@@ -81,7 +81,7 @@ class _UserPostsScreenState extends State<UserPostsScreen> {
                         final userInfo = AuthRepository.allUsers
                             .firstWhere((user) => user.uid == postInfo.userId);
                         return PostCard(
-                          postDataModel: postInfo,
+                          postInfo: postInfo,
                           userInfo: userInfo,
                           isSaved: isSaved,
                           onTapProfile: () {},

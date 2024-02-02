@@ -22,7 +22,6 @@ class LikesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.primaryColor,
       appBar: customAppBar(
-        context: context,
         showLeadingButton: true,
         title: 'Likes',
       ),

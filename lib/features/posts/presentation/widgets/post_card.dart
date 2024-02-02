@@ -1,3 +1,4 @@
+import 'package:connecthub/features/posts/presentation/widgets/like_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +20,14 @@ import '../../domain/post_data_model.dart';
 
 // ignore: must_be_immutable
 class PostCard extends StatelessWidget {
-  final PostDataModel postDataModel;
+  final PostDataModel postInfo;
   final VoidCallback onTapProfile;
   final UserDataModel userInfo;
   final bool isSaved;
 
   PostCard({
     super.key,
-    required this.postDataModel,
+    required this.postInfo,
     required this.isSaved,
     required this.onTapProfile,
     required this.userInfo,
@@ -42,116 +43,124 @@ class PostCard extends StatelessWidget {
         _handleStates(state, context);
       },
       builder: (context, state) {
-        return Stack(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: onTapProfile,
-                        child: _buildUserInfoTile(),
-                      ),
-                      const Spacer(),
-                      if (postDataModel.userId ==
-                          AuthRepository.currentUser!.uid)
-                        IconButton(
-                          onPressed: () {
-                            if (state is! PostShowAllPostOptionsState) {
-                              _postsBloc.add(
-                                  PostShowAllPostOptionsButtonClickedEvent());
-                            } else {
-                              _postsBloc.add(
-                                  PostHideAllPostOptionsButtonClickedEvent());
-                            }
-                          },
-                          icon: Icon(
-                            Icons.more_vert,
-                            color: MyColors.tercharyColor,
-                          ),
-                        )
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  NetworkImageWidget(
-                    height: 300,
-                    width: double.infinity,
-                    imageUrl: postDataModel.postUrl,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    postDataModel.caption,
-                    style: MyFonts.bodyFont(),
-                  ),
-                  _buildPostButtonsTile(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        return GestureDetector(
+          onDoubleTap: () {
+            _postsBloc.add(
+              PostLikeButtonClickedEvent(
+                postId: postInfo.postId,
+                likes: postInfo.likes,
+              ),
+            );
+          },
+          child: Stack(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            _postsBloc.add(
-                                PostNavigateToLikeScreenButtonClickedEvent());
-                          },
-                          child: Text(
-                            postDataModel.likes.isEmpty
-                                ? 'No Likes'
-                                : '${postDataModel.likes.length} ${postDataModel.likes.length == 1 ? 'Like' : 'Likes'}',
-                            style: MyFonts.bodyFont(
-                              fontColor: MyColors.secondaryColor,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
+                          onTap: onTapProfile,
+                          child: _buildUserInfoTile(),
+                        ),
+                        const Spacer(),
+                        if (postInfo.userId == AuthRepository.currentUser!.uid)
+                          IconButton(
+                            onPressed: () {
+                              if (state is! PostShowAllPostOptionsState) {
+                                _postsBloc.add(
+                                    PostShowAllPostOptionsButtonClickedEvent());
+                              } else {
+                                _postsBloc.add(
+                                    PostHideAllPostOptionsButtonClickedEvent());
+                              }
+                            },
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: MyColors.tercharyColor,
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:
-                                    '${postDataModel.username.toLowerCase()} ',
-                              ),
-                              TextSpan(
-                                text: postDataModel.caption,
-                                style: MyFonts.bodyFont(
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                          )
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                ],
+                    const SizedBox(height: 10),
+                    NetworkImageWidget(
+                      height: 300,
+                      width: double.infinity,
+                      imageUrl: postInfo.postUrl,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      postInfo.caption,
+                      style: MyFonts.bodyFont(),
+                    ),
+                    _buildPostButtonsTile(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _postsBloc.add(
+                                  PostNavigateToLikeScreenButtonClickedEvent());
+                            },
+                            child: Text(
+                              postInfo.likes.isEmpty
+                                  ? 'No Likes'
+                                  : '${postInfo.likes.length} ${postInfo.likes.length == 1 ? 'Like' : 'Likes'}',
+                              style: MyFonts.bodyFont(
+                                fontColor: MyColors.secondaryColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${postInfo.username.toLowerCase()} ',
+                                ),
+                                TextSpan(
+                                  text: postInfo.caption,
+                                  style: MyFonts.bodyFont(
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              right: 0,
-              top: 40,
-              child: BlocBuilder<PostsBloc, PostsState>(
-                bloc: _postsBloc,
-                builder: (context, state) {
-                  return DropDownOptionsWidget(
-                    enable: state is PostShowAllPostOptionsState,
-                    onEditClicked: () {
-                      _postsBloc.add(PostEditPostButtonClickedEvent());
-                    },
-                    onDeleteClicked: () {
-                      _postsBloc.add(PostDeletePostButtonClickedEvent());
-                    },
-                    onShareCliked: () {},
-                  );
-                },
+              Positioned(
+                right: 0,
+                top: 40,
+                child: BlocBuilder<PostsBloc, PostsState>(
+                  bloc: _postsBloc,
+                  builder: (context, state) {
+                    return DropDownOptionsWidget(
+                      enable: state is PostShowAllPostOptionsState,
+                      onEditClicked: () {
+                        _postsBloc.add(PostEditPostButtonClickedEvent());
+                      },
+                      onDeleteClicked: () {
+                        _postsBloc.add(PostDeletePostButtonClickedEvent());
+                      },
+                      onShareCliked: () {},
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -160,21 +169,25 @@ class PostCard extends StatelessWidget {
   Row _buildPostButtonsTile() {
     return Row(
       children: [
-        CustomIconButton(
-          icon: postDataModel.likes.contains(AuthRepository.currentUser!.uid)
-              ? IconlyBold.heart
-              : IconlyLight.heart,
-          color: postDataModel.likes.contains(AuthRepository.currentUser!.uid)
-              ? Colors.red
-              : MyColors.tercharyColor,
-          onPressed: () {
-            _postsBloc.add(
-              PostLikeButtonClickedEvent(
-                postId: postDataModel.postId,
-                likes: postDataModel.likes,
-              ),
-            );
-          },
+        LikeAnimation(
+          isAnimating: postInfo.likes.contains(AuthRepository.currentUser!.uid),
+          smallLike: true,
+          child: CustomIconButton(
+            icon: postInfo.likes.contains(AuthRepository.currentUser!.uid)
+                ? IconlyBold.heart
+                : IconlyLight.heart,
+            color: postInfo.likes.contains(AuthRepository.currentUser!.uid)
+                ? Colors.red
+                : MyColors.tercharyColor,
+            onPressed: () {
+              _postsBloc.add(
+                PostLikeButtonClickedEvent(
+                  postId: postInfo.postId,
+                  likes: postInfo.likes,
+                ),
+              );
+            },
+          ),
         ),
         CustomIconButton(
           icon: IconlyLight.document,
@@ -182,7 +195,7 @@ class PostCard extends StatelessWidget {
           onPressed: () {
             _postsBloc.add(
               PostNavigateToCommentScreenButtonClickedEvent(
-                postDataModel.postId,
+                postInfo.postId,
               ),
             );
           },
@@ -195,14 +208,14 @@ class PostCard extends StatelessWidget {
         const Spacer(),
         SavePostButtonWidget(
           isSaved: isSaved,
-          postId: postDataModel.postId,
+          postId: postInfo.postId,
         ),
       ],
     );
   }
 
   Row _buildUserInfoTile() {
-    String formatedDateTime = _getTimeAgo(postDataModel.postedOn);
+    String formatedDateTime = _getTimeAgo(postInfo.postedOn);
     return Row(
       children: [
         const SizedBox(width: 10),
@@ -249,10 +262,10 @@ class PostCard extends StatelessWidget {
       ).show();
     } else if (state is PostNavigateToLikesScreenActionState) {
       Navigator.pushNamed(context, LikesScreen.routeName,
-          arguments: postDataModel.likes);
+          arguments: postInfo.likes);
     } else if (state is PostNavigateToCommentsScreenActionState) {
       Navigator.pushNamed(context, CommentsScreen.routeName,
-          arguments: postDataModel.postId);
+          arguments: postInfo.postId);
     } else if (state is PostEditPostActionState) {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(
@@ -260,7 +273,7 @@ class PostCard extends StatelessWidget {
         UploadPostScreen.routeName,
         arguments: {
           'postBloc': _postsBloc,
-          'postDataModel': postDataModel,
+          'postDataModel': postInfo,
           'isEditing': true,
         },
       );
@@ -270,7 +283,7 @@ class PostCard extends StatelessWidget {
         message: 'Do you want to delete post',
         onTapYes: () {
           _postsBloc.add(PostDeleteConfirmationEvent(
-            postId: postDataModel.postId,
+            postId: postInfo.postId,
           ));
           Navigator.pop(context);
         },
@@ -312,7 +325,7 @@ class SavePostButtonWidget extends StatelessWidget {
 
   final bool isSaved;
   final String postId;
-  final postsBloc = ServiceLocator.instance.get<PostsBloc>();
+  final postsBloc = PostsBloc();
 
   @override
   Widget build(BuildContext context) {

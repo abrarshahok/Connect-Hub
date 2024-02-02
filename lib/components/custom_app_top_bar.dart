@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import '/constants/constants.dart';
-import 'custom_icon_button.dart';
 
 AppBar customAppBar({
   bool? centerTitle,
@@ -9,7 +7,6 @@ AppBar customAppBar({
   bool showLeadingButton = false,
   bool showActionButton = false,
   Widget? actionButton,
-  BuildContext? context,
 }) {
   return AppBar(
     backgroundColor: MyColors.primaryColor,
@@ -23,15 +20,7 @@ AppBar customAppBar({
         fontWeight: FontWeight.bold,
       ),
     ),
-    leading: (showLeadingButton && context != null)
-        ? CustomIconButton(
-            icon: IconlyLight.arrow_left,
-            color: MyColors.tercharyColor,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        : null,
+    leading: (showLeadingButton) ? const BackButton() : null,
     actions: [
       if (showActionButton && actionButton != null) actionButton,
     ],

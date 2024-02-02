@@ -31,7 +31,6 @@ class CommentsScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: MyColors.primaryColor,
         appBar: customAppBar(
-          context: context,
           showLeadingButton: true,
           title: 'Comments',
         ),
@@ -42,6 +41,14 @@ class CommentsScreen extends StatelessWidget {
               return const Loading();
             }
             final postDocs = snapshot.hasData ? snapshot.data!.docs : [];
+            if (postDocs.isEmpty) {
+              return Center(
+                child: Text(
+                  'No Comments!',
+                  style: MyFonts.bodyFont(),
+                ),
+              );
+            }
             return ListView.builder(
               itemCount: postDocs.length,
               itemBuilder: (context, index) {

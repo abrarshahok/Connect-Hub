@@ -32,7 +32,6 @@ class OtherUsersProfile extends StatelessWidget {
       backgroundColor: MyColors.primaryColor,
       appBar: customAppBar(
         title: 'Profile',
-        context: context,
         showActionButton: userId == AuthRepository.currentUser!.uid,
         showLeadingButton: showBackButton,
         actionButton: CustomIconButton(

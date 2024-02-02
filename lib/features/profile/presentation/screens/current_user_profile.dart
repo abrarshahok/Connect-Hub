@@ -52,7 +52,6 @@ class _CurrentUserProfileState extends State<CurrentUserProfile>
         backgroundColor: MyColors.primaryColor,
         appBar: customAppBar(
           title: 'Profile',
-          context: context,
           showLeadingButton: widget.showBackButton,
           showActionButton: true,
           actionButton: CustomIconButton(

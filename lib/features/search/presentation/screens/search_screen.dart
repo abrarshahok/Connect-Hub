@@ -22,6 +22,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.primaryColor,
       appBar: customAppBar(title: 'Search'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),

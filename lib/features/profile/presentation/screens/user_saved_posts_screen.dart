@@ -5,6 +5,8 @@ import '../../../auth/data/auth_repository.dart';
 import '../../../posts/presentation/widgets/post_card.dart';
 import '/constants/constants.dart';
 import '../../../posts/domain/post_data_model.dart';
+import 'current_user_profile.dart';
+import 'other_users_profile.dart';
 
 class UserSavedPostsScreen extends StatelessWidget {
   const UserSavedPostsScreen({super.key});
@@ -57,10 +59,26 @@ class UserSavedPostsScreen extends StatelessWidget {
                     final userInfo = AuthRepository.allUsers
                         .firstWhere((user) => user.uid == postInfo.userId);
                     return PostCard(
-                      postDataModel: postInfo,
+                      postInfo: postInfo,
                       userInfo: userInfo,
                       isSaved: true,
-                      onTapProfile: () {},
+                      onTapProfile: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                AuthRepository.currentUser!.uid ==
+                                        postInfo.userId
+                                    ? const CurrentUserProfile(
+                                        showBackButton: true,
+                                      )
+                                    : OtherUsersProfile(
+                                        userId: postInfo.userId,
+                                        showBackButton: true,
+                                      ),
+                          ),
+                        );
+                      },
                     );
                   });
             },
