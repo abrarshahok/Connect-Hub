@@ -49,56 +49,59 @@ class CommentsScreen extends StatelessWidget {
                 ),
               );
             }
-            return ListView.builder(
-              itemCount: postDocs.length,
-              itemBuilder: (context, index) {
-                final commentData =
-                    CommentDataModel.fromJson(postDocs[index].data());
-                String formatedDateTime =
-                    DateFormat().add_MMMMd().format(commentData.commentedOn);
-                return Stack(
-                  children: [
-                    ListTile(
-                      leading: CircleAvatar(
-                        radius: 25,
-                        backgroundImage: CachedNetworkImageProvider(
-                          commentData.userImageUrl,
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: postDocs.length,
+                    itemBuilder: (context, index) {
+                      final commentData =
+                          CommentDataModel.fromJson(postDocs[index].data());
+                      String formatedDateTime = DateFormat()
+                          .add_MMMMd()
+                          .format(commentData.commentedOn);
+                      return ListTile(
+                        leading: CircleAvatar(
+                          radius: 25,
+                          backgroundImage: CachedNetworkImageProvider(
+                            commentData.userImageUrl,
+                          ),
                         ),
-                      ),
-                      title: Text(
-                        '${commentData.username == AuthRepository.currentUser!.username ? 'You' : commentData.username} on $formatedDateTime',
-                        style: MyFonts.bodyFont(
-                          fontColor: MyColors.secondaryColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w300,
+                        title: Text(
+                          '${commentData.username == AuthRepository.currentUser!.username ? 'You' : commentData.username} on $formatedDateTime',
+                          style: MyFonts.bodyFont(
+                            fontColor: MyColors.secondaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
-                      ),
-                      subtitle: Text(
-                        commentData.comment,
-                        style: MyFonts.bodyFont(
-                          fontColor: MyColors.secondaryColor,
+                        subtitle: Text(
+                          commentData.comment,
+                          style: MyFonts.bodyFont(
+                            fontColor: MyColors.secondaryColor,
+                          ),
                         ),
-                      ),
-                      trailing:
-                          commentData.userId == AuthRepository.currentUser!.uid
-                              ? IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.more_vert,
-                                    color: MyColors.secondaryColor,
-                                  ),
-                                )
-                              : null,
-                    ),
-                  ],
-                );
-              },
+                        trailing: commentData.userId ==
+                                AuthRepository.currentUser!.uid
+                            ? IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: MyColors.secondaryColor,
+                                ),
+                              )
+                            : null,
+                      );
+                    },
+                  ),
+                ),
+                AddCommentField(
+                  postsBloc: _postsBloc,
+                  postId: postId,
+                ),
+              ],
             );
           },
-        ),
-        bottomNavigationBar: AddCommentField(
-          postsBloc: _postsBloc,
-          postId: postId,
         ),
       ),
     );

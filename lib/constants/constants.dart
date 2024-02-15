@@ -15,7 +15,7 @@ class MyColors {
   static Color secondaryColor = Colors.grey[900]!;
   static Color tercharyColor = const Color(0xFF4A4A4A);
   static Color buttonColor1 = Colors.deepPurple;
-  static Color onlineColor = Colors.greenAccent;
+  static Color onlineColor = Colors.green;
   static Color buttonColor2 = Colors.deepPurpleAccent;
 }
 

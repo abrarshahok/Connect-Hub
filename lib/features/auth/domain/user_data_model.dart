@@ -4,6 +4,7 @@ class UserDataModel {
   final String username;
   final String email;
   final String userImage;
+  final bool online;
   final List<dynamic> followers;
   final List<dynamic> following;
 
@@ -11,6 +12,7 @@ class UserDataModel {
     required this.uid,
     required this.username,
     required this.email,
+    required this.online,
     required this.userImage,
     required this.followers,
     required this.following,
@@ -20,6 +22,7 @@ class UserDataModel {
         'uid': uid,
         'username': username,
         'email': email,
+        'online': online,
         'userImage': userImage,
         'followers': followers,
         'following': following,
@@ -29,6 +32,7 @@ class UserDataModel {
         uid: json['uid'],
         username: json['username'],
         email: json['email'],
+        online: json['online'],
         userImage: json['userImage'],
         followers: json['followers'],
         following: json['following'],
@@ -38,6 +42,7 @@ class UserDataModel {
     String? uid,
     String? username,
     String? email,
+    bool? online,
     String? userImage,
     List<dynamic>? followers,
     List<dynamic>? following,
@@ -46,6 +51,7 @@ class UserDataModel {
       uid: uid ?? this.uid,
       username: username ?? this.username,
       email: email ?? this.email,
+      online: online ?? this.online,
       userImage: userImage ?? this.userImage,
       followers: followers ?? this.followers,
       following: following ?? this.following,

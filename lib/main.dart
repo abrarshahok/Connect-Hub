@@ -1,3 +1,4 @@
+import 'package:connecthub/features/chat/presentation/screens/messages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +53,7 @@ class MainApp extends StatelessWidget {
         CommentsScreen.routeName: (context) => CommentsScreen(),
         AuthScreen.routeName: (context) => const AuthScreen(),
         ProfileSettingsScreen.routeName: (context) => ProfileSettingsScreen(),
+        MessagesScreen.routeName: (context) => const MessagesScreen(),
       },
     );
   }

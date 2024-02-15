@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
 import '../../../auth/domain/user_data_model.dart';
 import '../../../../constants/constants.dart';
+import '../../../chat/presentation/screens/messages_screen.dart';
 
 class ProfileInfoCard extends StatelessWidget {
   ProfileInfoCard({
@@ -84,7 +85,16 @@ class ProfileInfoCard extends StatelessWidget {
                   SocialLoginButton(
                     icon: IconlyLight.message,
                     title: 'Message',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        MessagesScreen.routeName,
+                        arguments: {
+                          'currentUserId': AuthRepository.currentUser!.uid,
+                          'friendUserId': userInfo.uid,
+                          'userName': userInfo.username,
+                        },
+                      );
+                    },
                   ),
                   const SizedBox(width: 10),
                   CustomElevatedButton(

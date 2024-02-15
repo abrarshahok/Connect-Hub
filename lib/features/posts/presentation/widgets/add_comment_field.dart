@@ -16,71 +16,73 @@ class AddCommentField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isKeyboardEnabled = MediaQuery.of(context).viewInsets.bottom != 0;
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          height: 50,
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: MyColors.tercharyColor,
-              width: 0.5,
-            ),
-          ),
-          child: TextField(
-            key: const ValueKey('commentField'),
-            style: MyFonts.bodyFont(
-              fontColor: MyColors.tercharyColor,
-              fontWeight: FontWeight.w300,
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              hintText: 'Add a comment',
-              hintStyle: MyFonts.bodyFont(
-                fontColor: MyColors.tercharyColor,
-                fontWeight: FontWeight.w400,
+        Expanded(
+          child: Container(
+            height: 50,
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: MyColors.tercharyColor,
+                width: 0.5,
               ),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  if (_commentTextController.text.trim().isEmpty) {
-                    return;
-                  }
-                  postsBloc.add(PostAddCommentButtonClickedEvent(
-                      postId: postId, comment: _commentTextController.text));
-                  FocusManager.instance.primaryFocus!.unfocus();
-                  _commentTextController.clear();
-                },
-                icon: Icon(
-                  IconlyLight.send,
-                  color: MyColors.buttonColor1,
+            ),
+            child: TextField(
+              key: const ValueKey('commentField'),
+              style: MyFonts.bodyFont(
+                fontColor: MyColors.tercharyColor,
+                fontWeight: FontWeight.w300,
+              ),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                hintText: 'Add a comment',
+                hintStyle: MyFonts.bodyFont(
+                  fontColor: MyColors.tercharyColor,
+                  fontWeight: FontWeight.w400,
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    if (_commentTextController.text.trim().isEmpty) {
+                      return;
+                    }
+                    postsBloc.add(PostAddCommentButtonClickedEvent(
+                        postId: postId, comment: _commentTextController.text));
+                    FocusManager.instance.primaryFocus!.unfocus();
+                    _commentTextController.clear();
+                  },
+                  icon: Icon(
+                    IconlyLight.send,
+                    color: MyColors.buttonColor1,
+                  ),
                 ),
               ),
+              controller: _commentTextController,
+              onSubmitted: (comment) {
+                if (comment.trim().isEmpty) {
+                  return;
+                }
+                postsBloc.add(PostAddCommentButtonClickedEvent(
+                  postId: postId,
+                  comment: _commentTextController.text,
+                ));
+                _commentTextController.clear();
+              },
+              onTapOutside: (_) =>
+                  FocusManager.instance.primaryFocus!.unfocus(),
             ),
-            controller: _commentTextController,
-            onSubmitted: (comment) {
-              if (comment.trim().isEmpty) {
-                return;
-              }
-              postsBloc.add(PostAddCommentButtonClickedEvent(
-                  postId: postId, comment: _commentTextController.text));
-              _commentTextController.clear();
-            },
-            onTapOutside: (_) => FocusManager.instance.primaryFocus!.unfocus(),
           ),
         ),
-        if (isKeyboardEnabled)
-          SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 10)
       ],
     );
   }

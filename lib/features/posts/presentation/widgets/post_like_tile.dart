@@ -47,7 +47,7 @@ class PostLikeTile extends StatelessWidget {
         ),
       ),
       title: Text(
-        userInfo.username == AuthRepository.currentUser!.username
+        userInfo.uid == AuthRepository.currentUser!.uid
             ? 'You'
             : userInfo.username,
         style: MyFonts.bodyFont(

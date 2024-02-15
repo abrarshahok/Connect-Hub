@@ -1,9 +1,11 @@
-import 'package:connecthub/features/search/presentation/screens/search_screen.dart';
-import 'package:connecthub/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
 import 'package:iconly/iconly.dart';
+import 'package:crystal_navigation_bar/crystal_navigation_bar.dart';
+import '/features/chat/presentation/screens/chat_screen.dart';
+import '/features/search/presentation/screens/search_screen.dart';
+import '/service_locator/service_locator.dart';
+import '../../../auth/data/auth_repository.dart';
 import '../../../profile/presentation/screens/current_user_profile.dart';
 import '../../../posts/presentation/screens/add_post_screen.dart';
 import '../../../posts/presentation/screens/posts_feed.dart';
@@ -17,7 +19,32 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    AuthRepository.toggleUserStatus(true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    AuthRepository.toggleUserStatus(false);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      AuthRepository.toggleUserStatus(false);
+    } else if (state == AppLifecycleState.resumed) {
+      AuthRepository.toggleUserStatus(true);
+    } else if (state == AppLifecycleState.detached) {
+      AuthRepository.toggleUserStatus(false);
+    }
+  }
+
   int currentIndex = 0;
   final homeBloc = ServiceLocator.instance.get<HomeBloc>();
   @override
@@ -58,6 +85,9 @@ class _HomeState extends State<Home> {
 
                     // Skip it
                     SizedBox(),
+
+                    // Message Screen
+                    ChatScreen(),
 
                     // Screen for Disply Current User Profile
                     CurrentUserProfile(),
@@ -131,6 +161,11 @@ class _HomeState extends State<Home> {
         CrystalNavigationBarItem(
           icon: IconlyBold.plus,
           unselectedIcon: IconlyLight.plus,
+          selectedColor: MyColors.buttonColor1,
+        ),
+        CrystalNavigationBarItem(
+          icon: IconlyBold.message,
+          unselectedIcon: IconlyLight.message,
           selectedColor: MyColors.buttonColor1,
         ),
         CrystalNavigationBarItem(

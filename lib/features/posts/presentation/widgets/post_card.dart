@@ -1,11 +1,10 @@
-import 'package:connecthub/features/posts/presentation/widgets/like_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconly/iconly.dart';
 import '../../../auth/domain/user_data_model.dart';
-import '/service_locator/service_locator.dart';
+import '/features/posts/presentation/widgets/like_animation.dart';
 import '/components/confirmation_dialogue.dart';
 import '/components/network_image_widget.dart';
 import '/features/posts/presentation/screens/upload_post_screen.dart';

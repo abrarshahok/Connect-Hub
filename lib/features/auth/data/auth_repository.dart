@@ -82,6 +82,7 @@ class AuthRepository {
         username: username,
         email: email,
         userImage: MyImages.defaultProfilePicUrl,
+        online: true,
         followers: [],
         following: [],
       );
@@ -94,6 +95,13 @@ class AuthRepository {
     } catch (e) {
       return false;
     }
+  }
+
+  static void toggleUserStatus(bool status) async {
+    await firebaseFirestore
+        .collection('users')
+        .doc(currentUser!.uid)
+        .set(currentUser!.copyWith(online: status).toJson());
   }
 
   static Future<bool> signOut() async {
